@@ -1,5 +1,5 @@
 /**
- * Push .env (production, git-ignored) secrets to the deployed website Worker (bukuresipi-web).
+ * Push .env (production, git-ignored) secrets to the deployed website Worker (bukuresipi-astro).
  * Copied from bukuresipi-hono scripts/secrets-push.ts. .env also holds the build settings (PUBLIC_*): those are
  * baked into the public HTML/JS by `astro build`, so they are skipped here, never pushed as secrets.
  *
