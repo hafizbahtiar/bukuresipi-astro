@@ -1,5 +1,11 @@
 // @ts-check
-import { defineConfig } from 'astro/config';
+import { defineConfig } from 'astro/config'
 
-// https://astro.build/config
-export default defineConfig({});
+// Static site on Cloudflare (wrangler.jsonc). Pages are files (/auth/reset.html served at /auth/reset) so email links
+// with ?token= never go through a trailing-slash redirect.
+export default defineConfig({
+    site: 'https://bukuresipi.com',
+    trailingSlash: 'never',
+    build: { format: 'file' },
+    i18n: { defaultLocale: 'ms', locales: ['ms', 'en'], routing: { prefixDefaultLocale: false } },
+})

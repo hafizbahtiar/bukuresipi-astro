@@ -1,0 +1,70 @@
+---
+import logo from '../assets/logo-mark.svg?raw'
+import { type Lang, pathIn, t } from '../i18n'
+
+interface Props { lang: Lang; path: string; nav?: boolean }
+const { lang, path, nav = false } = Astro.props
+const s = t(lang)
+---
+
+<header class="wrap bar">
+    <a class="brand" href={pathIn('/', lang)} aria-label="Bukuresipi">
+        <span class="mark" set:html={logo} />
+        <span class="word">bukuresipi</span>
+    </a>
+    <nav aria-label={lang === 'en' ? 'Main' : 'Utama'}>
+        {nav && <a href="#cara">{s.nav.how}</a>}
+        {nav && <a href="#soalan">{s.nav.faq}</a>}
+        <a class="lang" href={pathIn(path, s.other.lang)} hreflang={s.other.lang} lang={s.other.lang}>{s.other.label}</a>
+    </nav>
+</header>
+
+<style>
+    .bar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+        padding-block: 1.25rem;
+    }
+    .brand {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.6rem;
+        color: var(--ink);
+        text-decoration: none;
+    }
+    .mark :global(svg) {
+        display: block;
+        width: 40px;
+        height: 40px;
+    }
+    .word {
+        font-size: 1.45rem;
+        font-weight: 700;
+        letter-spacing: -0.035em;
+    }
+    nav {
+        display: flex;
+        align-items: center;
+        gap: clamp(0.75rem, 2.5vw, 1.75rem);
+        font-size: var(--step--1);
+    }
+    nav a {
+        color: var(--ink);
+        text-decoration: none;
+    }
+    nav a:hover {
+        text-decoration: underline;
+    }
+    .lang {
+        padding: 0.35rem 0.8rem;
+        border: 1.5px solid var(--line);
+        border-radius: 999px;
+    }
+    @media (max-width: 560px) {
+        nav a:not(.lang) {
+            display: none;
+        }
+    }
+</style>
