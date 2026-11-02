@@ -1,7 +1,7 @@
 /**
- * Push .env (production Worker secrets, git-ignored) to the deployed website Worker (bukuresipi-web).
- * Copied from bukuresipi-hono scripts/secrets-push.ts. Build settings (PUBLIC_*) are not secrets: they are baked
- * into the public HTML/JS at build time and live in .env.production / .env.development (committed).
+ * Push .env (production, git-ignored) secrets to the deployed website Worker (bukuresipi-web).
+ * Copied from bukuresipi-hono scripts/secrets-push.ts. .env also holds the build settings (PUBLIC_*): those are
+ * baked into the public HTML/JS by `astro build`, so they are skipped here, never pushed as secrets.
  *
  *   bun run secrets:push              # .env
  *   bun run secrets:push other.env    # another file
@@ -9,7 +9,7 @@
  *
  * - Empty values are skipped, so a blank line never wipes a live secret.
  * - Names that are wrangler.jsonc "vars" are refused (Cloudflare rejects the clash).
- * - PUBLIC_* names are refused (they are build settings, public in the browser; a Worker secret would do nothing).
+ * - PUBLIC_* names are skipped (build settings, read by astro build).
  * - Names the Worker doesn't read (worker/index.ts `env`) are pushed with a warning.
  * - One `wrangler secret bulk` call; if that fails, falls back to one
  *   `wrangler secret put` per key so one bad key can't block the rest.
@@ -43,15 +43,15 @@ export const parseEnv = (text: string): { values: Record<string, string>; badLin
 /** Sort parsed keys into what gets pushed and why the rest doesn't. */
 export const plan = (values: Record<string, string>, wranglerConfig: string, bindings: string) => {
     const push: Record<string, string> = {}
-    const empty: string[] = [], clashes: string[] = [], unknown: string[] = []
+    const empty: string[] = [], clashes: string[] = [], unknown: string[] = [], build: string[] = []
     for (const [key, value] of Object.entries(values)) {
+        if (key.startsWith('PUBLIC_')) { build.push(key); continue }
         if (!value) { empty.push(key); continue }
-        if (key.startsWith('PUBLIC_')) { clashes.push(key); continue }
         if (new RegExp(`"${key}"\\s*:`).test(wranglerConfig)) { clashes.push(key); continue }
         if (!new RegExp(`\\b${key}\\??:`).test(bindings)) unknown.push(key)
         push[key] = value
     }
-    return { push, empty, clashes, unknown }
+    return { push, empty, clashes, unknown, build }
 }
 
 const wrangler = async (args: string[], stdin?: string) => {
@@ -78,14 +78,15 @@ const main = async () => {
     const { values, badLines } = parseEnv(await src.text())
     for (const n of badLines) console.warn(`  ! ${file}:${n} is not KEY=value - ignored`)
 
-    const { push, empty, clashes, unknown } = plan(
+    const { push, empty, clashes, unknown, build } = plan(
         values,
         await Bun.file(`${ROOT}/wrangler.jsonc`).text(),
         await Bun.file(`${ROOT}/worker/index.ts`).text(),
     )
     const names = Object.keys(push)
+    if (build.length) console.log(`  - skipped (build settings, not secrets): ${build.join(', ')}`)
     if (empty.length) console.log(`  - skipped (empty): ${empty.join(', ')}`)
-    for (const k of clashes) console.error(`  ✗ ${k} is ${k.startsWith('PUBLIC_') ? 'a public build setting - put it in .env.production' : 'a wrangler.jsonc var - change it there'}, not a secret`)
+    for (const k of clashes) console.error(`  ✗ ${k} is a wrangler.jsonc var - change it there, not as a secret`)
     for (const k of unknown) console.warn(`  ! ${k} is not read in worker/index.ts - typo?`)
 
     if (names.length === 0) die('nothing to push')
