@@ -1,0 +1,41 @@
+---
+import logo from '../assets/logo-mark.svg?raw'
+import { type Lang, t } from '../i18n'
+
+interface Props { lang: Lang }
+const { lang } = Astro.props
+---
+
+<footer class="wrap foot">
+    <div class="who">
+        <span class="mark" set:html={logo} />
+        <p><strong>Bukuresipi</strong><br />{t(lang).home.footer}</p>
+    </div>
+    <p class="copy">© {new Date().getFullYear()} Bukuresipi</p>
+</footer>
+
+<style>
+    .foot {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        align-items: flex-end;
+        gap: 1.5rem;
+        padding-block: 2.5rem;
+        font-size: var(--step--1);
+        color: var(--ink-soft);
+    }
+    .who {
+        display: flex;
+        gap: 0.8rem;
+        align-items: center;
+    }
+    .who strong {
+        color: var(--ink);
+    }
+    .mark :global(svg) {
+        display: block;
+        width: 34px;
+        height: 34px;
+    }
+</style>

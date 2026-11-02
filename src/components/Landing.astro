@@ -1,0 +1,473 @@
+---
+import Base from '../layouts/Base.astro'
+import { type Lang, pathIn, SITE, t } from '../i18n'
+import Footer from './Footer.astro'
+import Header from './Header.astro'
+import StoreBadges from './StoreBadges.astro'
+
+interface Props { lang: Lang }
+const { lang } = Astro.props
+const s = t(lang).home
+const n = s.notebook
+
+const jsonLd = [
+    {
+        '@context': 'https://schema.org',
+        '@type': 'Organization',
+        name: 'Bukuresipi',
+        url: SITE,
+        logo: `${SITE}/icon-512.png`,
+    },
+    {
+        '@context': 'https://schema.org',
+        '@type': 'WebSite',
+        name: 'Bukuresipi',
+        url: `${SITE}${pathIn('/', lang)}`,
+        inLanguage: lang,
+    },
+    {
+        '@context': 'https://schema.org',
+        '@type': 'MobileApplication',
+        name: 'Bukuresipi',
+        operatingSystem: 'Android, iOS',
+        applicationCategory: 'LifestyleApplication',
+        description: s.description,
+        inLanguage: ['ms', 'en'],
+    },
+    {
+        '@context': 'https://schema.org',
+        '@type': 'FAQPage',
+        mainEntity: s.faq.map(([q, a]) => ({ '@type': 'Question', name: q, acceptedAnswer: { '@type': 'Answer', text: a } })),
+    },
+]
+---
+
+<Base lang={lang} path="/" title={s.title} description={s.description} jsonLd={jsonLd}>
+    <Header lang={lang} path="/" nav />
+    <main>
+        <section class="wrap hero">
+            <div class="hero-copy">
+                <h1>{s.h1}</h1>
+                <p class="lead">{s.lead}</p>
+                <StoreBadges lang={lang} />
+            </div>
+
+            <figure class="book" aria-label={s.ogAlt}>
+                <div class="page" aria-hidden="true">
+                    <p class="chip"><span class="chip-dot"></span>tiktok.com/@dapurkakna/video/7426…</p>
+                    <p class="dish">{n.dish}</p>
+                    <ul class="hand">
+                        {n.lines.map(([qty, rest]) => <li><mark>{qty}</mark>{rest}</li>)}
+                        <li class="gap">{n.gap}</li>
+                    </ul>
+                    <div class="pin">
+                        <svg viewBox="0 0 24 24" class="pin-icon"><path d="M12 2a7 7 0 0 1 7 7c0 5.2-7 13-7 13S5 14.2 5 9a7 7 0 0 1 7-7z" fill="#d23c35"/><circle cx="12" cy="9" r="2.6" fill="#fff"/></svg>
+                        <div>
+                            <p class="pin-name">{n.place}</p>
+                            <p class="pin-area">{n.area}</p>
+                            <p class="pin-halal"><mark>{n.halal}</mark> <span>{n.halalSource}</span></p>
+                        </div>
+                    </div>
+                </div>
+            </figure>
+        </section>
+
+        <section id="cara" class="steps-band">
+            <div class="wrap">
+                <h2>{s.stepsTitle}</h2>
+                <ol class="steps">
+                    {s.steps.map(([title, text]) => <li><h3>{title}</h3><p>{text}</p></li>)}
+                </ol>
+            </div>
+        </section>
+
+        <section class="wrap duo">
+            <div>
+                <h2>{s.bookTitle}</h2>
+                <p>{s.bookText}</p>
+            </div>
+            <div>
+                <h2>{s.mapTitle}</h2>
+                <p>{s.mapText}</p>
+            </div>
+        </section>
+
+        <section class="wrap honest">
+            <h2>{s.honestTitle}</h2>
+            <p class="honest-lead">{s.honestLead}</p>
+            <dl>
+                {s.honest.map(([term, text]) => <div><dt>{term}</dt><dd>{text}</dd></div>)}
+            </dl>
+        </section>
+
+        <section class="wrap platforms" aria-labelledby="works-with">
+            <h2 id="works-with">{s.worksWith}</h2>
+            <ul>{s.platforms.map(p => <li>{p}</li>)}</ul>
+        </section>
+
+        <section id="soalan" class="wrap faq">
+            <h2>{s.faqTitle}</h2>
+            <div class="faq-list">
+                {s.faq.map(([q, a]) => <details><summary>{q}</summary><p>{a}</p></details>)}
+            </div>
+        </section>
+
+        <section class="cta">
+            <div class="wrap cta-inner">
+                <div>
+                    <h2>{s.ctaTitle}</h2>
+                    <p>{s.ctaText}</p>
+                </div>
+                <StoreBadges lang={lang} tone="light" />
+            </div>
+        </section>
+    </main>
+    <Footer lang={lang} />
+</Base>
+
+<style>
+    .hero {
+        display: grid;
+        grid-template-columns: 1.05fr 0.95fr;
+        gap: clamp(2rem, 5vw, 4.5rem);
+        align-items: center;
+        padding-block: clamp(2rem, 6vw, 5rem) clamp(3rem, 8vw, 6.5rem);
+    }
+    /* Grid children may shrink below their content (the link chip never wraps). */
+    .hero > *,
+    .duo > *,
+    .steps > * {
+        min-width: 0;
+    }
+    h1 {
+        font-size: var(--step-4);
+        max-width: 14ch;
+    }
+    .lead {
+        margin-block: 1.5rem 2rem;
+        max-width: 34em;
+        font-size: var(--step-1);
+        line-height: 1.45;
+        color: var(--ink-soft);
+    }
+
+    /* The exercise book: blue rules, red margin, a pasted link and the recipe written in by hand. */
+    .book {
+        margin: 0;
+        justify-self: center;
+        width: min(100%, 470px);
+        transform: rotate(1.6deg);
+        filter: drop-shadow(0 28px 40px rgba(31, 74, 41, 0.18));
+    }
+    .page {
+        --lh: 2.05rem;
+        position: relative;
+        padding: 1.6rem 1.6rem 1.8rem 4.2rem;
+        border-radius: 6px 18px 18px 6px;
+        background:
+            linear-gradient(90deg, transparent 3rem, var(--margin) 3rem, var(--margin) calc(3rem + 2px), transparent calc(3rem + 2px)),
+            repeating-linear-gradient(transparent 0 calc(var(--lh) - 1px), var(--rule) calc(var(--lh) - 1px) var(--lh)),
+            #fff;
+        background-position: 0 0, 0 1.45rem, 0 0;
+        border-left: 10px solid var(--pandan);
+        line-height: var(--lh);
+    }
+    .chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        max-width: 100%;
+        margin-bottom: 0.4rem;
+        padding: 0.1rem 0.75rem;
+        line-height: 1.8;
+        border-radius: 999px;
+        background: var(--ink);
+        color: #fff;
+        font-size: 0.82rem;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        transform: rotate(-1.5deg);
+    }
+    .chip-dot {
+        width: 0.55rem;
+        height: 0.55rem;
+        border-radius: 50%;
+        background: var(--kunyit);
+        flex: none;
+    }
+    .dish {
+        font-family: var(--hand);
+        font-weight: 600;
+        font-size: 2.15rem;
+        color: var(--pandan-deep);
+        text-decoration: underline 2px var(--margin);
+        text-underline-offset: 0.25em;
+    }
+    .hand {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+        font-family: var(--hand);
+        font-size: 1.55rem;
+        color: #24334f;
+    }
+    .hand li::before {
+        content: '- ';
+    }
+    mark {
+        background: linear-gradient(transparent 22%, color-mix(in srgb, var(--kunyit) 75%, transparent) 22% 88%, transparent 88%);
+        color: inherit;
+        padding-inline: 0.12em;
+    }
+    .gap {
+        color: #8a93a6;
+        font-style: italic;
+    }
+    .pin {
+        display: flex;
+        gap: 0.7rem;
+        margin-top: 0.9rem;
+        padding: 0.85rem 1rem;
+        border-radius: 14px;
+        background: var(--pandan-mist);
+        line-height: 1.35;
+        transform: rotate(-1deg);
+    }
+    .pin-icon {
+        width: 30px;
+        height: 30px;
+        flex: none;
+    }
+    .pin-name {
+        font-weight: 700;
+    }
+    .pin-area {
+        font-size: 0.85rem;
+        color: var(--ink-soft);
+    }
+    .pin-halal {
+        margin-top: 0.35rem;
+        font-size: 0.9rem;
+    }
+    .pin-halal span {
+        color: var(--ink-soft);
+        font-size: 0.8rem;
+    }
+
+    /* Load: the handwriting appears line by line, once. */
+    .hand li,
+    .dish,
+    .pin {
+        animation: write 0.5s ease-out both;
+    }
+    .dish { animation-delay: 0.25s; }
+    .hand li:nth-child(1) { animation-delay: 0.55s; }
+    .hand li:nth-child(2) { animation-delay: 0.8s; }
+    .hand li:nth-child(3) { animation-delay: 1.05s; }
+    .hand li:nth-child(4) { animation-delay: 1.3s; }
+    .pin { animation-delay: 1.65s; }
+    @keyframes write {
+        from { opacity: 0; clip-path: inset(0 100% 0 0); }
+        to { opacity: 1; clip-path: inset(0 0 0 0); }
+    }
+
+    .steps-band {
+        padding-block: clamp(3.5rem, 8vw, 6rem);
+        background: var(--pandan-deep);
+        color: #fff;
+    }
+    .steps-band h2,
+    .duo h2,
+    .honest h2,
+    .faq h2 {
+        font-size: var(--step-3);
+    }
+    .steps {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: clamp(1.5rem, 4vw, 3rem);
+        margin: 2.5rem 0 0;
+        padding: 0;
+        list-style: none;
+        counter-reset: step;
+    }
+    .steps li {
+        counter-increment: step;
+        padding-top: 1.1rem;
+        border-top: 2px solid rgba(255, 255, 255, 0.25);
+    }
+    .steps h3 {
+        display: flex;
+        align-items: baseline;
+        gap: 0.6rem;
+        font-size: var(--step-2);
+        margin-bottom: 0.6rem;
+    }
+    .steps h3::before {
+        content: counter(step);
+        font-family: var(--hand);
+        font-size: 2.6rem;
+        color: var(--kunyit);
+        line-height: 1;
+    }
+    .steps p {
+        color: rgba(255, 255, 255, 0.82);
+    }
+
+    .duo {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: clamp(2rem, 6vw, 5rem);
+        padding-block: clamp(3.5rem, 8vw, 6rem) 0;
+    }
+    .duo p {
+        margin-top: 1rem;
+        max-width: 32em;
+        color: var(--ink-soft);
+    }
+
+    .honest {
+        margin-block: clamp(3.5rem, 8vw, 6rem);
+        padding: clamp(1.75rem, 5vw, 3.25rem);
+        border-radius: 22px;
+        background: var(--pandan-mist);
+    }
+    .honest-lead {
+        margin-top: 1rem;
+        max-width: 38em;
+        font-size: var(--step-1);
+        line-height: 1.45;
+    }
+    .honest dl {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1.5rem 3rem;
+        margin: 2rem 0 0;
+    }
+    .honest dt {
+        font-weight: 700;
+    }
+    .honest dt::before {
+        content: '';
+        display: inline-block;
+        width: 0.9rem;
+        height: 0.9rem;
+        margin-right: 0.55rem;
+        border-radius: 3px;
+        background: var(--kunyit);
+        vertical-align: -0.05em;
+    }
+    .honest dd {
+        margin: 0.35rem 0 0;
+        color: var(--ink-soft);
+    }
+
+    .platforms {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: baseline;
+        gap: 1rem 1.5rem;
+    }
+    .platforms h2 {
+        font-size: var(--step-0);
+        font-weight: 600;
+        color: var(--ink-soft);
+        letter-spacing: 0;
+    }
+    .platforms ul {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.6rem;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+    }
+    .platforms li {
+        padding: 0.3rem 0.9rem;
+        border: 1.5px solid var(--line);
+        border-radius: 999px;
+        font-weight: 600;
+    }
+
+    .faq {
+        padding-block: clamp(3.5rem, 8vw, 6rem);
+    }
+    .faq-list {
+        margin-top: 1.75rem;
+        max-width: 48rem;
+        border-top: 1.5px solid var(--line);
+    }
+    details {
+        border-bottom: 1.5px solid var(--line);
+    }
+    summary {
+        display: flex;
+        justify-content: space-between;
+        gap: 1rem;
+        padding-block: 1.1rem;
+        font-size: var(--step-1);
+        font-weight: 600;
+        cursor: pointer;
+        list-style: none;
+    }
+    summary::-webkit-details-marker {
+        display: none;
+    }
+    summary::after {
+        content: '+';
+        color: var(--pandan);
+        font-weight: 400;
+        transition: transform 0.2s;
+    }
+    details[open] summary::after {
+        transform: rotate(45deg);
+    }
+    details p {
+        padding-bottom: 1.25rem;
+        max-width: 40em;
+        color: var(--ink-soft);
+    }
+
+    .cta {
+        background: var(--pandan);
+        color: #fff;
+    }
+    .cta-inner {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+        gap: 2rem;
+        padding-block: clamp(3rem, 7vw, 4.5rem);
+    }
+    .cta h2 {
+        font-size: var(--step-3);
+        max-width: 18ch;
+    }
+    .cta p {
+        margin-top: 0.75rem;
+        opacity: 0.85;
+    }
+
+    @media (max-width: 880px) {
+        .hero,
+        .duo,
+        .honest dl,
+        .steps {
+            grid-template-columns: 1fr;
+        }
+        .book {
+            transform: rotate(0.8deg);
+        }
+    }
+    @media (max-width: 420px) {
+        .page {
+            padding-left: 3.4rem;
+            background-position: -0.6rem 0, 0 1.45rem, 0 0;
+        }
+        .hand {
+            font-size: 1.35rem;
+        }
+    }
+</style>
