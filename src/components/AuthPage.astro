@@ -14,7 +14,9 @@ const path = `/auth/${kind}`
 const messages = {
     missing: a.missing, expired: a.expired, rate: a.rate, network: a.network, working: a.working,
     done: k.done, weak: 'weak' in k ? k.weak : '', invalid: 'invalid' in k ? k.invalid : '',
+    mismatch: a.reset.mismatch, ...a.reset.levels,
 }
+const rules = Object.entries(a.reset.rules)
 ---
 
 <Base lang={lang} path={path} title={`${k.title} - Bukuresipi`} description={k.text} noindex>
@@ -27,8 +29,18 @@ const messages = {
                 {kind === 'reset' && (
                     <label>
                         {a.reset.label}
-                        <input type="password" name="password" autocomplete="new-password" minlength="8" maxlength="200" required aria-describedby="hint" />
-                        <span id="hint" class="hint">{a.reset.hint}</span>
+                        <input type="password" name="password" autocomplete="new-password" maxlength="200" required aria-describedby="meter" />
+                    </label>
+                    <div id="meter" class="meter" data-level="">
+                        <div class="bars" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+                        <p class="level"><span>{a.reset.strength}</span> <b aria-live="polite"></b></p>
+                        <ul class="rules">
+                            {rules.map(([rule, text]) => <li data-rule={rule}>{text}</li>)}
+                        </ul>
+                    </div>
+                    <label>
+                        {a.reset.confirm}
+                        <input type="password" name="confirm" autocomplete="new-password" maxlength="200" required />
                     </label>
                     <label class="check"><input type="checkbox" name="show" /> {a.reset.show}</label>
                 )}
@@ -50,6 +62,8 @@ const messages = {
 </Base>
 
 <script>
+    import { checkPassword } from '../password'
+
     for (const card of document.querySelectorAll<HTMLElement>('.card')) {
         const kind = card.dataset.kind!
         const m = JSON.parse(card.dataset.messages!) as Record<string, string>
@@ -70,7 +84,18 @@ const messages = {
         }
 
         form.querySelector<HTMLInputElement>('[name=show]')?.addEventListener('change', e => {
-            form.querySelector<HTMLInputElement>('[name=password]')!.type = (e.target as HTMLInputElement).checked ? 'text' : 'password'
+            for (const input of form.querySelectorAll<HTMLInputElement>('[name=password], [name=confirm]'))
+                input.type = (e.target as HTMLInputElement).checked ? 'text' : 'password'
+        })
+
+        const meter = card.querySelector<HTMLElement>('.meter')
+        form.querySelector<HTMLInputElement>('[name=password]')?.addEventListener('input', e => {
+            const value = (e.target as HTMLInputElement).value
+            const c = checkPassword(value)
+            meter!.dataset.level = value ? c.strength : ''
+            meter!.querySelector('b')!.textContent = value ? m[c.strength] : ''
+            for (const li of meter!.querySelectorAll<HTMLElement>('[data-rule]'))
+                li.dataset.ok = String(c[li.dataset.rule as keyof typeof c] === true)
         })
 
         form.addEventListener('submit', async e => {
@@ -80,7 +105,8 @@ const messages = {
             if (kind === 'verify') { route = 'verify-email'; body = { token } }
             if (kind === 'reset') {
                 const password = field('password')
-                if (password.length < 8) return say(m.weak, 'bad')
+                if (!checkPassword(password).length) return say(m.weak, 'bad')
+                if (password !== field('confirm')) return say(m.mismatch, 'bad')
                 route = 'reset-password'; body = { token, password }
             }
             if (kind === 'forgot') {
@@ -153,10 +179,67 @@ const messages = {
         font: inherit;
         color: inherit;
     }
-    .hint {
-        font-weight: 400;
+    .meter {
+        margin-top: -0.4rem;
         font-size: var(--step--1);
         color: var(--ink-soft);
+    }
+    .bars {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 6px;
+    }
+    .bars i {
+        height: 6px;
+        border-radius: 3px;
+        background: #d6e2d4;
+        transition: background-color 0.2s;
+    }
+    .meter[data-level='weak'] { --level: var(--margin); }
+    .meter[data-level='fair'] { --level: #d9822b; }
+    .meter[data-level='good'] { --level: #6a9f3e; }
+    .meter[data-level='strong'] { --level: var(--pandan); }
+    .meter[data-level='weak'] i:nth-child(-n + 1),
+    .meter[data-level='fair'] i:nth-child(-n + 2),
+    .meter[data-level='good'] i:nth-child(-n + 3),
+    .meter[data-level='strong'] i {
+        background: var(--level);
+    }
+    .level {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 0.4rem;
+    }
+    .level b {
+        color: var(--level);
+    }
+    .rules {
+        display: grid;
+        gap: 0.3rem;
+        margin: 0.6rem 0 0;
+        padding: 0;
+        list-style: none;
+    }
+    .rules li {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+    .rules li::before {
+        content: '';
+        flex: none;
+        width: 1rem;
+        height: 1rem;
+        border: 1.5px solid #9fb29d;
+        border-radius: 50%;
+        box-sizing: border-box;
+    }
+    .rules li[data-ok='true'] {
+        color: var(--ink);
+    }
+    .rules li[data-ok='true']::before {
+        border: 0;
+        background: var(--pandan) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M4.5 8.2l2.3 2.3 4.7-4.9' fill='none' stroke='%23fff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / 100% no-repeat;
     }
     .check {
         display: flex;
