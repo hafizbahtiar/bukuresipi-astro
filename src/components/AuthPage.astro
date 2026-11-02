@@ -2,7 +2,7 @@
 // Email-link pages. Opening the page does nothing (mail scanners open links; a single-use token must survive);
 // the button / form calls the API. The token is read from ?token= and removed from the address bar at once.
 import Base from '../layouts/Base.astro'
-import { API, type Lang, pathIn, t } from '../i18n'
+import { type Lang, pathIn, t } from '../i18n'
 import Footer from './Footer.astro'
 import Header from './Header.astro'
 
@@ -20,7 +20,7 @@ const messages = {
 <Base lang={lang} path={path} title={`${k.title} - Bukuresipi`} description={k.text} noindex>
     <Header lang={lang} path={path} />
     <main class="wrap">
-        <div class="card" data-kind={kind} data-api={API} data-messages={JSON.stringify(messages)}>
+        <div class="card" data-kind={kind} data-messages={JSON.stringify(messages)}>
             <h1>{k.title}</h1>
             <p class="text">{k.text}</p>
             <form novalidate>
@@ -52,7 +52,6 @@ const messages = {
 <script>
     for (const card of document.querySelectorAll<HTMLElement>('.card')) {
         const kind = card.dataset.kind!
-        const api = card.dataset.api!
         const m = JSON.parse(card.dataset.messages!) as Record<string, string>
         const form = card.querySelector('form')!
         const status = card.querySelector<HTMLElement>('.status')!
@@ -92,7 +91,8 @@ const messages = {
             button.disabled = true
             say(m.working)
             try {
-                const res = await fetch(`${api}/api/v1/auth/${route}`, {
+                // Same origin: the website Worker passes /api/* to the API Worker (service binding).
+                const res = await fetch(`/api/v1/auth/${route}`, {
                     method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body),
                 })
                 const error = res.ok ? null : ((await res.json().catch(() => ({}))) as { error?: string }).error

@@ -8,4 +8,6 @@ export default defineConfig({
     trailingSlash: 'never',
     build: { format: 'file' },
     i18n: { defaultLocale: 'ms', locales: ['ms', 'en'], routing: { prefixDefaultLocale: false } },
+    // `astro dev`: /api goes to the API's `wrangler dev`, as the service binding does in production (worker/index.ts).
+    vite: { server: { proxy: { '/api': 'http://localhost:8787' } } },
 })

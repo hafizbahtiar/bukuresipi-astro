@@ -1,12 +1,13 @@
 # bukuresipi-astro
 
 Website for Bukuresipi at https://bukuresipi.com: the landing page (Malay at `/`, English at `/en`) and the pages that
-email links open (`/auth/verify`, `/auth/reset`, `/auth/forgot`, and `/en/auth/...`). Those pages call the API
-(`bukuresipi-hono`, https://api.bukuresipi.com), which allows this origin by CORS (`WEB_ORIGIN`).
+email links open (`/auth/verify`, `/auth/reset`, `/auth/forgot`, and `/en/auth/...`). Those pages call
+`/api/v1/auth/*` on their own origin; the Worker (`worker/index.ts`) passes `/api/*` to the API Worker
+(`bukuresipi-hono`) through a service binding. Deploy the API first.
 
 | Command | Does |
 |---|---|
-| `bun run dev` | `astro dev` on :4321; talks to the API on `wrangler dev` (:8787, `.env.development`) |
+| `bun run dev` | `astro dev` on :4321; `/api` is proxied to the API's `wrangler dev` (:8787) |
 | `bun run build` | static build to `dist/` |
 | `bun run deploy` | build + `wrangler deploy` (Worker `bukuresipi-web`, domains bukuresipi.com + www) |
 | `bun run secrets:push [--dry-run]` | push `.env` Worker secrets (none yet) to `bukuresipi-web`; skips `PUBLIC_*` build settings |
@@ -17,6 +18,4 @@ email links open (`/auth/verify`, `/auth/reset`, `/auth/forgot`, and `/en/auth/.
 - App Links: add `public/.well-known/assetlinks.json` and `apple-app-site-association` once the app has its ids;
   the app should claim `/auth/*` and `/en/auth/*`.
 
-Env files: `.env` = production (git-ignored, template `.env.example`): build settings (`PUBLIC_API_URL`) + Worker
-secrets. `.env.development` (committed) overrides it for `astro dev`. A build elsewhere (CI, Cloudflare Git builds)
-must be given `PUBLIC_API_URL`; without it the build stops.
+Env: `.env` = production Worker secrets (git-ignored, template `.env.example`, none needed yet). No build settings.
