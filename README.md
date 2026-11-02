@@ -1,46 +1,21 @@
-# Astro Starter Kit: Basics
+# bukuresipi-astro
 
-```sh
-bun create astro@latest -- --template basics
-```
+Website for Bukuresipi at https://bukuresipi.com: the landing page (Malay at `/`, English at `/en`) and the pages that
+email links open (`/auth/verify`, `/auth/reset`, `/auth/forgot`, and `/en/auth/...`). Those pages call
+`/api/v1/auth/*` on their own origin; the Worker (`worker/index.ts`) passes `/api/*` to the API Worker
+(`bukuresipi-hono`) through a service binding. Deploy the API first.
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+| Command | Does |
+|---|---|
+| `bun run dev` | `astro dev` on :4321; `/api` is proxied to the API's `wrangler dev` (:8787) |
+| `bun run build` | static build to `dist/` |
+| `bun run deploy` | build + `wrangler deploy` (Worker `bukuresipi-web`, domains bukuresipi.com + www) |
+| `bun run secrets:push [--dry-run]` | push `.env` Worker secrets (none yet) to `bukuresipi-web`; skips `PUBLIC_*` build settings |
+| `bun run icons` | regenerate `public/*.png` from `public/favicon.svg` and `scripts/og.html` (needs Brave/Chrome) |
 
-## 🚀 Project Structure
+- Copy for both languages: `src/i18n.ts`. Store links: `STORES` there (null = "coming soon").
+- SEO: `src/layouts/Base.astro` (canonical, hreflang, Open Graph, X card, JSON-LD), `sitemap.xml`, `robots.txt`.
+- App Links: add `public/.well-known/assetlinks.json` and `apple-app-site-association` once the app has its ids;
+  the app should claim `/auth/*` and `/en/auth/*`.
 
-Inside of your Astro project, you'll see the following folders and files:
-
-```text
-/
-├── public/
-│   └── favicon.svg
-├── src
-│   ├── assets
-│   │   └── astro.svg
-│   ├── components
-│   │   └── Welcome.astro
-│   ├── layouts
-│   │   └── Layout.astro
-│   └── pages
-│       └── index.astro
-└── package.json
-```
-
-To learn more about the folder structure of an Astro project, refer to [our guide on project structure](https://docs.astro.build/en/basics/project-structure/).
-
-## 🧞 Commands
-
-All commands are run from the root of the project, from a terminal:
-
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `bun install`             | Installs dependencies                            |
-| `bun dev`             | Starts local dev server at `localhost:4321`      |
-| `bun build`           | Build your production site to `./dist/`          |
-| `bun preview`         | Preview your build locally, before deploying     |
-| `bun astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `bun astro -- --help` | Get help using the Astro CLI                     |
-
-## 👀 Want to learn more?
-
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+Env: `.env` = production Worker secrets (git-ignored, template `.env.example`, none needed yet). No build settings.

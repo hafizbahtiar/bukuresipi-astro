@@ -1,0 +1,17 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "bukuresipi-web",
+  "main": "worker/index.ts",
+  "compatibility_date": "2026-11-02",
+  // Static Astro build. run_worker_first: the www redirect and /api/* run before any file match.
+  "assets": { "directory": "./dist", "binding": "ASSETS", "not_found_handling": "404-page", "run_worker_first": true },
+  // Custom domains: `wrangler deploy` creates the DNS records + certificates (zone bukuresipi.com is on this account).
+  // The API is the other Worker (bukuresipi-hono) on api.bukuresipi.com.
+  "routes": [
+    { "pattern": "bukuresipi.com", "custom_domain": true },
+    { "pattern": "www.bukuresipi.com", "custom_domain": true }
+  ],
+  // bukuresipi.com/api/* -> the API Worker (worker/index.ts). Deploy bukuresipi-hono first: the binding needs it.
+  "services": [{ "binding": "API", "service": "bukuresipi-hono" }],
+  "observability": { "enabled": true }
+}

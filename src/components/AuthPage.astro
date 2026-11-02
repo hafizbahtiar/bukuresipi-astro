@@ -1,0 +1,213 @@
+---
+// Email-link pages. Opening the page does nothing (mail scanners open links; a single-use token must survive);
+// the button / form calls the API. The token is read from ?token= and removed from the address bar at once.
+import Base from '../layouts/Base.astro'
+import { type Lang, pathIn, t } from '../i18n'
+import Footer from './Footer.astro'
+import Header from './Header.astro'
+
+interface Props { lang: Lang; kind: 'verify' | 'reset' | 'forgot' }
+const { lang, kind } = Astro.props
+const a = t(lang).auth
+const k = a[kind]
+const path = `/auth/${kind}`
+const messages = {
+    missing: a.missing, expired: a.expired, rate: a.rate, network: a.network, working: a.working,
+    done: k.done, weak: 'weak' in k ? k.weak : '', invalid: 'invalid' in k ? k.invalid : '',
+}
+---
+
+<Base lang={lang} path={path} title={`${k.title} - Bukuresipi`} description={k.text} noindex>
+    <Header lang={lang} path={path} />
+    <main class="wrap">
+        <div class="card" data-kind={kind} data-messages={JSON.stringify(messages)}>
+            <h1>{k.title}</h1>
+            <p class="text">{k.text}</p>
+            <form novalidate>
+                {kind === 'reset' && (
+                    <label>
+                        {a.reset.label}
+                        <input type="password" name="password" autocomplete="new-password" minlength="8" maxlength="200" required aria-describedby="hint" />
+                        <span id="hint" class="hint">{a.reset.hint}</span>
+                    </label>
+                    <label class="check"><input type="checkbox" name="show" /> {a.reset.show}</label>
+                )}
+                {kind === 'forgot' && (
+                    <label>
+                        {a.forgot.label}
+                        <input type="email" name="email" autocomplete="email" maxlength="254" required />
+                    </label>
+                )}
+                <button type="submit">{k.button}</button>
+            </form>
+            <p class="status" role="status" aria-live="polite"></p>
+            {kind === 'verify' && <p class="after" hidden>{a.verify.again}</p>}
+            {kind === 'reset' && <p class="after" hidden><a href={pathIn('/auth/forgot', lang)}>{a.reset.again}</a></p>}
+            <p class="home"><a href={pathIn('/', lang)}>{a.backHome}</a></p>
+        </div>
+    </main>
+    <Footer lang={lang} />
+</Base>
+
+<script>
+    for (const card of document.querySelectorAll<HTMLElement>('.card')) {
+        const kind = card.dataset.kind!
+        const m = JSON.parse(card.dataset.messages!) as Record<string, string>
+        const form = card.querySelector('form')!
+        const status = card.querySelector<HTMLElement>('.status')!
+        const after = card.querySelector<HTMLElement>('.after')
+        const button = form.querySelector('button')!
+
+        const token = new URLSearchParams(location.search).get('token') ?? ''
+        if (token) history.replaceState(null, '', location.pathname)
+        const say = (text: string, tone: 'ok' | 'bad' | '' = '') => {
+            status.textContent = text
+            status.dataset.tone = tone
+        }
+        if (kind !== 'forgot' && !token) {
+            form.hidden = true
+            say(m.missing, 'bad')
+        }
+
+        form.querySelector<HTMLInputElement>('[name=show]')?.addEventListener('change', e => {
+            form.querySelector<HTMLInputElement>('[name=password]')!.type = (e.target as HTMLInputElement).checked ? 'text' : 'password'
+        })
+
+        form.addEventListener('submit', async e => {
+            e.preventDefault()
+            const field = (name: string) => form.querySelector<HTMLInputElement>(`[name=${name}]`)!.value
+            let route = '', body = {}
+            if (kind === 'verify') { route = 'verify-email'; body = { token } }
+            if (kind === 'reset') {
+                const password = field('password')
+                if (password.length < 8) return say(m.weak, 'bad')
+                route = 'reset-password'; body = { token, password }
+            }
+            if (kind === 'forgot') {
+                const email = field('email').trim()
+                if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return say(m.invalid, 'bad')
+                route = 'forgot-password'; body = { email }
+            }
+            button.disabled = true
+            say(m.working)
+            try {
+                // Same origin: the website Worker passes /api/* to the API Worker (service binding).
+                const res = await fetch(`/api/v1/auth/${route}`, {
+                    method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body),
+                })
+                const error = res.ok ? null : ((await res.json().catch(() => ({}))) as { error?: string }).error
+                if (res.ok) {
+                    form.hidden = true
+                    return say(m.done, 'ok')
+                }
+                if (error === 'weak_password') return say(m.weak, 'bad')
+                if (error === 'rate_limited') return say(m.rate, 'bad')
+                if (error === 'invalid_input' && kind === 'forgot') return say(m.invalid, 'bad')
+                form.hidden = true
+                say(m.expired, 'bad')
+                if (after) after.hidden = false
+            } catch {
+                say(m.network, 'bad')
+            } finally {
+                button.disabled = false
+            }
+        })
+    }
+</script>
+
+<style>
+    main {
+        padding-block: clamp(2rem, 8vw, 5rem);
+    }
+    .card {
+        max-width: 30rem;
+        margin-inline: auto;
+        padding: clamp(1.5rem, 5vw, 2.5rem);
+        border-radius: 22px;
+        background: var(--pandan-mist);
+    }
+    h1 {
+        font-size: var(--step-3);
+    }
+    .text {
+        margin-block: 0.9rem 1.5rem;
+        color: var(--ink-soft);
+    }
+    form {
+        display: grid;
+        gap: 1rem;
+    }
+    label {
+        display: grid;
+        gap: 0.4rem;
+        font-weight: 600;
+    }
+    input[type='password'],
+    input[type='email'],
+    input[type='text'] {
+        width: 100%;
+        padding: 0.8rem 0.9rem;
+        border: 1.5px solid #b9c9b8;
+        border-radius: 12px;
+        background: #fff;
+        font: inherit;
+        color: inherit;
+    }
+    .hint {
+        font-weight: 400;
+        font-size: var(--step--1);
+        color: var(--ink-soft);
+    }
+    .check {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-weight: 400;
+        font-size: var(--step--1);
+    }
+    .check input {
+        width: 1.1rem;
+        height: 1.1rem;
+        accent-color: var(--pandan);
+    }
+    button {
+        justify-self: start;
+        padding: 0.85rem 1.5rem;
+        border: 0;
+        border-radius: 999px;
+        background: var(--pandan);
+        color: #fff;
+        font: inherit;
+        font-weight: 700;
+        cursor: pointer;
+    }
+    button:hover {
+        background: var(--pandan-deep);
+    }
+    button:disabled {
+        opacity: 0.6;
+        cursor: progress;
+    }
+    .status:empty {
+        display: none;
+    }
+    .status {
+        margin-top: 1.25rem;
+        padding: 0.9rem 1rem;
+        border-radius: 12px;
+        background: #fff;
+    }
+    .status[data-tone='ok'] {
+        border-left: 5px solid var(--pandan);
+    }
+    .status[data-tone='bad'] {
+        border-left: 5px solid var(--margin);
+    }
+    .after {
+        margin-top: 1rem;
+    }
+    .home {
+        margin-top: 1.75rem;
+        font-size: var(--step--1);
+    }
+</style>

@@ -1,0 +1,207 @@
+// All website copy, Malay (default, at /) and English (at /en). Pages pick one with `t(lang)`.
+export const LANGS = ['ms', 'en'] as const
+export type Lang = (typeof LANGS)[number]
+
+export const SITE = 'https://bukuresipi.com'
+/** Store links: null = not published yet ("coming soon"). Set at launch. */
+export const STORES = { play: null as string | null, appStore: null as string | null }
+
+/** URL path of a page in a language: ('/auth/reset', 'en') -> '/en/auth/reset'. */
+export const pathIn = (path: string, lang: Lang) => (lang === 'en' ? (path === '/' ? '/en' : `/en${path}`) : path)
+
+const ms = {
+    htmlLang: 'ms',
+    ogLocale: 'ms_MY',
+    other: { lang: 'en' as Lang, label: 'English' },
+    nav: { how: 'Cara guna', faq: 'Soalan lazim' },
+    home: {
+        title: 'Bukuresipi: simpan resipi dan tempat makan dari TikTok, Instagram dan YouTube',
+        description:
+            'Nampak resipi atau kedai makan sedap di TikTok, Instagram, Facebook atau YouTube? Kongsi ke Bukuresipi. Resipi masuk buku anda, kedai makan masuk peta anda.',
+        ogAlt: 'Bukuresipi: resipi dari TikTok tersalin ke dalam buku latihan',
+        h1: 'Resipi yang anda jumpa di TikTok, tersimpan dalam satu buku.',
+        lead: 'Kongsi pautan atau tangkap layar ke Bukuresipi. Bahan, langkah dan nama kedai disalin daripada hantaran itu sendiri, terus ke buku resipi dan peta anda.',
+        soon: 'Tidak lama lagi',
+        play: 'Google Play',
+        appStore: 'App Store',
+        notebook: {
+            dish: 'Ayam masak merah',
+            lines: [
+                ['2 ekor', ' ayam, potong 12'],
+                ['10 tangkai', ' cili kering, rendam'],
+                ['3 sudu besar', ' sos tomato'],
+            ],
+            gap: 'garam: tidak disebut dalam video',
+            place: 'Warung Mak Teh',
+            area: 'Kuala Terengganu, 2 cawangan',
+            halal: '"Semua makanan kami halal"',
+            halalSource: 'dipetik daripada kapsyen',
+        },
+        stepsTitle: 'Dari skrol ke simpanan',
+        steps: [
+            ['Kongsi', 'Tekan Kongsi di TikTok, Instagram, Facebook, YouTube atau mana-mana laman web, kemudian pilih Bukuresipi.'],
+            ['Kami baca', 'Kapsyen, teks pada skrin dan maklumat laman dibaca untuk tahu sama ada ia resipi atau kedai makan.'],
+            ['Tersimpan', 'Resipi masuk buku anda. Kedai makan dapat pin di peta, lengkap dengan cawangannya.'],
+        ],
+        bookTitle: 'Buku resipi',
+        bookText:
+            'Sukatan disimpan seperti yang ditulis: "segenggam kecil" kekal segenggam kecil. Langkah ikut turutan, dan bahan dipadankan dengan katalog supaya alahan seperti kacang atau susu ditanda.',
+        mapTitle: 'Peta makan',
+        mapText:
+            'Setiap kedai yang anda simpan muncul di peta. Bukuresipi cari cawangannya sekali, jadi anda tahu yang mana paling dekat.',
+        honestTitle: 'Tiada yang direka.',
+        honestLead:
+            'Setiap bahan, langkah dan nama kedai mesti datang daripada hantaran itu. Kalau video tak sebut sukatan, Bukuresipi tulis "tidak disebut", bukan meneka.',
+        honest: [
+            ['Tiada pin lebih baik daripada pin yang salah', 'Alamat yang tidak dapat dikenal pasti disimpan tanpa pin.'],
+            ['Halal ialah petikan, bukan pensijilan', 'Anda nampak ayat kedai itu sendiri dan sumbernya, bukan tanda "disahkan".'],
+        ],
+        worksWith: 'Berfungsi dengan',
+        platforms: ['TikTok', 'Instagram', 'Facebook', 'YouTube', 'Google Maps', 'Laman web resipi', 'Tangkap layar'],
+        faqTitle: 'Soalan lazim',
+        faq: [
+            ['Apa yang boleh saya kongsi?', 'Pautan TikTok, Instagram, Facebook, YouTube, Google Maps dan laman web resipi, atau tangkap layar daripada mana-mana aplikasi.'],
+            ['Adakah maklumat halal disahkan?', 'Tidak. Bukuresipi menunjukkan apa yang kedai atau hantaran itu sendiri katakan, berserta sumbernya. Ia bukan pensijilan JAKIM, jadi semak logo halal di premis.'],
+            ['Bagaimana kalau hantaran tak lengkap?', 'Resipi tetap disimpan, dan bahagian yang tiada ditanda dengan jelas supaya anda boleh lengkapkannya sendiri.'],
+            ['Bila aplikasi dilancarkan?', 'Bukuresipi sedang dibina untuk Android dan iPhone. Butang muat turun di halaman ini akan aktif sebaik sahaja aplikasi tersedia.'],
+            ['Bahasa apa yang disokong?', 'Bahasa Melayu dan English. Resipi disimpan dalam bahasa asal hantaran.'],
+        ],
+        ctaTitle: 'Buku resipi anda, diisi oleh skrol anda.',
+        ctaText: 'Aplikasi Android dan iPhone akan tersedia tidak lama lagi.',
+        footer: 'Resipi dan tempat makan dari media sosial, tersimpan di satu tempat.',
+    },
+    auth: {
+        backHome: 'Ke laman utama',
+        missing: 'Pautan ini tidak lengkap. Buka semula pautan daripada emel anda.',
+        expired: 'Pautan ini sudah tamat atau telah digunakan.',
+        rate: 'Terlalu banyak cubaan. Cuba lagi dalam seminit.',
+        network: 'Tidak dapat menghubungi Bukuresipi. Semak sambungan internet dan cuba lagi.',
+        working: 'Sebentar...',
+        verify: {
+            title: 'Sahkan emel',
+            text: 'Tekan butang di bawah untuk mengesahkan emel akaun Bukuresipi anda.',
+            button: 'Sahkan emel',
+            done: 'Emel anda telah disahkan. Anda boleh kembali ke aplikasi.',
+            again: 'Minta pautan pengesahan baharu dari aplikasi Bukuresipi.',
+        },
+        reset: {
+            title: 'Tetapkan kata laluan baharu',
+            text: 'Pilih kata laluan baharu untuk akaun Bukuresipi anda.',
+            label: 'Kata laluan baharu',
+            hint: 'Sekurang-kurangnya 8 aksara.',
+            show: 'Tunjuk kata laluan',
+            button: 'Simpan kata laluan',
+            weak: 'Kata laluan mesti sekurang-kurangnya 8 aksara dan tidak terlalu panjang.',
+            done: 'Kata laluan disimpan. Log masuk di aplikasi dengan kata laluan baharu. Peranti lain telah dilog keluar.',
+            again: 'Minta pautan baharu',
+        },
+        forgot: {
+            title: 'Lupa kata laluan',
+            text: 'Masukkan emel akaun anda. Kami akan hantar pautan untuk tetapkan kata laluan baharu.',
+            label: 'Emel',
+            button: 'Hantar pautan',
+            invalid: 'Masukkan alamat emel yang sah.',
+            done: 'Jika emel ini berdaftar, pautan telah dihantar. Semak peti masuk dan folder spam. Pautan sah selama 1 jam.',
+        },
+    },
+    notFound: { title: 'Halaman tidak dijumpai', text: 'Halaman ini tiada atau telah dipindahkan.', home: 'Ke laman utama' },
+}
+
+const en: typeof ms = {
+    htmlLang: 'en',
+    ogLocale: 'en_MY',
+    other: { lang: 'ms', label: 'Bahasa Melayu' },
+    nav: { how: 'How it works', faq: 'FAQ' },
+    home: {
+        title: 'Bukuresipi: save recipes and places to eat from TikTok, Instagram and YouTube',
+        description:
+            'Found a great recipe or food spot on TikTok, Instagram, Facebook or YouTube? Share it to Bukuresipi. Recipes go into your book, restaurants onto your map.',
+        ogAlt: 'Bukuresipi: a TikTok recipe copied into an exercise book',
+        h1: 'The recipe you found on TikTok, kept in one book.',
+        lead: 'Share a link or a screenshot to Bukuresipi. Ingredients, steps and the restaurant name are copied from the post itself, straight into your recipe book and map.',
+        soon: 'Coming soon',
+        play: 'Google Play',
+        appStore: 'App Store',
+        notebook: {
+            dish: 'Ayam masak merah',
+            lines: [
+                ['2 whole', ' chickens, cut into 12'],
+                ['10', ' dried chillies, soaked'],
+                ['3 tbsp', ' tomato sauce'],
+            ],
+            gap: 'salt: not mentioned in the video',
+            place: 'Warung Mak Teh',
+            area: 'Kuala Terengganu, 2 branches',
+            halal: '"All our food is halal"',
+            halalSource: 'quoted from the caption',
+        },
+        stepsTitle: 'From scroll to saved',
+        steps: [
+            ['Share', 'Tap Share in TikTok, Instagram, Facebook, YouTube or any website, then pick Bukuresipi.'],
+            ['We read it', 'The caption, on-screen text and page details tell us whether it is a recipe or a place to eat.'],
+            ['Saved', 'Recipes go into your book. Restaurants get a pin on your map, with their branches.'],
+        ],
+        bookTitle: 'Recipe book',
+        bookText:
+            'Quantities are kept as written: "a small handful" stays a small handful. Steps stay in order, and ingredients are matched to a catalogue so allergens like nuts or milk are marked.',
+        mapTitle: 'Food map',
+        mapText: 'Every place you save shows up on your map. Bukuresipi finds its other branches too, so you know which one is closest.',
+        honestTitle: 'Nothing made up.',
+        honestLead:
+            'Every ingredient, step and restaurant name has to come from the post. If the video never gives a quantity, Bukuresipi writes "not mentioned" instead of guessing.',
+        honest: [
+            ['No pin beats a wrong pin', 'An address that cannot be placed is saved without a pin.'],
+            ['Halal is a quote, not a certificate', "You see the restaurant's own words and where they came from, never a \"verified\" badge."],
+        ],
+        worksWith: 'Works with',
+        platforms: ['TikTok', 'Instagram', 'Facebook', 'YouTube', 'Google Maps', 'Recipe websites', 'Screenshots'],
+        faqTitle: 'Frequently asked questions',
+        faq: [
+            ['What can I share?', 'Links from TikTok, Instagram, Facebook, YouTube, Google Maps and recipe websites, or a screenshot from any app.'],
+            ['Is the halal information verified?', 'No. Bukuresipi shows what the restaurant or post itself says, with its source. It is not JAKIM certification, so check for the halal logo at the premises.'],
+            ['What if a post is incomplete?', 'The recipe is still saved, and the missing parts are clearly marked so you can fill them in yourself.'],
+            ['When does the app launch?', 'Bukuresipi is being built for Android and iPhone. The download buttons on this page go live as soon as the app is available.'],
+            ['Which languages are supported?', 'Malay and English. Recipes are kept in the language of the original post.'],
+        ],
+        ctaTitle: 'Your recipe book, filled by your scrolling.',
+        ctaText: 'The Android and iPhone apps are coming soon.',
+        footer: 'Recipes and places to eat from social media, kept in one place.',
+    },
+    auth: {
+        backHome: 'Go to the home page',
+        missing: 'This link is incomplete. Open the link from your email again.',
+        expired: 'This link has expired or was already used.',
+        rate: 'Too many tries. Try again in a minute.',
+        network: 'Could not reach Bukuresipi. Check your internet connection and try again.',
+        working: 'One moment...',
+        verify: {
+            title: 'Confirm your email',
+            text: 'Press the button below to confirm the email for your Bukuresipi account.',
+            button: 'Confirm email',
+            done: 'Your email is confirmed. You can go back to the app.',
+            again: 'Ask for a new confirmation link in the Bukuresipi app.',
+        },
+        reset: {
+            title: 'Set a new password',
+            text: 'Choose a new password for your Bukuresipi account.',
+            label: 'New password',
+            hint: 'At least 8 characters.',
+            show: 'Show password',
+            button: 'Save password',
+            weak: 'The password must be at least 8 characters and not too long.',
+            done: 'Password saved. Sign in to the app with your new password. Other devices have been signed out.',
+            again: 'Ask for a new link',
+        },
+        forgot: {
+            title: 'Forgot password',
+            text: "Enter your account's email. We'll send you a link to set a new password.",
+            label: 'Email',
+            button: 'Send link',
+            invalid: 'Enter a valid email address.',
+            done: 'If this email is registered, a link is on its way. Check your inbox and spam folder. The link works for 1 hour.',
+        },
+    },
+    notFound: { title: 'Page not found', text: 'This page does not exist or has moved.', home: 'Go to the home page' },
+}
+
+export const t = (lang: Lang) => (lang === 'en' ? en : ms)

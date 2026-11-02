@@ -1,0 +1,41 @@
+---
+// One 404 for both languages (Cloudflare serves it for any missing path): Malay first, English below.
+import Footer from '../components/Footer.astro'
+import Header from '../components/Header.astro'
+import Base from '../layouts/Base.astro'
+import { t } from '../i18n'
+
+const ms = t('ms').notFound
+const en = t('en').notFound
+---
+
+<Base lang="ms" path="/404" title={`${ms.title} - Bukuresipi`} description={ms.text} noindex>
+    <Header lang="ms" path="/" />
+    <main class="wrap nf">
+        <p class="code">404</p>
+        <h1>{ms.title}</h1>
+        <p>{ms.text} <a href="/">{ms.home}</a></p>
+        <p lang="en" class="en">{en.text} <a href="/en">{en.home}</a></p>
+    </main>
+    <Footer lang="ms" />
+</Base>
+
+<style>
+    .nf {
+        padding-block: clamp(3rem, 10vw, 7rem);
+    }
+    .code {
+        font-family: var(--hand);
+        font-size: 4rem;
+        line-height: 1;
+        color: var(--margin);
+    }
+    h1 {
+        margin-block: 0.5rem 1rem;
+        font-size: var(--step-3);
+    }
+    .en {
+        margin-top: 0.5rem;
+        color: var(--ink-soft);
+    }
+</style>

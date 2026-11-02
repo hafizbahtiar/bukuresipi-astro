@@ -13,12 +13,14 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 
-# environment variables
+# environment variables: .env = production (build settings + Worker secrets). .env.development = dev, committed.
 .env
-.env.production
 
 # macOS-specific files
 .DS_Store
 
 # jetbrains setting folder
 .idea/
+
+# wrangler
+.wrangler/
