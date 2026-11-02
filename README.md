@@ -9,8 +9,8 @@ email links open (`/auth/verify`, `/auth/reset`, `/auth/forgot`, and `/en/auth/.
 |---|---|
 | `bun run dev` | `astro dev` on :4321; `/api` is proxied to the API's `wrangler dev` (:8787) |
 | `bun run build` | static build to `dist/` |
-| `bun run deploy` | build + `wrangler deploy` (Worker `bukuresipi-web`, domains bukuresipi.com + www) |
-| `bun run secrets:push [--dry-run]` | push `.env` Worker secrets (none yet) to `bukuresipi-web`; skips `PUBLIC_*` build settings |
+| `bun run deploy` | build + `wrangler deploy` (Worker `bukuresipi-astro`, domains bukuresipi.com + www) |
+| `bun run secrets:push [--dry-run]` | push `.env` Worker secrets (none yet) to `bukuresipi-astro`; skips `PUBLIC_*` build settings |
 | `bun run icons` | regenerate `public/*.png` from `public/favicon.svg` and `scripts/og.html` (needs Brave/Chrome) |
 
 - Copy for both languages: `src/i18n.ts`. Store links: `STORES` there (null = "coming soon").
