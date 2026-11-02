@@ -3,8 +3,9 @@ export const LANGS = ['ms', 'en'] as const
 export type Lang = (typeof LANGS)[number]
 
 export const SITE = 'https://bukuresipi.com'
-/** The API Worker (bukuresipi-hono). Local: .env.development. */
-export const API = import.meta.env.PUBLIC_API_URL ?? 'https://api.bukuresipi.com'
+/** The API Worker (bukuresipi-hono): .env.production for builds, .env.development for `astro dev`. */
+export const API: string = import.meta.env.PUBLIC_API_URL
+if (!API) throw new Error('PUBLIC_API_URL is not set (.env.production / .env.development)')
 /** Store links: null = not published yet ("coming soon"). Set at launch. */
 export const STORES = { play: null as string | null, appStore: null as string | null }
 
