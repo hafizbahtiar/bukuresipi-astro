@@ -113,10 +113,9 @@ const jsonLd = [
                         </figure>
                     </section>
                 </div>
-                <div class="page-back" aria-hidden="true"></div>
             </div>
 
-            <div class="book-page is-next" data-page="1" data-theme="dark">
+            <div class="book-page" data-page="1" data-theme="dark">
                 <div class="page-front">
                     <section id="cara" class="steps-band">
                         <div class="wrap">
@@ -136,7 +135,6 @@ const jsonLd = [
                         </div>
                     </section>
                 </div>
-                <div class="page-back" aria-hidden="true"></div>
             </div>
 
             <div class="book-page" data-page="2">
@@ -152,7 +150,6 @@ const jsonLd = [
                         </div>
                     </section>
                 </div>
-                <div class="page-back" aria-hidden="true"></div>
             </div>
 
             <div class="book-page" data-page="3">
@@ -174,7 +171,6 @@ const jsonLd = [
                         </dl>
                     </section>
                 </div>
-                <div class="page-back" aria-hidden="true"></div>
             </div>
 
             <div class="book-page" data-page="4">
@@ -187,7 +183,6 @@ const jsonLd = [
                         <ul>{s.platforms.map((p) => <li>{p}</li>)}</ul>
                     </section>
                 </div>
-                <div class="page-back" aria-hidden="true"></div>
             </div>
 
             <div class="book-page" data-page="5">
@@ -210,7 +205,6 @@ const jsonLd = [
                         </div>
                     </section>
                 </div>
-                <div class="page-back" aria-hidden="true"></div>
             </div>
 
             <div class="book-page" data-page="6" data-theme="green">
@@ -261,28 +255,15 @@ const jsonLd = [
                         </div>
                     </section>
                 </div>
-                <div class="page-back" aria-hidden="true"></div>
             </div>
         </div>
         <nav
             class="book-nav"
             aria-label={lang === "en" ? "Book pages" : "Halaman buku"}
         >
-            <button
-                type="button"
-                data-book-prev
-                aria-label={lang === "en" ? "Previous page" : "Halaman sebelum"}
-                >←</button
-            >
             <span class="book-count"
                 ><b data-book-current>1</b> / <span data-book-total>7</span
                 ></span
-            >
-            <button
-                type="button"
-                data-book-next
-                aria-label={lang === "en" ? "Next page" : "Halaman seterusnya"}
-                >→</button
             >
         </nav>
     </main>
@@ -292,14 +273,14 @@ const jsonLd = [
 <style>
     .home {
         --page-indent: clamp(1.5rem, 4vw, 2.75rem);
-        padding-block: clamp(1.5rem, 4vw, 3rem) 0;
+        padding-block: 0;
     }
     .flipbook {
         position: relative;
-        width: min(100% - 2 * var(--gutter), var(--wrap));
-        height: clamp(540px, calc(100svh - 9rem), 840px);
-        margin-inline: auto;
-        perspective: 2200px;
+        width: 100%;
+        height: calc(100svh - 5rem);
+        margin: 0;
+        overflow: hidden;
     }
     .book-page {
         position: absolute;
@@ -307,79 +288,69 @@ const jsonLd = [
         z-index: 1;
         visibility: hidden;
         pointer-events: none;
-        transform-origin: top center;
-        transform-style: preserve-3d;
-        transition: transform 0.9s cubic-bezier(0.45, 0, 0.15, 1);
     }
     .book-page.is-current {
-        z-index: 3;
-        visibility: visible;
-        pointer-events: auto;
-        transform: rotateX(0deg);
-    }
-    .book-page.is-next {
         z-index: 2;
         visibility: visible;
+        pointer-events: auto;
+    }
+    /* The turning leaf (built by src/flipbook.ts, so unscoped): strips of a page clone laid on the bent paper. */
+    :global(.flip-leaf) {
+        position: absolute;
+        inset: 0;
+        z-index: 5;
         pointer-events: none;
-        transform: rotateX(0deg);
+        perspective-origin: 50% 50%;
     }
-    .book-page.is-flipping {
-        z-index: 4;
-        visibility: visible;
-        pointer-events: none;
-        transform: rotateX(-180deg);
+    :global(.flip-shadow),
+    :global(.flip-stage),
+    :global(.flip-strip),
+    :global(.flip-light) {
+        position: absolute;
     }
-    .book-page.is-returning {
-        z-index: 4;
-        visibility: visible;
-        pointer-events: none;
-        transform: rotateX(-180deg);
+    :global(.flip-stage) {
+        inset: 0;
+        transform-style: preserve-3d;
     }
-    .book-page.is-returning.is-returned {
-        transform: rotateX(0deg);
+    :global(.flip-strip) {
+        top: 0;
+        left: 0;
+        overflow: hidden;
     }
-    .page-front,
-    .page-back {
+    :global(.flip-light) {
+        inset: 0;
+    }
+    :global(.flip-strip *) {
+        animation: none !important;
+        transition: none !important;
+    }
+    .page-front {
+        --page-line: max(var(--gutter), calc(50% - var(--wrap) / 2));
         position: absolute;
         inset: 0;
         overflow-y: auto;
         overflow-x: hidden;
-        padding-bottom: 4.5rem;
+        padding-bottom: 2rem;
+        overscroll-behavior: contain;
         background-color: var(--paper);
         background-image: linear-gradient(
             90deg,
-            var(--margin) 0 2px,
-            transparent 2px
+            transparent var(--page-line),
+            var(--margin) var(--page-line),
+            var(--margin) calc(var(--page-line) + 2px),
+            transparent calc(var(--page-line) + 2px)
         );
-        box-shadow: 0 10px 24px rgba(28, 42, 32, 0.12);
-        backface-visibility: hidden;
         -webkit-overflow-scrolling: touch;
-    }
-    .page-back {
-        transform: rotateX(180deg);
-        overflow: hidden;
-        padding-bottom: 0;
-        background-image:
-            linear-gradient(
-                90deg,
-                transparent 1.4rem,
-                var(--line) 1.4rem,
-                var(--line) calc(1.4rem + 1px),
-                transparent calc(1.4rem + 1px)
-            ),
-            repeating-linear-gradient(
-                180deg,
-                transparent 0 2rem,
-                rgba(47, 107, 59, 0.05) 2rem calc(2rem + 1px)
-            );
     }
     .book-page[data-theme="dark"] .page-front {
         background-color: var(--pandan-deep);
         background-image:
             linear-gradient(
                 90deg,
-                rgba(255, 255, 255, 0.4) 0 1px,
-                transparent 1px
+                transparent var(--page-line),
+                rgba(255, 255, 255, 0.4) var(--page-line),
+                rgba(255, 255, 255, 0.4) calc(var(--page-line) + 1px),
+                transparent calc(var(--page-line) + 1px)
             ),
             repeating-linear-gradient(
                 180deg,
@@ -390,10 +361,6 @@ const jsonLd = [
     .book-page[data-theme="green"] .page-front {
         background-color: var(--pandan-deep);
         background-image: none;
-    }
-    .page-front .wrap {
-        width: 100%;
-        margin-inline: 0;
     }
     .book-nav {
         position: fixed;
@@ -410,30 +377,6 @@ const jsonLd = [
         box-shadow: 0 8px 20px rgba(28, 42, 32, 0.1);
         font-size: var(--step--1);
         transform: translateX(-50%);
-    }
-    .book-nav button {
-        display: grid;
-        place-items: center;
-        width: 2.4rem;
-        height: 2.4rem;
-        border: 1.5px solid var(--ink);
-        border-radius: 2px;
-        background: transparent;
-        color: var(--ink);
-        font: inherit;
-        font-size: 1.1rem;
-        cursor: pointer;
-        transition:
-            background-color 0.2s ease,
-            color 0.2s ease;
-    }
-    .book-nav button:hover:not(:disabled) {
-        background: var(--ink);
-        color: var(--paper);
-    }
-    .book-nav button:disabled {
-        opacity: 0.25;
-        cursor: default;
     }
     .book-count {
         min-width: 3.25rem;
@@ -455,14 +398,8 @@ const jsonLd = [
         overflow: visible;
         padding-bottom: 0;
     }
-    :global(html:not(.js)) .page-back,
     :global(html:not(.js)) .book-nav {
         display: none;
-    }
-    @media (prefers-reduced-motion: reduce) {
-        .book-page {
-            transition: none;
-        }
     }
 
     .hl {
@@ -1129,117 +1066,177 @@ const jsonLd = [
 </style>
 
 <script>
+    import { type Axis, flip } from "../flipbook";
+
     const book = document.querySelector<HTMLElement>(".flipbook");
     const pages = book
         ? [...book.querySelectorAll<HTMLElement>(".book-page")]
         : [];
-    const prevButton = document.querySelector<HTMLButtonElement>(
-        "[data-book-prev]",
-    );
-    const nextButton = document.querySelector<HTMLButtonElement>(
-        "[data-book-next]",
-    );
     const currentLabel = document.querySelector<HTMLElement>(
         "[data-book-current]",
     );
     const totalLabel = document.querySelector<HTMLElement>("[data-book-total]");
-    const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const flipDuration = reducedMotion ? 0 : 950;
+    const reducedMotion = matchMedia(
+        "(prefers-reduced-motion: reduce)",
+    ).matches;
     let pageIndex = 0;
     let busy = false;
 
-    const pageTop = (page: HTMLElement) => {
-        page.querySelector<HTMLElement>(".page-front")?.scrollTo({ top: 0 });
-    };
+    const frontOf = (page = pages[pageIndex]) =>
+        page?.querySelector<HTMLElement>(".page-front") ?? null;
+    const atTop = (front: HTMLElement) => front.scrollTop <= 0;
+    const atBottom = (front: HTMLElement) =>
+        front.scrollTop + front.clientHeight >= front.scrollHeight - 2;
 
-    const scrollPageTo = (page: HTMLElement, selector: string) => {
-        const front = page.querySelector<HTMLElement>(".page-front");
-        const target = front?.querySelector<HTMLElement>(selector);
-        if (!front || !target) return;
-        const top =
-            target.getBoundingClientRect().top -
-            front.getBoundingClientRect().top +
-            front.scrollTop;
-        front.scrollTo({
-            top: Math.max(0, top - 12),
-            behavior: reducedMotion ? "auto" : "smooth",
-        });
+    /** Scrolls a page, before it is shown, to its top, its end, or an element in it. */
+    const place = (page: HTMLElement, at?: string) => {
+        const front = frontOf(page);
+        if (!front) return;
+        if (at === "end") return void (front.scrollTop = front.scrollHeight);
+        const target = at ? front.querySelector<HTMLElement>(at) : null;
+        front.scrollTop = target
+            ? target.getBoundingClientRect().top -
+              front.getBoundingClientRect().top +
+              front.scrollTop -
+              12
+            : 0;
     };
 
     const setPage = (index: number) => {
         pageIndex = index;
         for (const [i, page] of pages.entries()) {
             page.classList.toggle("is-current", i === index);
-            page.classList.toggle("is-next", i === index + 1);
-            page.classList.remove(
-                "is-flipping",
-                "is-returning",
-                "is-returned",
-            );
             page.toggleAttribute("inert", i !== index);
             page.setAttribute("aria-hidden", String(i !== index));
         }
         if (currentLabel) currentLabel.textContent = String(index + 1);
-        if (prevButton) prevButton.disabled = index === 0;
-        if (nextButton) nextButton.disabled = index === pages.length - 1;
     };
 
-    const flipTo = (target: number, selector?: string) => {
-        if (
-            !pages.length ||
-            busy ||
-            target === pageIndex ||
-            target < 0 ||
-            target >= pages.length
-        )
-            return;
-        if (reducedMotion) {
-            setPage(target);
-            pageTop(pages[target]);
-            if (selector) scrollPageTo(pages[target], selector);
-            return;
-        }
+    const canTurn = (target: number) =>
+        !busy && target !== pageIndex && target >= 0 && target < pages.length;
+
+    /** Forward, the current page is the leaf and lifts off the target; back, the target's leaf settles onto it. */
+    const flipTo = async (target: number, axis: Axis, at?: string) => {
+        if (!book || !canTurn(target)) return;
+        place(pages[target], at);
+        if (reducedMotion) return setPage(target);
         busy = true;
         if (target > pageIndex) {
-            pages[target].classList.remove("is-next");
-            pages[target].classList.add("is-current");
-            pages[pageIndex].classList.add("is-flipping");
-            pageTop(pages[target]);
-        } else {
-            pages[target].classList.remove("is-next");
-            pages[target].classList.add("is-returning");
-            requestAnimationFrame(() =>
-                pages[target].classList.add("is-returned"),
-            );
-        }
-        window.setTimeout(() => {
+            const turning = flip(book, pages[pageIndex], axis, true);
             setPage(target);
-            pageTop(pages[target]);
-            if (selector) scrollPageTo(pages[target], selector);
-            busy = false;
-        }, flipDuration);
+            await turning;
+        } else {
+            await flip(book, pages[target], axis, false);
+            setPage(target);
+        }
+        busy = false;
     };
 
-    if (pages.length) {
+    if (book && pages.length) {
         if (totalLabel) totalLabel.textContent = String(pages.length);
         setPage(0);
-        prevButton?.addEventListener("click", () => flipTo(pageIndex - 1));
-        nextButton?.addEventListener("click", () => flipTo(pageIndex + 1));
+
+        // Chapter links thumb through the book sideways.
         const pageForHash: Record<string, number> = {
             "#cara": 1,
             "#soalan": 5,
             "#tester": 6,
         };
         document.addEventListener("click", (event) => {
-            const link = (event.target as HTMLElement).closest<HTMLAnchorElement>(
-                'a[href^="#"]',
-            );
-            if (!link) return;
-            const hash = link.getAttribute("href") ?? "";
+            const link = (
+                event.target as HTMLElement
+            ).closest<HTMLAnchorElement>('a[href^="#"]');
+            const hash = link?.getAttribute("href") ?? "";
             const target = pageForHash[hash];
             if (target === undefined) return;
             event.preventDefault();
-            flipTo(target, hash === "#tester" ? ".tester" : undefined);
+            flipTo(target, "x", hash === "#tester" ? ".tester" : undefined);
+        });
+
+        /** Turns by [step] along [axis] if the gesture is past the page's end; true when it was. */
+        const turnBy = (step: number, axis: Axis) => {
+            const front = frontOf();
+            if (!front || !canTurn(pageIndex + step)) return false;
+            if (axis === "y" && !(step > 0 ? atBottom(front) : atTop(front)))
+                return false;
+            // Scrolling back up lands at the end of the previous page, as if the scroll carried on.
+            flipTo(
+                pageIndex + step,
+                axis,
+                axis === "y" && step < 0 ? "end" : undefined,
+            );
+            return true;
+        };
+
+        // A trackpad fling keeps sending wheel events long after the turn starts; swallow them until it settles
+        // so one gesture turns one page.
+        let settleUntil = 0;
+        book.addEventListener(
+            "wheel",
+            (event) => {
+                const now = performance.now();
+                if (busy || now < settleUntil) {
+                    event.preventDefault();
+                    settleUntil = now + 180;
+                    return;
+                }
+                const sideways =
+                    Math.abs(event.deltaX) > Math.abs(event.deltaY);
+                const delta = sideways ? event.deltaX : event.deltaY;
+                if (Math.abs(delta) < 4) return;
+                if (turnBy(Math.sign(delta), sideways ? "x" : "y")) {
+                    event.preventDefault();
+                    settleUntil = now + 180;
+                }
+            },
+            { passive: false },
+        );
+
+        let touchX = 0,
+            touchY = 0;
+        book.addEventListener(
+            "touchstart",
+            (event) => {
+                touchX = event.touches[0]?.clientX ?? 0;
+                touchY = event.touches[0]?.clientY ?? 0;
+            },
+            { passive: true },
+        );
+        book.addEventListener(
+            "touchend",
+            (event) => {
+                const dx =
+                    (event.changedTouches[0]?.clientX ?? touchX) - touchX;
+                const dy =
+                    (event.changedTouches[0]?.clientY ?? touchY) - touchY;
+                if (Math.max(Math.abs(dx), Math.abs(dy)) < 50) return;
+                if (Math.abs(dx) > Math.abs(dy)) turnBy(dx < 0 ? 1 : -1, "x");
+                else turnBy(dy < 0 ? 1 : -1, "y");
+            },
+            { passive: true },
+        );
+
+        const keys: Record<string, [number, Axis]> = {
+            ArrowRight: [1, "x"],
+            ArrowLeft: [-1, "x"],
+            ArrowDown: [1, "y"],
+            PageDown: [1, "y"],
+            ArrowUp: [-1, "y"],
+            PageUp: [-1, "y"],
+        };
+        document.addEventListener("keydown", (event) => {
+            const key = keys[event.key];
+            if (
+                !key ||
+                event.altKey ||
+                event.ctrlKey ||
+                event.metaKey ||
+                (event.target as HTMLElement).closest(
+                    "input, textarea, select, [contenteditable]",
+                )
+            )
+                return;
+            if (turnBy(...key)) event.preventDefault();
         });
     }
 
