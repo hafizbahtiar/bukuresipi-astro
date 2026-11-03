@@ -112,7 +112,7 @@ const jsonLd = [
 
             <section id="cara" class="steps-band">
                 <div class="wrap reveal">
-                    <span class="turn-sheet" aria-hidden="true"></span>
+                    <span class="turn-shade" aria-hidden="true"></span>
                     <h2>{s.stepsTitle}</h2>
                     <ol class="steps">
                         {
@@ -130,7 +130,7 @@ const jsonLd = [
             </section>
 
             <section class="wrap duo reveal">
-                <span class="turn-sheet" aria-hidden="true"></span>
+                <span class="turn-shade" aria-hidden="true"></span>
                 <div>
                     <h2><span class="hl">{s.bookTitle}</span></h2>
                     <p>{s.bookText}</p>
@@ -142,7 +142,7 @@ const jsonLd = [
             </section>
 
             <section class="wrap honest reveal">
-                <span class="turn-sheet" aria-hidden="true"></span>
+                <span class="turn-shade" aria-hidden="true"></span>
                 <h2>{s.honestTitle}</h2>
                 <p class="honest-lead">{s.honestLead}</p>
                 <dl>
@@ -160,13 +160,13 @@ const jsonLd = [
             </section>
 
             <section class="wrap platforms reveal" aria-labelledby="works-with">
-                <span class="turn-sheet" aria-hidden="true"></span>
+                <span class="turn-shade" aria-hidden="true"></span>
                 <h2 id="works-with">{s.worksWith}</h2>
                 <ul>{s.platforms.map((p) => <li>{p}</li>)}</ul>
             </section>
 
             <section id="soalan" class="wrap faq reveal">
-                <span class="turn-sheet" aria-hidden="true"></span>
+                <span class="turn-shade" aria-hidden="true"></span>
                 <h2><span class="hl">{s.faqTitle}</span></h2>
                 <div class="faq-list">
                     {
@@ -188,7 +188,7 @@ const jsonLd = [
         <section class="cta" id="tester">
             <div class="wrap">
                 <div class="cta-page reveal">
-                    <span class="turn-sheet" aria-hidden="true"></span>
+                    <span class="turn-shade" aria-hidden="true"></span>
                     <h2>{s.ctaTitle}</h2>
                     <p>{s.ctaText}</p>
                     <form
@@ -270,62 +270,70 @@ const jsonLd = [
 
     .reveal {
         position: relative;
+        z-index: 3;
+        background-color: var(--paper);
+        background-image: linear-gradient(90deg, var(--margin) 0 2px, transparent 2px);
+        box-shadow: 0 8px 16px rgba(28, 42, 32, 0.06);
+        transform-origin: top center;
     }
-    .turn-sheet {
+    .steps-band .reveal {
+        background-color: var(--pandan-deep);
+        background-image:
+            linear-gradient(90deg, rgba(255, 255, 255, 0.4) 0 1px, transparent 1px),
+            repeating-linear-gradient(
+                180deg,
+                transparent 0 2.4rem,
+                rgba(255, 255, 255, 0.045) 2.4rem calc(2.4rem + 1px)
+            );
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.18);
+    }
+    .turn-shade {
         display: none;
     }
-    :global(html.js) .turn-sheet {
+    :global(html.js) .turn-shade {
         display: block;
         position: absolute;
         inset: 0;
-        z-index: 3;
-        border-radius: 2px;
-        background-color: var(--paper-raised);
-        background-image:
-            linear-gradient(
-                90deg,
-                transparent 1.4rem,
-                var(--margin) 1.4rem,
-                var(--margin) calc(1.4rem + 2px),
-                transparent calc(1.4rem + 2px)
-            ),
-            repeating-linear-gradient(
-                180deg,
-                transparent 0 2rem,
-                rgba(47, 107, 59, 0.1) 2rem calc(2rem + 1px)
-            );
-        box-shadow: 0 22px 32px rgba(28, 42, 32, 0.16);
-        transform-origin: top center;
-        transform: perspective(1200px) rotateX(0deg);
-        transition:
-            transform 0.9s cubic-bezier(0.45, 0, 0.15, 1),
-            opacity 0.15s ease-out 0.8s;
-        pointer-events: auto;
-    }
-    :global(html.js) .reveal.in .turn-sheet {
-        transform: perspective(1200px) rotateX(-89deg);
-        opacity: 0;
+        z-index: 2;
+        background: linear-gradient(
+            180deg,
+            rgba(28, 42, 32, 0.3),
+            rgba(28, 42, 32, 0.04) 55%,
+            transparent 80%
+        );
+        opacity: 1;
+        transition: opacity 0.9s ease-out;
         pointer-events: none;
     }
-    .cta-page .turn-sheet {
-        border-radius: 5px 16px 16px 5px;
-        background-image:
-            linear-gradient(
-                90deg,
-                transparent var(--margin-x),
-                var(--margin) var(--margin-x),
-                var(--margin) calc(var(--margin-x) + 1.5px),
-                transparent calc(var(--margin-x) + 1.5px)
-            ),
-            repeating-linear-gradient(
-                180deg,
-                transparent 0 2rem,
-                rgba(47, 107, 59, 0.1) 2rem calc(2rem + 1px)
-            );
+    .steps-band .turn-shade {
+        background: linear-gradient(180deg, rgba(0, 0, 0, 0.32), transparent 60%);
+    }
+    :global(html.js) .turn-shade::after {
+        content: "";
+        position: absolute;
+        inset-inline: 0;
+        bottom: 0;
+        height: 7%;
+        border-radius: 0 0 50% 50% / 0 0 1.5rem 1.5rem;
+        background: linear-gradient(180deg, transparent, rgba(28, 42, 32, 0.16));
+        pointer-events: none;
+    }
+    :global(html.js) .reveal {
+        transform: perspective(1400px) rotateX(-78deg);
+        transition: transform 0.95s cubic-bezier(0.45, 0, 0.15, 1);
+    }
+    :global(html.js) .reveal.in {
+        transform: perspective(1400px) rotateX(0deg);
+    }
+    :global(html.js) .reveal.in .turn-shade {
+        opacity: 0;
     }
     @media (prefers-reduced-motion: reduce) {
-        .turn-sheet {
+        .turn-shade {
             display: none !important;
+        }
+        .reveal {
+            transform: none !important;
         }
     }
 
