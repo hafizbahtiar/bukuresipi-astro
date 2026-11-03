@@ -264,14 +264,15 @@ const jsonLd = [
 
     :global(html.js) .reveal {
         opacity: 0;
-        transform: translateY(18px);
+        transform: perspective(1200px) rotateX(7deg) translateY(14px);
+        transform-origin: top center;
         transition:
-            opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1),
-            transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+            opacity 0.45s ease-out,
+            transform 0.8s cubic-bezier(0.45, 0, 0.15, 1);
     }
     :global(html.js) .reveal.in {
         opacity: 1;
-        transform: none;
+        transform: perspective(1200px) rotateX(0deg) translateY(0);
     }
     @media (prefers-reduced-motion: reduce) {
         :global(html.js) .reveal {
