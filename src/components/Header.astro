@@ -1,21 +1,30 @@
 ---
-import logo from '../assets/logo-mark.svg?raw'
-import { type Lang, pathIn, t } from '../i18n'
+import logo from "../assets/logo-mark.svg?raw";
+import { type Lang, pathIn, t } from "../i18n";
 
-interface Props { lang: Lang; path: string; nav?: boolean }
-const { lang, path, nav = false } = Astro.props
-const s = t(lang)
+interface Props {
+    lang: Lang;
+    path: string;
+    nav?: boolean;
+}
+const { lang, path, nav = false } = Astro.props;
+const s = t(lang);
 ---
 
-<header class="wrap bar">
-    <a class="brand" href={pathIn('/', lang)} aria-label="Bukuresipi">
+<header class="wrap bar" id="top">
+    <a class="brand" href={pathIn("/", lang)} aria-label="Bukuresipi">
         <span class="mark" set:html={logo} />
         <span class="word">bukuresipi</span>
     </a>
-    <nav aria-label={lang === 'en' ? 'Main' : 'Utama'}>
+    <nav aria-label={lang === "en" ? "Main" : "Utama"}>
         {nav && <a href="#cara">{s.nav.how}</a>}
         {nav && <a href="#soalan">{s.nav.faq}</a>}
-        <a class="lang" href={pathIn(path, s.other.lang)} hreflang={s.other.lang} lang={s.other.lang}>{s.other.label}</a>
+        <a
+            class="lang"
+            href={pathIn(path, s.other.lang)}
+            hreflang={s.other.lang}
+            lang={s.other.lang}>{s.other.label}</a
+        >
     </nav>
 </header>
 

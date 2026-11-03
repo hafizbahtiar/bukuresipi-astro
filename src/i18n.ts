@@ -70,6 +70,7 @@ const ms = {
         ctaTitle: 'Buku resipi anda, diisi oleh skrol anda.',
         ctaText: 'Aplikasi Android dan iPhone akan tersedia tidak lama lagi.',
         footer: 'Resipi dan tempat makan dari media sosial, tersimpan di satu tempat.',
+        footerTop: 'Kembali ke atas',
     },
     auth: {
         backHome: 'Ke laman utama',
@@ -179,6 +180,7 @@ const en: typeof ms = {
         ctaTitle: 'Your recipe book, filled by your scrolling.',
         ctaText: 'The Android and iPhone apps are coming soon.',
         footer: 'Recipes and places to eat from social media, kept in one place.',
+        footerTop: 'Back to top',
     },
     auth: {
         backHome: 'Go to the home page',

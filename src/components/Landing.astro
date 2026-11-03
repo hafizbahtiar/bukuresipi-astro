@@ -1,117 +1,181 @@
 ---
-import Base from '../layouts/Base.astro'
-import { type Lang, pathIn, SITE, t } from '../i18n'
-import Footer from './Footer.astro'
-import Header from './Header.astro'
-import StoreBadges from './StoreBadges.astro'
+import Base from "../layouts/Base.astro";
+import { type Lang, pathIn, SITE, t } from "../i18n";
+import Footer from "./Footer.astro";
+import Header from "./Header.astro";
+import StoreBadges from "./StoreBadges.astro";
 
-interface Props { lang: Lang }
-const { lang } = Astro.props
-const s = t(lang).home
-const n = s.notebook
+interface Props {
+    lang: Lang;
+}
+const { lang } = Astro.props;
+const s = t(lang).home;
+const n = s.notebook;
 
 const jsonLd = [
     {
-        '@context': 'https://schema.org',
-        '@type': 'Organization',
-        name: 'Bukuresipi',
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        name: "Bukuresipi",
         url: SITE,
         logo: `${SITE}/icon-512.png`,
     },
     {
-        '@context': 'https://schema.org',
-        '@type': 'WebSite',
-        name: 'Bukuresipi',
-        url: `${SITE}${pathIn('/', lang)}`,
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        name: "Bukuresipi",
+        url: `${SITE}${pathIn("/", lang)}`,
         inLanguage: lang,
     },
     {
-        '@context': 'https://schema.org',
-        '@type': 'MobileApplication',
-        name: 'Bukuresipi',
-        operatingSystem: 'Android, iOS',
-        applicationCategory: 'LifestyleApplication',
+        "@context": "https://schema.org",
+        "@type": "MobileApplication",
+        name: "Bukuresipi",
+        operatingSystem: "Android, iOS",
+        applicationCategory: "LifestyleApplication",
         description: s.description,
-        inLanguage: ['ms', 'en'],
+        inLanguage: ["ms", "en"],
     },
     {
-        '@context': 'https://schema.org',
-        '@type': 'FAQPage',
-        mainEntity: s.faq.map(([q, a]) => ({ '@type': 'Question', name: q, acceptedAnswer: { '@type': 'Answer', text: a } })),
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        mainEntity: s.faq.map(([q, a]) => ({
+            "@type": "Question",
+            name: q,
+            acceptedAnswer: { "@type": "Answer", text: a },
+        })),
     },
-]
+];
 ---
 
-<Base lang={lang} path="/" title={s.title} description={s.description} jsonLd={jsonLd}>
+<Base
+    lang={lang}
+    path="/"
+    title={s.title}
+    description={s.description}
+    jsonLd={jsonLd}
+>
     <Header lang={lang} path="/" nav />
-    <main>
-        <section class="wrap hero">
-            <div class="hero-copy">
-                <p class="eyebrow">{s.eyebrow}</p>
-                <h1>{s.h1}</h1>
-                <p class="lead">{s.lead}</p>
-                <StoreBadges lang={lang} />
-            </div>
+    <main class="home">
+        <div class="sheet">
+            <section class="wrap hero">
+                <div class="hero-copy">
+                    <p class="eyebrow">{s.eyebrow}</p>
+                    <h1>{s.h1}</h1>
+                    <p class="lead">{s.lead}</p>
+                    <StoreBadges lang={lang} />
+                </div>
 
-            <figure class="book" aria-label={s.ogAlt}>
-                <div class="page" aria-hidden="true">
-                    <p class="chip"><span class="chip-dot"></span>tiktok.com/@dapurkakna/video/7426…</p>
-                    <p class="dish">{n.dish}</p>
-                    <ul class="hand">
-                        {n.lines.map(([qty, rest]) => <li><mark>{qty}</mark>{rest}</li>)}
-                        <li class="gap">{n.gap}</li>
-                    </ul>
-                    <div class="pin">
-                        <svg viewBox="0 0 24 24" class="pin-icon"><path d="M12 2a7 7 0 0 1 7 7c0 5.2-7 13-7 13S5 14.2 5 9a7 7 0 0 1 7-7z" fill="#d23c35"/><circle cx="12" cy="9" r="2.6" fill="#fff"/></svg>
-                        <div>
-                            <p class="pin-name">{n.place}</p>
-                            <p class="pin-area">{n.area}</p>
-                            <p class="pin-halal"><mark>{n.halal}</mark> <span>{n.halalSource}</span></p>
+                <figure class="book" aria-label={s.ogAlt}>
+                    <div class="page" aria-hidden="true">
+                        <p class="chip">
+                            <span class="chip-dot"
+                            ></span>tiktok.com/@dapurkakna/video/7426…
+                        </p>
+                        <p class="dish">{n.dish}</p>
+                        <ul class="hand">
+                            {
+                                n.lines.map(([qty, rest]) => (
+                                    <li>
+                                        <mark>{qty}</mark>
+                                        {rest}
+                                    </li>
+                                ))
+                            }
+                            <li class="gap">{n.gap}</li>
+                        </ul>
+                        <div class="pin">
+                            <svg viewBox="0 0 24 24" class="pin-icon"
+                                ><path
+                                    d="M12 2a7 7 0 0 1 7 7c0 5.2-7 13-7 13S5 14.2 5 9a7 7 0 0 1 7-7z"
+                                    fill="#d23c35"></path><circle
+                                    cx="12"
+                                    cy="9"
+                                    r="2.6"
+                                    fill="#fff"></circle></svg
+                            >
+                            <div>
+                                <p class="pin-name">{n.place}</p>
+                                <p class="pin-area">{n.area}</p>
+                                <p class="pin-halal">
+                                    <mark>{n.halal}</mark>
+                                    <span>{n.halalSource}</span>
+                                </p>
+                            </div>
                         </div>
                     </div>
+                </figure>
+            </section>
+
+            <section id="cara" class="steps-band">
+                <div class="wrap">
+                    <h2>{s.stepsTitle}</h2>
+                    <ol class="steps">
+                        {
+                            s.steps.map(([title, text]) => (
+                                <li>
+                                    <>
+                                        <h3>{title}</h3>
+                                        <p>{text}</p>
+                                    </>
+                                </li>
+                            ))
+                        }
+                    </ol>
                 </div>
-            </figure>
-        </section>
+            </section>
 
-        <section id="cara" class="steps-band">
-            <div class="wrap">
-                <h2>{s.stepsTitle}</h2>
-                <ol class="steps">
-                    {s.steps.map(([title, text]) => <li><h3>{title}</h3><p>{text}</p></li>)}
-                </ol>
-            </div>
-        </section>
+            <section class="wrap duo">
+                <div>
+                    <h2><span class="hl">{s.bookTitle}</span></h2>
+                    <p>{s.bookText}</p>
+                </div>
+                <div>
+                    <h2><span class="hl">{s.mapTitle}</span></h2>
+                    <p>{s.mapText}</p>
+                </div>
+            </section>
 
-        <section class="wrap duo">
-            <div>
-                <h2>{s.bookTitle}</h2>
-                <p>{s.bookText}</p>
-            </div>
-            <div>
-                <h2>{s.mapTitle}</h2>
-                <p>{s.mapText}</p>
-            </div>
-        </section>
+            <section class="wrap honest">
+                <h2>{s.honestTitle}</h2>
+                <p class="honest-lead">{s.honestLead}</p>
+                <dl>
+                    {
+                        s.honest.map(([term, text]) => (
+                            <div>
+                                <>
+                                    <dt>{term}</dt>
+                                    <dd>{text}</dd>
+                                </>
+                            </div>
+                        ))
+                    }
+                </dl>
+            </section>
 
-        <section class="wrap honest">
-            <h2>{s.honestTitle}</h2>
-            <p class="honest-lead">{s.honestLead}</p>
-            <dl>
-                {s.honest.map(([term, text]) => <div><dt>{term}</dt><dd>{text}</dd></div>)}
-            </dl>
-        </section>
+            <section class="wrap platforms" aria-labelledby="works-with">
+                <h2 id="works-with">{s.worksWith}</h2>
+                <ul>{s.platforms.map((p) => <li>{p}</li>)}</ul>
+            </section>
 
-        <section class="wrap platforms" aria-labelledby="works-with">
-            <h2 id="works-with">{s.worksWith}</h2>
-            <ul>{s.platforms.map(p => <li>{p}</li>)}</ul>
-        </section>
-
-        <section id="soalan" class="wrap faq">
-            <h2>{s.faqTitle}</h2>
-            <div class="faq-list">
-                {s.faq.map(([q, a]) => <details><summary>{q}</summary><p>{a}</p></details>)}
-            </div>
-        </section>
+            <section id="soalan" class="wrap faq">
+                <h2><span class="hl">{s.faqTitle}</span></h2>
+                <div class="faq-list">
+                    {
+                        s.faq.map(([q, a]) => (
+                            <details>
+                                <>
+                                    <summary>
+                                        <span class="q">{q}</span>
+                                    </summary>
+                                    <p>{a}</p>
+                                </>
+                            </details>
+                        ))
+                    }
+                </div>
+            </section>
+        </div>
 
         <section class="cta">
             <div class="wrap">
@@ -123,16 +187,51 @@ const jsonLd = [
             </div>
         </section>
     </main>
-    <Footer lang={lang} />
+    <Footer lang={lang} nav />
 </Base>
 
 <style>
+    /* The page margin: one red rule down the whole sheet, content written to its right. */
+    .home {
+        --page-indent: clamp(1.5rem, 4vw, 2.75rem);
+    }
+    .sheet {
+        position: relative;
+    }
+    .sheet::before {
+        content: "";
+        position: absolute;
+        inset-block: 0;
+        left: max(var(--gutter), calc(50% - var(--wrap) / 2));
+        width: 2px;
+        background: var(--margin);
+        opacity: 0.55;
+        pointer-events: none;
+    }
+    .steps-band,
+    .cta {
+        position: relative;
+        z-index: 1;
+    }
+
+    .hl {
+        background: linear-gradient(
+            transparent 56%,
+            color-mix(in srgb, var(--kunyit) 62%, transparent) 56% 92%,
+            transparent 92%
+        );
+        padding-inline: 0.08em;
+        -webkit-box-decoration-break: clone;
+        box-decoration-break: clone;
+    }
+
     .hero {
         display: grid;
         grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
         gap: clamp(2rem, 5vw, 4.5rem);
         align-items: center;
         padding-block: clamp(2rem, 5vw, 4rem) clamp(3rem, 7vw, 5.5rem);
+        padding-left: var(--page-indent);
     }
     /* Grid children may shrink below their content (the link chip never wraps). */
     .hero > *,
@@ -151,7 +250,7 @@ const jsonLd = [
         color: var(--ink-soft);
     }
     .eyebrow::before {
-        content: '';
+        content: "";
         width: 1.8rem;
         height: 1px;
         background: var(--margin);
@@ -178,7 +277,7 @@ const jsonLd = [
         animation: settle 0.55s cubic-bezier(0.16, 1, 0.3, 1) both;
     }
     .book::before {
-        content: '';
+        content: "";
         position: absolute;
         inset: 0.55rem -0.45rem -0.6rem 0.5rem;
         z-index: -1;
@@ -193,10 +292,22 @@ const jsonLd = [
         padding: 1.6rem 1.6rem 1.8rem 4.2rem;
         border-radius: 6px 18px 18px 6px;
         background:
-            linear-gradient(90deg, transparent 3rem, var(--margin) 3rem, var(--margin) calc(3rem + 2px), transparent calc(3rem + 2px)),
-            repeating-linear-gradient(transparent 0 calc(var(--lh) - 1px), var(--rule) calc(var(--lh) - 1px) var(--lh)),
+            linear-gradient(
+                90deg,
+                transparent 3rem,
+                var(--margin) 3rem,
+                var(--margin) calc(3rem + 2px),
+                transparent calc(3rem + 2px)
+            ),
+            repeating-linear-gradient(
+                transparent 0 calc(var(--lh) - 1px),
+                var(--rule) calc(var(--lh) - 1px) var(--lh)
+            ),
             var(--paper-raised);
-        background-position: 0 0, 0 1.45rem, 0 0;
+        background-position:
+            0 0,
+            0 1.45rem,
+            0 0;
         border-left: 10px solid var(--pandan);
         box-shadow: 6px 8px 0 rgba(28, 42, 32, 0.08);
         line-height: var(--lh);
@@ -242,10 +353,14 @@ const jsonLd = [
         color: #24334f;
     }
     .hand li::before {
-        content: '- ';
+        content: "- ";
     }
     mark {
-        background: linear-gradient(transparent 22%, color-mix(in srgb, var(--kunyit) 75%, transparent) 22% 88%, transparent 88%);
+        background: linear-gradient(
+            transparent 22%,
+            color-mix(in srgb, var(--kunyit) 75%, transparent) 22% 88%,
+            transparent 88%
+        );
         color: inherit;
         padding-inline: 0.12em;
     }
@@ -286,15 +401,28 @@ const jsonLd = [
 
     /* The book settles onto the page once; nothing in it is hidden behind a reveal. */
     @keyframes settle {
-        from { opacity: 0; transform: translateY(14px) rotate(0.9deg); }
-        to { opacity: 1; transform: translateY(0) rotate(0.9deg); }
+        from {
+            opacity: 0;
+            transform: translateY(14px) rotate(0.9deg);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0) rotate(0.9deg);
+        }
     }
 
     .steps-band {
         padding-block: clamp(3rem, 7vw, 5.5rem);
         background-color: var(--pandan-deep);
-        background-image: repeating-linear-gradient(180deg, transparent 0 2.4rem, rgba(255, 255, 255, 0.045) 2.4rem calc(2.4rem + 1px));
+        background-image: repeating-linear-gradient(
+            180deg,
+            transparent 0 2.4rem,
+            rgba(255, 255, 255, 0.045) 2.4rem calc(2.4rem + 1px)
+        );
         color: #fff;
+    }
+    .steps-band .wrap {
+        padding-left: var(--page-indent);
     }
     .steps-band h2,
     .duo h2,
@@ -340,20 +468,38 @@ const jsonLd = [
 
     .duo {
         display: grid;
-        grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.08fr);
+        grid-template-columns: 1fr 1fr;
         padding-block: clamp(3rem, 7vw, 5rem) 0;
+        padding-left: var(--page-indent);
     }
     .duo > div {
-        padding-block: 1.35rem 1.75rem;
+        display: flex;
+        flex-direction: column;
+        padding-block: 1.35rem 0.9rem;
         border-top: 1.5px solid var(--ink);
     }
     .duo > div:first-child {
         padding-right: clamp(1.5rem, 4vw, 3.5rem);
         border-right: 1px solid var(--line);
+        box-shadow: inset -10px 0 10px -10px rgba(28, 42, 32, 0.14);
     }
     .duo > div + div {
-        margin-top: clamp(1.5rem, 4vw, 3rem);
         padding-left: clamp(1.5rem, 4vw, 3.5rem);
+        box-shadow: inset 10px 0 10px -10px rgba(28, 42, 32, 0.14);
+    }
+    .duo > div::after {
+        content: "12";
+        margin-top: auto;
+        padding-top: 1.5rem;
+        font-family: var(--hand);
+        font-size: 1.05rem;
+        line-height: 1;
+        text-align: left;
+        color: var(--ink-soft);
+    }
+    .duo > div + div::after {
+        content: "13";
+        text-align: right;
     }
     .duo h2 {
         font-size: var(--step-2);
@@ -366,10 +512,10 @@ const jsonLd = [
 
     .honest {
         margin-block: clamp(3rem, 7vw, 5rem);
-        padding: clamp(1.5rem, 4vw, 2.25rem) 0 clamp(1.5rem, 4vw, 2.25rem) clamp(1.5rem, 4vw, 2.75rem);
+        padding: clamp(1.5rem, 4vw, 2.25rem) 0 clamp(1.5rem, 4vw, 2.25rem)
+            var(--page-indent);
         border-top: 1px solid var(--line);
         border-bottom: 1px solid var(--line);
-        border-left: 2px solid var(--margin);
     }
     .honest h2 {
         font-family: var(--hand);
@@ -395,7 +541,7 @@ const jsonLd = [
         font-weight: 700;
     }
     .honest dt::before {
-        content: '*';
+        content: "*";
         margin-right: 0.25rem;
         font-family: var(--hand);
         font-size: 1.5em;
@@ -408,13 +554,16 @@ const jsonLd = [
 
     .platforms {
         padding-block: clamp(2.5rem, 6vw, 4rem) 0;
+        padding-left: var(--page-indent);
     }
     .platforms h2 {
-        font-size: var(--step--1);
-        font-weight: 600;
-        letter-spacing: 0.12em;
-        text-transform: uppercase;
-        color: var(--ink-soft);
+        font-family: var(--hand);
+        font-size: 1.5rem;
+        font-weight: 700;
+        line-height: 1.1;
+        letter-spacing: 0;
+        text-transform: none;
+        color: var(--pandan-deep);
     }
     .platforms ul {
         margin: 0.55rem 0 0;
@@ -426,26 +575,29 @@ const jsonLd = [
         font-weight: 600;
     }
     .platforms li:not(:last-child)::after {
-        content: ', ';
+        content: ", ";
         color: var(--ink-soft);
         font-weight: 400;
     }
 
     .faq {
         padding-block: clamp(3rem, 7vw, 5rem);
+        padding-left: var(--page-indent);
     }
     .faq-list {
-        max-width: 46rem;
+        max-width: none;
         margin-top: 1.75rem;
         border-top: 1px solid var(--line);
+        counter-reset: q;
     }
     details {
         border-bottom: 1px solid var(--line);
+        counter-increment: q;
     }
     summary {
-        display: flex;
-        justify-content: space-between;
-        gap: 1rem;
+        display: grid;
+        grid-template-columns: 2.75rem minmax(0, 1fr) 2rem;
+        align-items: baseline;
         padding-block: 1.1rem;
         font-size: var(--step-1);
         font-weight: 600;
@@ -455,8 +607,21 @@ const jsonLd = [
     summary::-webkit-details-marker {
         display: none;
     }
+    summary::before {
+        content: counter(q, decimal-leading-zero);
+        font-family: var(--hand);
+        font-size: 1.35rem;
+        font-weight: 700;
+        line-height: 1;
+        color: var(--margin);
+    }
+    summary .q {
+        grid-column: 2;
+    }
     summary::after {
-        content: '+';
+        content: "+";
+        grid-column: 3;
+        justify-self: end;
         font-family: var(--hand);
         font-size: 1.8rem;
         line-height: 1;
@@ -470,6 +635,7 @@ const jsonLd = [
         transform: rotate(45deg);
     }
     details p {
+        padding-left: 2.75rem;
         padding-bottom: 1.25rem;
         max-width: 40em;
         color: var(--ink-soft);
@@ -481,9 +647,11 @@ const jsonLd = [
     }
     .cta-page {
         --margin-x: 2.9rem;
+        position: relative;
         max-width: 46rem;
         margin-inline: auto;
-        padding: clamp(1.5rem, 5vw, 2.5rem) clamp(1.5rem, 5vw, 2.5rem) clamp(1.5rem, 5vw, 2.5rem) calc(var(--margin-x) + 1.6rem);
+        padding: clamp(1.5rem, 5vw, 2.5rem) clamp(1.5rem, 5vw, 2.5rem)
+            clamp(2.25rem, 5vw, 3rem) calc(var(--margin-x) + 1.6rem);
         border-radius: 5px 16px 16px 5px;
         border-left: 9px solid var(--pandan);
         background-color: var(--paper-raised);
@@ -495,6 +663,16 @@ const jsonLd = [
             transparent calc(var(--margin-x) + 1.5px)
         );
         box-shadow: 8px 10px 0 rgba(0, 0, 0, 0.16);
+    }
+    .cta-page::after {
+        content: "14";
+        position: absolute;
+        right: clamp(1.5rem, 5vw, 2.5rem);
+        bottom: 0.75rem;
+        font-family: var(--hand);
+        font-size: 1.05rem;
+        line-height: 1;
+        color: var(--ink-soft);
     }
     .cta-page h2 {
         font-size: var(--step-3);
@@ -515,10 +693,11 @@ const jsonLd = [
         .duo > div:first-child {
             padding-right: 0;
             border-right: 0;
+            box-shadow: none;
         }
         .duo > div + div {
-            margin-top: 0;
             padding-left: 0;
+            box-shadow: none;
         }
     }
     @media (max-width: 640px) {
@@ -529,6 +708,12 @@ const jsonLd = [
         .steps li::before {
             font-size: 2rem;
         }
+        summary {
+            grid-template-columns: 2rem minmax(0, 1fr) 1.75rem;
+        }
+        details p {
+            padding-left: 2rem;
+        }
     }
     @media (max-width: 480px) {
         .cta-page {
@@ -538,7 +723,10 @@ const jsonLd = [
     @media (max-width: 420px) {
         .page {
             padding-left: 3.4rem;
-            background-position: -0.6rem 0, 0 1.45rem, 0 0;
+            background-position:
+                -0.6rem 0,
+                0 1.45rem,
+                0 0;
         }
         .hand {
             font-size: 1.35rem;
