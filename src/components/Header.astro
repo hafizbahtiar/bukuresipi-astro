@@ -11,24 +11,50 @@ const { lang, path, nav = false } = Astro.props;
 const s = t(lang);
 ---
 
-<header class="wrap bar" id="top">
-    <a class="brand" href={pathIn("/", lang)} aria-label="Bukuresipi">
-        <span class="mark" set:html={logo} />
-        <span class="word">bukuresipi</span>
-    </a>
-    <nav aria-label={lang === "en" ? "Main" : "Utama"}>
-        {nav && <a href="#cara">{s.nav.how}</a>}
-        {nav && <a href="#soalan">{s.nav.faq}</a>}
-        <a
-            class="lang"
-            href={pathIn(path, s.other.lang)}
-            hreflang={s.other.lang}
-            lang={s.other.lang}>{s.other.label}</a
-        >
-    </nav>
+<header class="site-head" id="top">
+    <div class="wrap bar">
+        <a class="brand" href={pathIn("/", lang)} aria-label="Bukuresipi">
+            <span class="mark" set:html={logo} />
+            <span class="word">bukuresipi</span>
+        </a>
+        <nav aria-label={lang === "en" ? "Main" : "Utama"}>
+            {nav && <a href="#cara">{s.nav.how}</a>}
+            {nav && <a href="#soalan">{s.nav.faq}</a>}
+            <a
+                class="lang"
+                href={pathIn(path, s.other.lang)}
+                hreflang={s.other.lang}
+                lang={s.other.lang}>{s.other.label}</a
+            >
+        </nav>
+    </div>
 </header>
 
+<script>
+    const head = document.querySelector<HTMLElement>(".site-head");
+    if (head) {
+        const sync = () =>
+            head.toggleAttribute("data-scrolled", window.scrollY > 8);
+        sync();
+        window.addEventListener("scroll", sync, { passive: true });
+    }
+</script>
+
 <style>
+    .site-head {
+        position: sticky;
+        top: 0;
+        z-index: 50;
+        background: var(--paper);
+        border-bottom: 1px solid transparent;
+        transition:
+            border-color 0.25s ease,
+            box-shadow 0.25s ease;
+    }
+    .site-head[data-scrolled] {
+        border-bottom-color: var(--line);
+        box-shadow: 0 8px 24px rgba(28, 42, 32, 0.05);
+    }
     .bar {
         display: flex;
         align-items: center;
@@ -62,6 +88,7 @@ const s = t(lang);
     nav a {
         color: var(--ink);
         text-decoration: none;
+        transition: color 0.2s ease;
     }
     nav a:hover {
         text-decoration: underline;
@@ -71,6 +98,7 @@ const s = t(lang);
     .lang {
         padding-bottom: 0.1rem;
         border-bottom: 1.5px solid var(--margin);
+        transition: border-color 0.2s ease;
     }
     @media (max-width: 560px) {
         nav a:not(.lang) {

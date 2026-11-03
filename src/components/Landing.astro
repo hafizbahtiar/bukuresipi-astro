@@ -108,7 +108,7 @@ const jsonLd = [
             </section>
 
             <section id="cara" class="steps-band">
-                <div class="wrap">
+                <div class="wrap reveal">
                     <h2>{s.stepsTitle}</h2>
                     <ol class="steps">
                         {
@@ -125,7 +125,7 @@ const jsonLd = [
                 </div>
             </section>
 
-            <section class="wrap duo">
+            <section class="wrap duo reveal">
                 <div>
                     <h2><span class="hl">{s.bookTitle}</span></h2>
                     <p>{s.bookText}</p>
@@ -136,7 +136,7 @@ const jsonLd = [
                 </div>
             </section>
 
-            <section class="wrap honest">
+            <section class="wrap honest reveal">
                 <h2>{s.honestTitle}</h2>
                 <p class="honest-lead">{s.honestLead}</p>
                 <dl>
@@ -153,12 +153,12 @@ const jsonLd = [
                 </dl>
             </section>
 
-            <section class="wrap platforms" aria-labelledby="works-with">
+            <section class="wrap platforms reveal" aria-labelledby="works-with">
                 <h2 id="works-with">{s.worksWith}</h2>
                 <ul>{s.platforms.map((p) => <li>{p}</li>)}</ul>
             </section>
 
-            <section id="soalan" class="wrap faq">
+            <section id="soalan" class="wrap faq reveal">
                 <h2><span class="hl">{s.faqTitle}</span></h2>
                 <div class="faq-list">
                     {
@@ -179,7 +179,7 @@ const jsonLd = [
 
         <section class="cta">
             <div class="wrap">
-                <div class="cta-page">
+                <div class="cta-page reveal">
                     <h2>{s.ctaTitle}</h2>
                     <p>{s.ctaText}</p>
                     <StoreBadges lang={lang} />
@@ -207,11 +207,44 @@ const jsonLd = [
         background: var(--margin);
         opacity: 0.55;
         pointer-events: none;
+        transform-origin: top;
+        animation: rule-in 0.9s cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+    @keyframes rule-in {
+        from {
+            transform: scaleY(0);
+        }
+        to {
+            transform: scaleY(1);
+        }
     }
     .steps-band,
     .cta {
         position: relative;
         z-index: 1;
+    }
+    #cara,
+    #soalan {
+        scroll-margin-top: 5.5rem;
+    }
+
+    :global(html.js) .reveal {
+        opacity: 0;
+        transform: translateY(18px);
+        transition:
+            opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+            transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    :global(html.js) .reveal.in {
+        opacity: 1;
+        transform: none;
+    }
+    @media (prefers-reduced-motion: reduce) {
+        :global(html.js) .reveal {
+            opacity: 1;
+            transform: none;
+            transition: none;
+        }
     }
 
     .hl {
@@ -603,6 +636,7 @@ const jsonLd = [
         font-weight: 600;
         cursor: pointer;
         list-style: none;
+        transition: color 0.2s ease;
     }
     summary::-webkit-details-marker {
         display: none;
@@ -626,7 +660,7 @@ const jsonLd = [
         font-size: 1.8rem;
         line-height: 1;
         color: var(--pandan);
-        transition: transform 0.2s;
+        transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
     }
     summary:hover {
         color: var(--pandan-deep);
@@ -639,6 +673,25 @@ const jsonLd = [
         padding-bottom: 1.25rem;
         max-width: 40em;
         color: var(--ink-soft);
+    }
+
+    @supports (interpolate-size: allow-keywords) {
+        details::details-content {
+            block-size: 0;
+            overflow: hidden;
+            transition:
+                block-size 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+                content-visibility 0.3s;
+            transition-behavior: allow-discrete;
+        }
+        details[open]::details-content {
+            block-size: auto;
+        }
+    }
+    @media (prefers-reduced-motion: reduce) {
+        details::details-content {
+            transition: none;
+        }
     }
 
     .cta {
@@ -733,3 +786,25 @@ const jsonLd = [
         }
     }
 </style>
+
+<script>
+    const reveals = document.querySelectorAll<HTMLElement>(".reveal");
+    if (
+        reveals.length &&
+        "IntersectionObserver" in window &&
+        !matchMedia("(prefers-reduced-motion: reduce)").matches
+    ) {
+        document.documentElement.classList.add("js");
+        const io = new IntersectionObserver(
+            (entries) => {
+                for (const entry of entries) {
+                    if (!entry.isIntersecting) continue;
+                    entry.target.classList.add("in");
+                    io.unobserve(entry.target);
+                }
+            },
+            { rootMargin: "0px 0px -8% 0px", threshold: 0.1 },
+        );
+        reveals.forEach((el) => io.observe(el));
+    }
+</script>

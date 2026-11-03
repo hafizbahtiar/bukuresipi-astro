@@ -13,7 +13,7 @@ const k = a[kind]
 const path = `/auth/${kind}`
 const messages = {
     missing: a.missing, expired: a.expired, rate: a.rate, network: a.network, working: a.working,
-    done: k.done, weak: 'weak' in k ? k.weak : '', invalid: 'invalid' in k ? k.invalid : '',
+    done: k.done, weakPassword: 'weak' in k ? k.weak : '', invalid: 'invalid' in k ? k.invalid : '',
     mismatch: a.reset.mismatch, ...a.reset.levels,
 }
 const rules = Object.entries(a.reset.rules)
@@ -105,7 +105,7 @@ const rules = Object.entries(a.reset.rules)
             if (kind === 'verify') { route = 'verify-email'; body = { token } }
             if (kind === 'reset') {
                 const password = field('password')
-                if (!checkPassword(password).length) return say(m.weak, 'bad')
+                if (!checkPassword(password).length) return say(m.weakPassword, 'bad')
                 if (password !== field('confirm')) return say(m.mismatch, 'bad')
                 route = 'reset-password'; body = { token, password }
             }
@@ -126,7 +126,7 @@ const rules = Object.entries(a.reset.rules)
                     form.hidden = true
                     return say(m.done, 'ok')
                 }
-                if (error === 'weak_password') return say(m.weak, 'bad')
+                if (error === 'weak_password') return say(m.weakPassword, 'bad')
                 if (error === 'rate_limited') return say(m.rate, 'bad')
                 if (error === 'invalid_input' && kind === 'forgot') return say(m.invalid, 'bad')
                 form.hidden = true
@@ -266,6 +266,7 @@ const rules = Object.entries(a.reset.rules)
         font: inherit;
         font-weight: 700;
         cursor: pointer;
+        transition: background-color 0.2s ease;
     }
     button:hover {
         background: var(--pandan-deep);
