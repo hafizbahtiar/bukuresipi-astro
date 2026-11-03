@@ -56,11 +56,12 @@ const s = t(lang)
     }
     nav a:hover {
         text-decoration: underline;
+        text-decoration-color: var(--margin);
+        text-underline-offset: 0.25em;
     }
     .lang {
-        padding: 0.35rem 0.8rem;
-        border: 1.5px solid var(--line);
-        border-radius: 999px;
+        padding-bottom: 0.1rem;
+        border-bottom: 1.5px solid var(--margin);
     }
     @media (max-width: 560px) {
         nav a:not(.lang) {

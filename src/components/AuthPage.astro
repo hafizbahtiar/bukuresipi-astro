@@ -149,8 +149,11 @@ const rules = Object.entries(a.reset.rules)
         max-width: 30rem;
         margin-inline: auto;
         padding: clamp(1.5rem, 5vw, 2.5rem);
-        border-radius: 22px;
-        background: var(--pandan-mist);
+        border: 1.5px solid var(--line);
+        border-left: 7px solid var(--pandan);
+        border-radius: 4px 12px 12px 4px;
+        background: var(--paper-raised);
+        box-shadow: 5px 7px 0 rgba(28, 42, 32, 0.06);
     }
     h1 {
         font-size: var(--step-3);
@@ -173,8 +176,8 @@ const rules = Object.entries(a.reset.rules)
     input[type='text'] {
         width: 100%;
         padding: 0.8rem 0.9rem;
-        border: 1.5px solid #b9c9b8;
-        border-radius: 12px;
+        border: 1.5px solid #8a9687;
+        border-radius: 3px;
         background: #fff;
         font: inherit;
         color: inherit;
@@ -257,7 +260,7 @@ const rules = Object.entries(a.reset.rules)
         justify-self: start;
         padding: 0.85rem 1.5rem;
         border: 0;
-        border-radius: 999px;
+        border-radius: 3px;
         background: var(--pandan);
         color: #fff;
         font: inherit;
@@ -277,8 +280,9 @@ const rules = Object.entries(a.reset.rules)
     .status {
         margin-top: 1.25rem;
         padding: 0.9rem 1rem;
-        border-radius: 12px;
-        background: #fff;
+        border: 1px solid var(--line);
+        border-radius: 3px;
+        background: var(--paper-raised);
     }
     .status[data-tone='ok'] {
         border-left: 5px solid var(--pandan);

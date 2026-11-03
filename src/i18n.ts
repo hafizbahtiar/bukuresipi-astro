@@ -19,6 +19,7 @@ const ms = {
         description:
             'Nampak resipi atau kedai makan sedap di TikTok, Instagram, Facebook atau YouTube? Kongsi ke Bukuresipi. Resipi masuk buku anda, kedai makan masuk peta anda.',
         ogAlt: 'Bukuresipi: resipi dari TikTok tersalin ke dalam buku latihan',
+        eyebrow: 'Buku resipi dan peta makan',
         h1: 'Resipi yang anda jumpa di TikTok, tersimpan dalam satu buku.',
         lead: 'Kongsi pautan atau tangkap layar ke Bukuresipi. Bahan, langkah dan nama kedai disalin daripada hantaran itu sendiri, terus ke buku resipi dan peta anda.',
         soon: 'Tidak lama lagi',
@@ -128,6 +129,7 @@ const en: typeof ms = {
         description:
             'Found a great recipe or food spot on TikTok, Instagram, Facebook or YouTube? Share it to Bukuresipi. Recipes go into your book, restaurants onto your map.',
         ogAlt: 'Bukuresipi: a TikTok recipe copied into an exercise book',
+        eyebrow: 'Recipe book and food map',
         h1: 'The recipe you found on TikTok, kept in one book.',
         lead: 'Share a link or a screenshot to Bukuresipi. Ingredients, steps and the restaurant name are copied from the post itself, straight into your recipe book and map.',
         soon: 'Coming soon',
