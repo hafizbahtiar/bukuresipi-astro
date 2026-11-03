@@ -112,6 +112,7 @@ const jsonLd = [
 
             <section id="cara" class="steps-band">
                 <div class="wrap reveal">
+                    <span class="turn-sheet" aria-hidden="true"></span>
                     <h2>{s.stepsTitle}</h2>
                     <ol class="steps">
                         {
@@ -129,6 +130,7 @@ const jsonLd = [
             </section>
 
             <section class="wrap duo reveal">
+                <span class="turn-sheet" aria-hidden="true"></span>
                 <div>
                     <h2><span class="hl">{s.bookTitle}</span></h2>
                     <p>{s.bookText}</p>
@@ -140,6 +142,7 @@ const jsonLd = [
             </section>
 
             <section class="wrap honest reveal">
+                <span class="turn-sheet" aria-hidden="true"></span>
                 <h2>{s.honestTitle}</h2>
                 <p class="honest-lead">{s.honestLead}</p>
                 <dl>
@@ -157,11 +160,13 @@ const jsonLd = [
             </section>
 
             <section class="wrap platforms reveal" aria-labelledby="works-with">
+                <span class="turn-sheet" aria-hidden="true"></span>
                 <h2 id="works-with">{s.worksWith}</h2>
                 <ul>{s.platforms.map((p) => <li>{p}</li>)}</ul>
             </section>
 
             <section id="soalan" class="wrap faq reveal">
+                <span class="turn-sheet" aria-hidden="true"></span>
                 <h2><span class="hl">{s.faqTitle}</span></h2>
                 <div class="faq-list">
                     {
@@ -183,6 +188,7 @@ const jsonLd = [
         <section class="cta" id="tester">
             <div class="wrap">
                 <div class="cta-page reveal">
+                    <span class="turn-sheet" aria-hidden="true"></span>
                     <h2>{s.ctaTitle}</h2>
                     <p>{s.ctaText}</p>
                     <form
@@ -262,23 +268,64 @@ const jsonLd = [
         scroll-margin-top: 5.5rem;
     }
 
-    :global(html.js) .reveal {
-        opacity: 0;
-        transform: perspective(1200px) rotateX(7deg) translateY(14px);
-        transform-origin: top center;
-        transition:
-            opacity 0.45s ease-out,
-            transform 0.8s cubic-bezier(0.45, 0, 0.15, 1);
+    .reveal {
+        position: relative;
     }
-    :global(html.js) .reveal.in {
-        opacity: 1;
-        transform: perspective(1200px) rotateX(0deg) translateY(0);
+    .turn-sheet {
+        display: none;
+    }
+    :global(html.js) .turn-sheet {
+        display: block;
+        position: absolute;
+        inset: 0;
+        z-index: 3;
+        border-radius: 2px;
+        background-color: var(--paper-raised);
+        background-image:
+            linear-gradient(
+                90deg,
+                transparent 1.4rem,
+                var(--margin) 1.4rem,
+                var(--margin) calc(1.4rem + 2px),
+                transparent calc(1.4rem + 2px)
+            ),
+            repeating-linear-gradient(
+                180deg,
+                transparent 0 2rem,
+                rgba(47, 107, 59, 0.1) 2rem calc(2rem + 1px)
+            );
+        box-shadow: 0 22px 32px rgba(28, 42, 32, 0.16);
+        transform-origin: top center;
+        transform: perspective(1200px) rotateX(0deg);
+        transition:
+            transform 0.9s cubic-bezier(0.45, 0, 0.15, 1),
+            opacity 0.15s ease-out 0.8s;
+        pointer-events: auto;
+    }
+    :global(html.js) .reveal.in .turn-sheet {
+        transform: perspective(1200px) rotateX(-89deg);
+        opacity: 0;
+        pointer-events: none;
+    }
+    .cta-page .turn-sheet {
+        border-radius: 5px 16px 16px 5px;
+        background-image:
+            linear-gradient(
+                90deg,
+                transparent var(--margin-x),
+                var(--margin) var(--margin-x),
+                var(--margin) calc(var(--margin-x) + 1.5px),
+                transparent calc(var(--margin-x) + 1.5px)
+            ),
+            repeating-linear-gradient(
+                180deg,
+                transparent 0 2rem,
+                rgba(47, 107, 59, 0.1) 2rem calc(2rem + 1px)
+            );
     }
     @media (prefers-reduced-motion: reduce) {
-        :global(html.js) .reveal {
-            opacity: 1;
-            transform: none;
-            transition: none;
+        .turn-sheet {
+            display: none !important;
         }
     }
 
