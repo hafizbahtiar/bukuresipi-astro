@@ -11,7 +11,7 @@ const { lang, path, nav = false } = Astro.props;
 const s = t(lang);
 ---
 
-<header class="site-head" id="top">
+<header class="site-head">
     <div class="wrap bar">
         <a class="brand" href={pathIn("/", lang)} aria-label="Bukuresipi">
             <span class="mark" set:html={logo} />

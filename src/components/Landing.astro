@@ -64,6 +64,9 @@ const jsonLd = [
                     <h1>{s.h1}</h1>
                     <p class="lead">{s.lead}</p>
                     <StoreBadges lang={lang} />
+                    <a class="tester-link" href="#tester"
+                        >{s.tester.hero} <span aria-hidden="true">→</span></a
+                    >
                 </div>
 
                 <figure class="book" aria-label={s.ogAlt}>
@@ -177,12 +180,42 @@ const jsonLd = [
             </section>
         </div>
 
-        <section class="cta">
+        <section class="cta" id="tester">
             <div class="wrap">
                 <div class="cta-page reveal">
                     <h2>{s.ctaTitle}</h2>
                     <p>{s.ctaText}</p>
-                    <StoreBadges lang={lang} />
+                    <form
+                        class="tester"
+                        novalidate
+                        data-invalid={s.tester.invalid}
+                        data-pending={s.tester.pending}
+                    >
+                        <h3 class="tester-title">{s.tester.title}</h3>
+                        <p class="tester-text">{s.tester.text}</p>
+                        <div class="tester-row">
+                            <label class="visually-hidden" for="tester-email"
+                                >{s.tester.label}</label
+                            >
+                            <input
+                                id="tester-email"
+                                type="email"
+                                name="email"
+                                autocomplete="email"
+                                maxlength="254"
+                                placeholder={s.tester.placeholder}
+                                required
+                            />
+                            <button type="submit">{s.tester.button}</button>
+                        </div>
+                        <p class="tester-note">{s.tester.note}</p>
+                        <p
+                            class="tester-status"
+                            role="status"
+                            aria-live="polite"
+                        >
+                        </p>
+                    </form>
                 </div>
             </div>
         </section>
@@ -224,7 +257,8 @@ const jsonLd = [
         z-index: 1;
     }
     #cara,
-    #soalan {
+    #soalan,
+    #tester {
         scroll-margin-top: 5.5rem;
     }
 
@@ -299,6 +333,24 @@ const jsonLd = [
         line-height: 1.45;
         color: var(--ink-soft);
     }
+    .tester-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+        margin-top: 1rem;
+        padding-bottom: 0.1rem;
+        color: var(--pandan-deep);
+        font-weight: 600;
+        text-decoration: none;
+        border-bottom: 1.5px solid var(--margin);
+        transition:
+            color 0.2s ease,
+            border-color 0.2s ease;
+    }
+    .tester-link:hover {
+        color: var(--margin);
+        border-color: var(--pandan);
+    }
 
     /* The exercise book: blue rules, red margin, a pasted link and the recipe written in by hand. */
     .book {
@@ -344,6 +396,20 @@ const jsonLd = [
         border-left: 10px solid var(--pandan);
         box-shadow: 6px 8px 0 rgba(28, 42, 32, 0.08);
         line-height: var(--lh);
+    }
+    .page::before {
+        content: "";
+        position: absolute;
+        top: 0.8rem;
+        bottom: 0.8rem;
+        left: -7px;
+        width: 2px;
+        background: repeating-linear-gradient(
+            180deg,
+            rgba(255, 255, 255, 0.55) 0 0.5rem,
+            transparent 0.5rem 1rem
+        );
+        pointer-events: none;
     }
     .chip {
         display: inline-flex;
@@ -717,6 +783,18 @@ const jsonLd = [
         );
         box-shadow: 8px 10px 0 rgba(0, 0, 0, 0.16);
     }
+    .cta-page::before {
+        content: "";
+        position: absolute;
+        top: -1px;
+        right: clamp(1.5rem, 5vw, 3rem);
+        width: 18px;
+        height: 58px;
+        background: var(--kunyit);
+        clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 82%, 0 100%);
+        filter: drop-shadow(0 1px 0 rgba(28, 42, 32, 0.15));
+        pointer-events: none;
+    }
     .cta-page::after {
         content: "14";
         position: absolute;
@@ -736,6 +814,82 @@ const jsonLd = [
         max-width: 34em;
         color: var(--ink-soft);
     }
+    .tester {
+        margin-top: 1.75rem;
+        padding-top: 1.25rem;
+        border-top: 1.5px dashed var(--line);
+    }
+    .tester-title {
+        font-family: var(--hand);
+        font-size: 1.6rem;
+        font-weight: 700;
+        line-height: 1.1;
+        color: var(--pandan-deep);
+    }
+    .tester-text {
+        margin-top: 0.4rem;
+        max-width: 40em;
+        font-size: var(--step--1);
+        color: var(--ink-soft);
+    }
+    .tester-row {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: flex-end;
+        gap: 0.75rem;
+        margin-top: 1rem;
+    }
+    .tester-row input {
+        flex: 1 1 12rem;
+        min-width: 0;
+        padding: 0.55rem 0;
+        border: 0;
+        border-bottom: 1.5px solid var(--ink);
+        border-radius: 0;
+        background: transparent;
+        font: inherit;
+        color: var(--ink);
+    }
+    .tester-row input::placeholder {
+        color: var(--ink-soft);
+        opacity: 0.7;
+    }
+    .tester-row button {
+        flex: none;
+        padding: 0.6rem 1rem;
+        border: 2px solid var(--ink);
+        border-radius: 3px;
+        background: transparent;
+        color: var(--ink);
+        font: inherit;
+        font-size: var(--step--1);
+        font-weight: 700;
+        cursor: pointer;
+        transition:
+            background-color 0.2s ease,
+            color 0.2s ease;
+    }
+    .tester-row button:hover {
+        background: var(--ink);
+        color: var(--paper);
+    }
+    .tester-note {
+        margin-top: 0.7rem;
+        font-size: 0.82rem;
+        color: var(--ink-soft);
+    }
+    .tester-status {
+        margin-top: 0.5rem;
+        font-size: var(--step--1);
+        font-weight: 600;
+        color: var(--ink-soft);
+    }
+    .tester-status:empty {
+        display: none;
+    }
+    .tester-status[data-tone="bad"] {
+        color: var(--margin);
+    }
 
     @media (max-width: 880px) {
         .hero,
@@ -754,6 +908,9 @@ const jsonLd = [
         }
     }
     @media (max-width: 640px) {
+        .cta-page::before {
+            display: none;
+        }
         .steps li {
             grid-template-columns: 2.75rem minmax(0, 1fr);
             column-gap: 0.9rem;
@@ -806,5 +963,25 @@ const jsonLd = [
             { rootMargin: "0px 0px -8% 0px", threshold: 0.1 },
         );
         reveals.forEach((el) => io.observe(el));
+    }
+
+    const tester = document.querySelector<HTMLFormElement>(".tester");
+    if (tester) {
+        const status = tester.querySelector<HTMLElement>(".tester-status")!;
+        tester.addEventListener("submit", (event) => {
+            event.preventDefault();
+            const email = tester.querySelector<HTMLInputElement>(
+                'input[type="email"]',
+            )!;
+            if (!email.value.trim() || !email.checkValidity()) {
+                status.textContent = tester.dataset.invalid ?? "";
+                status.dataset.tone = "bad";
+                email.focus();
+                return;
+            }
+            // Backend later: POST this email to the tester endpoint.
+            status.textContent = tester.dataset.pending ?? "";
+            status.dataset.tone = "";
+        });
     }
 </script>

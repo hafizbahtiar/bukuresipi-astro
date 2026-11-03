@@ -9,8 +9,8 @@ interface Props {
 const { lang } = Astro.props;
 const s = t(lang).home;
 const stores = [
-    { name: s.play, href: STORES.play },
-    { name: s.appStore, href: STORES.appStore },
+    { name: s.play, href: STORES.play, note: s.soon },
+    { name: s.appStore, href: STORES.appStore, note: s.iosNote },
 ];
 ---
 
@@ -29,7 +29,7 @@ const stores = [
             ) : (
                 <span class="badge soon" aria-disabled="true">
                     <span>
-                        <small>{s.soon}</small>
+                        <small>{st.note}</small>
                         {st.name}
                     </span>
                 </span>
