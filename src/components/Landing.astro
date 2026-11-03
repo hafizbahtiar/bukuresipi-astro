@@ -57,283 +57,411 @@ const jsonLd = [
 >
     <Header lang={lang} path="/" nav />
     <main class="home">
-        <div class="sheet">
-            <section class="wrap hero">
-                <div class="hero-copy">
-                    <p class="eyebrow">{s.eyebrow}</p>
-                    <h1>{s.h1}</h1>
-                    <p class="lead">{s.lead}</p>
-                    <StoreBadges lang={lang} />
-                    <a class="tester-link" href="#tester"
-                        >{s.tester.hero} <span aria-hidden="true">→</span></a
-                    >
-                </div>
+        <div class="flipbook" id="book">
+            <div class="book-page is-current" data-page="0">
+                <div class="page-front">
+                    <section class="wrap hero">
+                        <div class="hero-copy">
+                            <p class="eyebrow">{s.eyebrow}</p>
+                            <h1>{s.h1}</h1>
+                            <p class="lead">{s.lead}</p>
+                            <StoreBadges lang={lang} />
+                            <a class="tester-link" href="#tester"
+                                >{s.tester.hero}
+                                <span aria-hidden="true">→</span></a
+                            >
+                        </div>
 
-                <figure class="book" aria-label={s.ogAlt}>
-                    <div class="page" aria-hidden="true">
-                        <p class="chip">
-                            <span class="chip-dot"
-                            ></span>tiktok.com/@dapurkakna/video/7426…
-                        </p>
-                        <p class="dish">{n.dish}</p>
-                        <ul class="hand">
+                        <figure class="book" aria-label={s.ogAlt}>
+                            <div class="page" aria-hidden="true">
+                                <p class="chip">
+                                    <span class="chip-dot"
+                                    ></span>tiktok.com/@dapurkakna/video/7426…
+                                </p>
+                                <p class="dish">{n.dish}</p>
+                                <ul class="hand">
+                                    {
+                                        n.lines.map(([qty, rest]) => (
+                                            <li>
+                                                <mark>{qty}</mark>
+                                                {rest}
+                                            </li>
+                                        ))
+                                    }
+                                    <li class="gap">{n.gap}</li>
+                                </ul>
+                                <div class="pin">
+                                    <svg viewBox="0 0 24 24" class="pin-icon"
+                                        ><path
+                                            d="M12 2a7 7 0 0 1 7 7c0 5.2-7 13-7 13S5 14.2 5 9a7 7 0 0 1 7-7z"
+                                            fill="#d23c35"></path><circle
+                                            cx="12"
+                                            cy="9"
+                                            r="2.6"
+                                            fill="#fff"></circle></svg
+                                    >
+                                    <div>
+                                        <p class="pin-name">{n.place}</p>
+                                        <p class="pin-area">{n.area}</p>
+                                        <p class="pin-halal">
+                                            <mark>{n.halal}</mark>
+                                            <span>{n.halalSource}</span>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </figure>
+                    </section>
+                </div>
+                <div class="page-back" aria-hidden="true"></div>
+            </div>
+
+            <div class="book-page is-next" data-page="1" data-theme="dark">
+                <div class="page-front">
+                    <section id="cara" class="steps-band">
+                        <div class="wrap">
+                            <h2>{s.stepsTitle}</h2>
+                            <ol class="steps">
+                                {
+                                    s.steps.map(([title, text]) => (
+                                        <li>
+                                            <>
+                                                <h3>{title}</h3>
+                                                <p>{text}</p>
+                                            </>
+                                        </li>
+                                    ))
+                                }
+                            </ol>
+                        </div>
+                    </section>
+                </div>
+                <div class="page-back" aria-hidden="true"></div>
+            </div>
+
+            <div class="book-page" data-page="2">
+                <div class="page-front">
+                    <section class="wrap duo">
+                        <div>
+                            <h2><span class="hl">{s.bookTitle}</span></h2>
+                            <p>{s.bookText}</p>
+                        </div>
+                        <div>
+                            <h2><span class="hl">{s.mapTitle}</span></h2>
+                            <p>{s.mapText}</p>
+                        </div>
+                    </section>
+                </div>
+                <div class="page-back" aria-hidden="true"></div>
+            </div>
+
+            <div class="book-page" data-page="3">
+                <div class="page-front">
+                    <section class="wrap honest">
+                        <h2>{s.honestTitle}</h2>
+                        <p class="honest-lead">{s.honestLead}</p>
+                        <dl>
                             {
-                                n.lines.map(([qty, rest]) => (
-                                    <li>
-                                        <mark>{qty}</mark>
-                                        {rest}
-                                    </li>
+                                s.honest.map(([term, text]) => (
+                                    <div>
+                                        <>
+                                            <dt>{term}</dt>
+                                            <dd>{text}</dd>
+                                        </>
+                                    </div>
                                 ))
                             }
-                            <li class="gap">{n.gap}</li>
-                        </ul>
-                        <div class="pin">
-                            <svg viewBox="0 0 24 24" class="pin-icon"
-                                ><path
-                                    d="M12 2a7 7 0 0 1 7 7c0 5.2-7 13-7 13S5 14.2 5 9a7 7 0 0 1 7-7z"
-                                    fill="#d23c35"></path><circle
-                                    cx="12"
-                                    cy="9"
-                                    r="2.6"
-                                    fill="#fff"></circle></svg
-                            >
-                            <div>
-                                <p class="pin-name">{n.place}</p>
-                                <p class="pin-area">{n.area}</p>
-                                <p class="pin-halal">
-                                    <mark>{n.halal}</mark>
-                                    <span>{n.halalSource}</span>
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </figure>
-            </section>
-
-            <section id="cara" class="steps-band">
-                <div class="wrap reveal">
-                    <span class="turn-shade" aria-hidden="true"></span>
-                    <h2>{s.stepsTitle}</h2>
-                    <ol class="steps">
-                        {
-                            s.steps.map(([title, text]) => (
-                                <li>
-                                    <>
-                                        <h3>{title}</h3>
-                                        <p>{text}</p>
-                                    </>
-                                </li>
-                            ))
-                        }
-                    </ol>
+                        </dl>
+                    </section>
                 </div>
-            </section>
-
-            <section class="wrap duo reveal">
-                <span class="turn-shade" aria-hidden="true"></span>
-                <div>
-                    <h2><span class="hl">{s.bookTitle}</span></h2>
-                    <p>{s.bookText}</p>
-                </div>
-                <div>
-                    <h2><span class="hl">{s.mapTitle}</span></h2>
-                    <p>{s.mapText}</p>
-                </div>
-            </section>
-
-            <section class="wrap honest reveal">
-                <span class="turn-shade" aria-hidden="true"></span>
-                <h2>{s.honestTitle}</h2>
-                <p class="honest-lead">{s.honestLead}</p>
-                <dl>
-                    {
-                        s.honest.map(([term, text]) => (
-                            <div>
-                                <>
-                                    <dt>{term}</dt>
-                                    <dd>{text}</dd>
-                                </>
-                            </div>
-                        ))
-                    }
-                </dl>
-            </section>
-
-            <section class="wrap platforms reveal" aria-labelledby="works-with">
-                <span class="turn-shade" aria-hidden="true"></span>
-                <h2 id="works-with">{s.worksWith}</h2>
-                <ul>{s.platforms.map((p) => <li>{p}</li>)}</ul>
-            </section>
-
-            <section id="soalan" class="wrap faq reveal">
-                <span class="turn-shade" aria-hidden="true"></span>
-                <h2><span class="hl">{s.faqTitle}</span></h2>
-                <div class="faq-list">
-                    {
-                        s.faq.map(([q, a]) => (
-                            <details>
-                                <>
-                                    <summary>
-                                        <span class="q">{q}</span>
-                                    </summary>
-                                    <p>{a}</p>
-                                </>
-                            </details>
-                        ))
-                    }
-                </div>
-            </section>
-        </div>
-
-        <section class="cta" id="tester">
-            <div class="wrap">
-                <div class="cta-page reveal">
-                    <span class="turn-shade" aria-hidden="true"></span>
-                    <h2>{s.ctaTitle}</h2>
-                    <p>{s.ctaText}</p>
-                    <form
-                        class="tester"
-                        novalidate
-                        data-invalid={s.tester.invalid}
-                        data-pending={s.tester.pending}
-                    >
-                        <h3 class="tester-title">{s.tester.title}</h3>
-                        <p class="tester-text">{s.tester.text}</p>
-                        <div class="tester-row">
-                            <label class="visually-hidden" for="tester-email"
-                                >{s.tester.label}</label
-                            >
-                            <input
-                                id="tester-email"
-                                type="email"
-                                name="email"
-                                autocomplete="email"
-                                maxlength="254"
-                                placeholder={s.tester.placeholder}
-                                required
-                            />
-                            <button type="submit">{s.tester.button}</button>
-                        </div>
-                        <p class="tester-note">{s.tester.note}</p>
-                        <p
-                            class="tester-status"
-                            role="status"
-                            aria-live="polite"
-                        >
-                        </p>
-                    </form>
-                </div>
+                <div class="page-back" aria-hidden="true"></div>
             </div>
-        </section>
+
+            <div class="book-page" data-page="4">
+                <div class="page-front">
+                    <section
+                        class="wrap platforms"
+                        aria-labelledby="works-with"
+                    >
+                        <h2 id="works-with">{s.worksWith}</h2>
+                        <ul>{s.platforms.map((p) => <li>{p}</li>)}</ul>
+                    </section>
+                </div>
+                <div class="page-back" aria-hidden="true"></div>
+            </div>
+
+            <div class="book-page" data-page="5">
+                <div class="page-front">
+                    <section id="soalan" class="wrap faq">
+                        <h2><span class="hl">{s.faqTitle}</span></h2>
+                        <div class="faq-list">
+                            {
+                                s.faq.map(([q, a]) => (
+                                    <details>
+                                        <>
+                                            <summary>
+                                                <span class="q">{q}</span>
+                                            </summary>
+                                            <p>{a}</p>
+                                        </>
+                                    </details>
+                                ))
+                            }
+                        </div>
+                    </section>
+                </div>
+                <div class="page-back" aria-hidden="true"></div>
+            </div>
+
+            <div class="book-page" data-page="6" data-theme="green">
+                <div class="page-front">
+                    <section class="cta" id="tester">
+                        <div class="wrap">
+                            <div class="cta-page">
+                                <h2>{s.ctaTitle}</h2>
+                                <p>{s.ctaText}</p>
+                                <form
+                                    class="tester"
+                                    novalidate
+                                    data-invalid={s.tester.invalid}
+                                    data-pending={s.tester.pending}
+                                >
+                                    <h3 class="tester-title">
+                                        {s.tester.title}
+                                    </h3>
+                                    <p class="tester-text">{s.tester.text}</p>
+                                    <div class="tester-row">
+                                        <label
+                                            class="visually-hidden"
+                                            for="tester-email"
+                                            >{s.tester.label}</label
+                                        >
+                                        <input
+                                            id="tester-email"
+                                            type="email"
+                                            name="email"
+                                            autocomplete="email"
+                                            maxlength="254"
+                                            placeholder={s.tester.placeholder}
+                                            required
+                                        />
+                                        <button type="submit"
+                                            >{s.tester.button}</button
+                                        >
+                                    </div>
+                                    <p class="tester-note">{s.tester.note}</p>
+                                    <p
+                                        class="tester-status"
+                                        role="status"
+                                        aria-live="polite"
+                                    >
+                                    </p>
+                                </form>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+                <div class="page-back" aria-hidden="true"></div>
+            </div>
+        </div>
+        <nav
+            class="book-nav"
+            aria-label={lang === "en" ? "Book pages" : "Halaman buku"}
+        >
+            <button
+                type="button"
+                data-book-prev
+                aria-label={lang === "en" ? "Previous page" : "Halaman sebelum"}
+                >←</button
+            >
+            <span class="book-count"
+                ><b data-book-current>1</b> / <span data-book-total>7</span
+                ></span
+            >
+            <button
+                type="button"
+                data-book-next
+                aria-label={lang === "en" ? "Next page" : "Halaman seterusnya"}
+                >→</button
+            >
+        </nav>
     </main>
     <Footer lang={lang} nav />
 </Base>
 
 <style>
-    /* The page margin: one red rule down the whole sheet, content written to its right. */
     .home {
         --page-indent: clamp(1.5rem, 4vw, 2.75rem);
+        padding-block: clamp(1.5rem, 4vw, 3rem) 0;
     }
-    .sheet {
+    .flipbook {
         position: relative;
+        width: min(100% - 2 * var(--gutter), var(--wrap));
+        height: clamp(540px, calc(100svh - 9rem), 840px);
+        margin-inline: auto;
+        perspective: 2200px;
     }
-    .sheet::before {
-        content: "";
+    .book-page {
         position: absolute;
-        inset-block: 0;
-        left: max(var(--gutter), calc(50% - var(--wrap) / 2));
-        width: 2px;
-        background: var(--margin);
-        opacity: 0.55;
-        pointer-events: none;
-        transform-origin: top;
-        animation: rule-in 0.9s cubic-bezier(0.16, 1, 0.3, 1) both;
-    }
-    @keyframes rule-in {
-        from {
-            transform: scaleY(0);
-        }
-        to {
-            transform: scaleY(1);
-        }
-    }
-    .steps-band,
-    .cta {
-        position: relative;
+        inset: 0;
         z-index: 1;
-    }
-    #cara,
-    #soalan,
-    #tester {
-        scroll-margin-top: 5.5rem;
-    }
-
-    .reveal {
-        position: relative;
-        z-index: 3;
-        background-color: var(--paper);
-        background-image: linear-gradient(90deg, var(--margin) 0 2px, transparent 2px);
-        box-shadow: 0 8px 16px rgba(28, 42, 32, 0.06);
+        visibility: hidden;
+        pointer-events: none;
         transform-origin: top center;
+        transform-style: preserve-3d;
+        transition: transform 0.9s cubic-bezier(0.45, 0, 0.15, 1);
     }
-    .steps-band .reveal {
+    .book-page.is-current {
+        z-index: 3;
+        visibility: visible;
+        pointer-events: auto;
+        transform: rotateX(0deg);
+    }
+    .book-page.is-next {
+        z-index: 2;
+        visibility: visible;
+        pointer-events: none;
+        transform: rotateX(0deg);
+    }
+    .book-page.is-flipping {
+        z-index: 4;
+        visibility: visible;
+        pointer-events: none;
+        transform: rotateX(-180deg);
+    }
+    .book-page.is-returning {
+        z-index: 4;
+        visibility: visible;
+        pointer-events: none;
+        transform: rotateX(-180deg);
+    }
+    .book-page.is-returning.is-returned {
+        transform: rotateX(0deg);
+    }
+    .page-front,
+    .page-back {
+        position: absolute;
+        inset: 0;
+        overflow-y: auto;
+        overflow-x: hidden;
+        padding-bottom: 4.5rem;
+        background-color: var(--paper);
+        background-image: linear-gradient(
+            90deg,
+            var(--margin) 0 2px,
+            transparent 2px
+        );
+        box-shadow: 0 10px 24px rgba(28, 42, 32, 0.12);
+        backface-visibility: hidden;
+        -webkit-overflow-scrolling: touch;
+    }
+    .page-back {
+        transform: rotateX(180deg);
+        overflow: hidden;
+        padding-bottom: 0;
+        background-image:
+            linear-gradient(
+                90deg,
+                transparent 1.4rem,
+                var(--line) 1.4rem,
+                var(--line) calc(1.4rem + 1px),
+                transparent calc(1.4rem + 1px)
+            ),
+            repeating-linear-gradient(
+                180deg,
+                transparent 0 2rem,
+                rgba(47, 107, 59, 0.05) 2rem calc(2rem + 1px)
+            );
+    }
+    .book-page[data-theme="dark"] .page-front {
         background-color: var(--pandan-deep);
         background-image:
-            linear-gradient(90deg, rgba(255, 255, 255, 0.4) 0 1px, transparent 1px),
+            linear-gradient(
+                90deg,
+                rgba(255, 255, 255, 0.4) 0 1px,
+                transparent 1px
+            ),
             repeating-linear-gradient(
                 180deg,
                 transparent 0 2.4rem,
                 rgba(255, 255, 255, 0.045) 2.4rem calc(2.4rem + 1px)
             );
-        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.18);
     }
-    .turn-shade {
+    .book-page[data-theme="green"] .page-front {
+        background-color: var(--pandan-deep);
+        background-image: none;
+    }
+    .page-front .wrap {
+        width: 100%;
+        margin-inline: 0;
+    }
+    .book-nav {
+        position: fixed;
+        bottom: 1rem;
+        left: 50%;
+        z-index: 45;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        padding: 0.4rem 0.55rem;
+        border: 1.5px solid var(--line);
+        border-radius: 3px;
+        background: var(--paper);
+        box-shadow: 0 8px 20px rgba(28, 42, 32, 0.1);
+        font-size: var(--step--1);
+        transform: translateX(-50%);
+    }
+    .book-nav button {
+        display: grid;
+        place-items: center;
+        width: 2.4rem;
+        height: 2.4rem;
+        border: 1.5px solid var(--ink);
+        border-radius: 2px;
+        background: transparent;
+        color: var(--ink);
+        font: inherit;
+        font-size: 1.1rem;
+        cursor: pointer;
+        transition:
+            background-color 0.2s ease,
+            color 0.2s ease;
+    }
+    .book-nav button:hover:not(:disabled) {
+        background: var(--ink);
+        color: var(--paper);
+    }
+    .book-nav button:disabled {
+        opacity: 0.25;
+        cursor: default;
+    }
+    .book-count {
+        min-width: 3.25rem;
+        text-align: center;
+        font-variant-numeric: tabular-nums;
+        color: var(--ink-soft);
+    }
+    :global(html:not(.js)) .flipbook {
+        height: auto;
+    }
+    :global(html:not(.js)) .book-page {
+        position: relative;
+        visibility: visible;
+        pointer-events: auto;
+        transform: none;
+    }
+    :global(html:not(.js)) .page-front {
+        position: relative;
+        overflow: visible;
+        padding-bottom: 0;
+    }
+    :global(html:not(.js)) .page-back,
+    :global(html:not(.js)) .book-nav {
         display: none;
     }
-    :global(html.js) .turn-shade {
-        display: block;
-        position: absolute;
-        inset: 0;
-        z-index: 2;
-        background: linear-gradient(
-            180deg,
-            rgba(28, 42, 32, 0.3),
-            rgba(28, 42, 32, 0.04) 55%,
-            transparent 80%
-        );
-        opacity: 1;
-        transition: opacity 0.9s ease-out;
-        pointer-events: none;
-    }
-    .steps-band .turn-shade {
-        background: linear-gradient(180deg, rgba(0, 0, 0, 0.32), transparent 60%);
-    }
-    :global(html.js) .turn-shade::after {
-        content: "";
-        position: absolute;
-        inset-inline: 0;
-        bottom: 0;
-        height: 7%;
-        border-radius: 0 0 50% 50% / 0 0 1.5rem 1.5rem;
-        background: linear-gradient(180deg, transparent, rgba(28, 42, 32, 0.16));
-        pointer-events: none;
-    }
-    :global(html.js) .reveal {
-        transform: perspective(1400px) rotateX(-78deg);
-        transition: transform 0.95s cubic-bezier(0.45, 0, 0.15, 1);
-    }
-    :global(html.js) .reveal.in {
-        transform: perspective(1400px) rotateX(0deg);
-    }
-    :global(html.js) .reveal.in .turn-shade {
-        opacity: 0;
-    }
     @media (prefers-reduced-motion: reduce) {
-        .turn-shade {
-            display: none !important;
-        }
-        .reveal {
-            transform: none !important;
+        .book-page {
+            transition: none;
         }
     }
 
@@ -1001,24 +1129,118 @@ const jsonLd = [
 </style>
 
 <script>
-    const reveals = document.querySelectorAll<HTMLElement>(".reveal");
-    if (
-        reveals.length &&
-        "IntersectionObserver" in window &&
-        !matchMedia("(prefers-reduced-motion: reduce)").matches
-    ) {
-        document.documentElement.classList.add("js");
-        const io = new IntersectionObserver(
-            (entries) => {
-                for (const entry of entries) {
-                    if (!entry.isIntersecting) continue;
-                    entry.target.classList.add("in");
-                    io.unobserve(entry.target);
-                }
-            },
-            { rootMargin: "0px 0px -8% 0px", threshold: 0.1 },
-        );
-        reveals.forEach((el) => io.observe(el));
+    const book = document.querySelector<HTMLElement>(".flipbook");
+    const pages = book
+        ? [...book.querySelectorAll<HTMLElement>(".book-page")]
+        : [];
+    const prevButton = document.querySelector<HTMLButtonElement>(
+        "[data-book-prev]",
+    );
+    const nextButton = document.querySelector<HTMLButtonElement>(
+        "[data-book-next]",
+    );
+    const currentLabel = document.querySelector<HTMLElement>(
+        "[data-book-current]",
+    );
+    const totalLabel = document.querySelector<HTMLElement>("[data-book-total]");
+    const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const flipDuration = reducedMotion ? 0 : 950;
+    let pageIndex = 0;
+    let busy = false;
+
+    const pageTop = (page: HTMLElement) => {
+        page.querySelector<HTMLElement>(".page-front")?.scrollTo({ top: 0 });
+    };
+
+    const scrollPageTo = (page: HTMLElement, selector: string) => {
+        const front = page.querySelector<HTMLElement>(".page-front");
+        const target = front?.querySelector<HTMLElement>(selector);
+        if (!front || !target) return;
+        const top =
+            target.getBoundingClientRect().top -
+            front.getBoundingClientRect().top +
+            front.scrollTop;
+        front.scrollTo({
+            top: Math.max(0, top - 12),
+            behavior: reducedMotion ? "auto" : "smooth",
+        });
+    };
+
+    const setPage = (index: number) => {
+        pageIndex = index;
+        for (const [i, page] of pages.entries()) {
+            page.classList.toggle("is-current", i === index);
+            page.classList.toggle("is-next", i === index + 1);
+            page.classList.remove(
+                "is-flipping",
+                "is-returning",
+                "is-returned",
+            );
+            page.toggleAttribute("inert", i !== index);
+            page.setAttribute("aria-hidden", String(i !== index));
+        }
+        if (currentLabel) currentLabel.textContent = String(index + 1);
+        if (prevButton) prevButton.disabled = index === 0;
+        if (nextButton) nextButton.disabled = index === pages.length - 1;
+    };
+
+    const flipTo = (target: number, selector?: string) => {
+        if (
+            !pages.length ||
+            busy ||
+            target === pageIndex ||
+            target < 0 ||
+            target >= pages.length
+        )
+            return;
+        if (reducedMotion) {
+            setPage(target);
+            pageTop(pages[target]);
+            if (selector) scrollPageTo(pages[target], selector);
+            return;
+        }
+        busy = true;
+        if (target > pageIndex) {
+            pages[target].classList.remove("is-next");
+            pages[target].classList.add("is-current");
+            pages[pageIndex].classList.add("is-flipping");
+            pageTop(pages[target]);
+        } else {
+            pages[target].classList.remove("is-next");
+            pages[target].classList.add("is-returning");
+            requestAnimationFrame(() =>
+                pages[target].classList.add("is-returned"),
+            );
+        }
+        window.setTimeout(() => {
+            setPage(target);
+            pageTop(pages[target]);
+            if (selector) scrollPageTo(pages[target], selector);
+            busy = false;
+        }, flipDuration);
+    };
+
+    if (pages.length) {
+        if (totalLabel) totalLabel.textContent = String(pages.length);
+        setPage(0);
+        prevButton?.addEventListener("click", () => flipTo(pageIndex - 1));
+        nextButton?.addEventListener("click", () => flipTo(pageIndex + 1));
+        const pageForHash: Record<string, number> = {
+            "#cara": 1,
+            "#soalan": 5,
+            "#tester": 6,
+        };
+        document.addEventListener("click", (event) => {
+            const link = (event.target as HTMLElement).closest<HTMLAnchorElement>(
+                'a[href^="#"]',
+            );
+            if (!link) return;
+            const hash = link.getAttribute("href") ?? "";
+            const target = pageForHash[hash];
+            if (target === undefined) return;
+            event.preventDefault();
+            flipTo(target, hash === "#tester" ? ".tester" : undefined);
+        });
     }
 
     const tester = document.querySelector<HTMLFormElement>(".tester");
