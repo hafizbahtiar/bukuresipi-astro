@@ -6,7 +6,7 @@ import { type Lang, pathIn, t } from '../i18n'
 import Footer from './Footer.astro'
 import Header from './Header.astro'
 
-interface Props { lang: Lang; kind: 'verify' | 'reset' | 'forgot' }
+interface Props { lang: Lang; kind: 'verify' | 'reset' | 'forgot' | 'delete' }
 const { lang, kind } = Astro.props
 const a = t(lang).auth
 const k = a[kind]
@@ -15,6 +15,7 @@ const messages = {
     missing: a.missing, expired: a.expired, rate: a.rate, network: a.network, working: a.working,
     done: k.done, weakPassword: 'weak' in k ? k.weak : '', invalid: 'invalid' in k ? k.invalid : '',
     mismatch: a.reset.mismatch, ...a.reset.levels,
+    confirm: a.delete.confirm, wrong: a.delete.wrong, owner: a.delete.owner,
 }
 const rules = Object.entries(a.reset.rules)
 ---
@@ -44,6 +45,16 @@ const rules = Object.entries(a.reset.rules)
                     </label>
                     <label class="check"><input type="checkbox" name="show" /> {a.reset.show}</label>
                 )}
+                {kind === 'delete' && (
+                    <label>
+                        {a.delete.email}
+                        <input type="email" name="email" autocomplete="email" maxlength="254" required />
+                    </label>
+                    <label>
+                        {a.delete.password}
+                        <input type="password" name="password" autocomplete="current-password" maxlength="200" required />
+                    </label>
+                )}
                 {kind === 'forgot' && (
                     <label>
                         {a.forgot.label}
@@ -55,6 +66,7 @@ const rules = Object.entries(a.reset.rules)
             <p class="status" role="status" aria-live="polite"></p>
             {kind === 'verify' && <p class="after" hidden>{a.verify.again}</p>}
             {kind === 'reset' && <p class="after" hidden><a href={pathIn('/auth/forgot', lang)}>{a.reset.again}</a></p>}
+            {kind === 'delete' && <p class="after"><a href={pathIn('/auth/forgot', lang)}>{a.forgot.title}</a></p>}
             <p class="home"><a href={pathIn('/', lang)}>{a.backHome}</a></p>
         </div>
     </main>
@@ -78,7 +90,7 @@ const rules = Object.entries(a.reset.rules)
             status.textContent = text
             status.dataset.tone = tone
         }
-        if (kind !== 'forgot' && !token) {
+        if (kind !== 'forgot' && kind !== 'delete' && !token) {
             form.hidden = true
             say(m.missing, 'bad')
         }
@@ -109,10 +121,14 @@ const rules = Object.entries(a.reset.rules)
                 if (password !== field('confirm')) return say(m.mismatch, 'bad')
                 route = 'reset-password'; body = { token, password }
             }
-            if (kind === 'forgot') {
+            if (kind === 'forgot' || kind === 'delete') {
                 const email = field('email').trim()
                 if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return say(m.invalid, 'bad')
                 route = 'forgot-password'; body = { email }
+                if (kind === 'delete') {
+                    if (!confirm(m.confirm)) return
+                    route = 'delete-account'; body = { email, password: field('password') }
+                }
             }
             button.disabled = true
             say(m.working)
@@ -124,11 +140,13 @@ const rules = Object.entries(a.reset.rules)
                 const error = res.ok ? null : ((await res.json().catch(() => ({}))) as { error?: string }).error
                 if (res.ok) {
                     form.hidden = true
+                    if (after) after.hidden = true
                     return say(m.done, 'ok')
                 }
                 if (error === 'weak_password') return say(m.weakPassword, 'bad')
                 if (error === 'rate_limited') return say(m.rate, 'bad')
                 if (error === 'invalid_input' && kind === 'forgot') return say(m.invalid, 'bad')
+                if (kind === 'delete') return say(error === 'owner_account' ? m.owner : error === 'invalid_input' ? m.invalid : m.wrong, 'bad')
                 form.hidden = true
                 say(m.expired, 'bad')
                 if (after) after.hidden = false

@@ -29,7 +29,10 @@ const s = t(lang);
         }
     </div>
     <div class="wrap foot-base">
-        <p>© {new Date().getFullYear()} Bukuresipi</p>
+        <p>
+            © {new Date().getFullYear()} Bukuresipi · <a
+                href={pathIn("/auth/delete", lang)}>{s.home.footerDelete}</a>
+        </p>
         <a class="top" href="#top"
             >{s.home.footerTop} <span aria-hidden="true">↑</span></a
         >
