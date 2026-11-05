@@ -257,6 +257,8 @@ const jsonLd = [
     .home {
         --page-indent: clamp(1.5rem, 4vw, 2.75rem);
         padding-block: 0;
+        /* The tilted book's back page pokes past the edge on phones; clip (not hidden) keeps no scroll container. */
+        overflow-x: clip;
     }
     .hl {
         background: linear-gradient(
@@ -881,6 +883,10 @@ const jsonLd = [
         }
     }
     @media (max-width: 480px) {
+        /* Phones: the gutter is margin enough; the extra indent only narrows the text. */
+        .home {
+            --page-indent: 0px;
+        }
         .cta-page {
             --margin-x: 2rem;
         }
