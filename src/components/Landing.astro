@@ -113,18 +113,43 @@ const jsonLd = [
         <section id="cara" class="steps-band">
             <div class="wrap">
                 <h2>{s.stepsTitle}</h2>
-                <ol class="steps">
-                    {
-                        s.steps.map(([title, text]) => (
-                            <li>
-                                <>
-                                    <h3>{title}</h3>
-                                    <p>{text}</p>
-                                </>
-                            </li>
-                        ))
-                    }
-                </ol>
+                <div class="how">
+                    <ol class="steps">
+                        {
+                            s.steps.map(([title, text]) => (
+                                <li>
+                                    <>
+                                        <h3>{title}</h3>
+                                        <p>{text}</p>
+                                    </>
+                                </li>
+                            ))
+                        }
+                    </ol>
+                    <!-- Made by `bun run video` (scripts/video.ts). Silent: the steps beside it carry the same words. -->
+                    <video
+                        class="how-video"
+                        poster={`/video/how-it-works-${lang}.webp`}
+                        width="1080"
+                        height="1080"
+                        muted
+                        loop
+                        playsinline
+                        controls
+                        preload="none"
+                        aria-label={s.stepsTitle}
+                    >
+                        <!-- The browser takes the first it can play: AV1 (smaller), else H.264. -->
+                        <source
+                            src={`/video/how-it-works-${lang}.webm`}
+                            type='video/webm; codecs="av01.0.08M.08"'
+                        />
+                        <source
+                            src={`/video/how-it-works-${lang}.mp4`}
+                            type="video/mp4"
+                        />
+                    </video>
+                </div>
             </div>
         </section>
 
@@ -480,9 +505,24 @@ const jsonLd = [
     .faq h2 {
         font-size: var(--step-3);
     }
+    .how {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(0, 26rem);
+        gap: clamp(1.5rem, 4vw, 3.5rem);
+        align-items: start;
+        margin-top: 2.25rem;
+    }
+    .how-video {
+        display: block;
+        width: 100%;
+        height: auto;
+        border-radius: 14px;
+        background: var(--paper);
+        box-shadow: 0 24px 48px -24px rgba(0, 0, 0, 0.55);
+    }
     .steps {
         display: grid;
-        margin: 2.25rem 0 0;
+        margin: 0;
         padding: 0;
         list-style: none;
         counter-reset: step;
@@ -678,7 +718,6 @@ const jsonLd = [
         color: var(--ink-soft);
     }
 
-
     .cta {
         padding-block: clamp(2.5rem, 6vw, 4.5rem);
         background: var(--pandan-deep);
@@ -804,6 +843,12 @@ const jsonLd = [
     }
 
     @media (max-width: 880px) {
+        .how {
+            grid-template-columns: minmax(0, 1fr);
+        }
+        .how-video {
+            max-width: 30rem;
+        }
         .hero,
         .duo,
         .honest dl {
@@ -911,7 +956,9 @@ const jsonLd = [
     // FAQ: slide open and shut in every browser (a plain <details> jumps). The script animates the height of the whole
     // <details>; [open] stays on until a close finishes. Reduced motion or no script: the plain jump.
     const still = matchMedia("(prefers-reduced-motion: reduce)");
-    for (const details of document.querySelectorAll<HTMLDetailsElement>(".faq details")) {
+    for (const details of document.querySelectorAll<HTMLDetailsElement>(
+        ".faq details",
+    )) {
         const summary = details.querySelector("summary")!;
         let anim: Animation | null = null;
         summary.addEventListener("click", (event) => {
@@ -919,13 +966,19 @@ const jsonLd = [
             event.preventDefault();
             const from = details.getBoundingClientRect().height; // mid-slide when clicked again
             anim?.cancel();
-            const closing = details.open && !details.classList.contains("closing");
+            const closing =
+                details.open && !details.classList.contains("closing");
             details.classList.toggle("closing", closing);
             details.open = true;
             const border = details.offsetHeight - details.clientHeight;
-            const to = closing ? summary.offsetHeight + border : details.offsetHeight;
+            const to = closing
+                ? summary.offsetHeight + border
+                : details.offsetHeight;
             details.style.overflow = "hidden";
-            anim = details.animate({ height: [`${from}px`, `${to}px`] }, { duration: 320, easing: "cubic-bezier(0.16, 1, 0.3, 1)" });
+            anim = details.animate(
+                { height: [`${from}px`, `${to}px`] },
+                { duration: 320, easing: "cubic-bezier(0.16, 1, 0.3, 1)" },
+            );
             anim.onfinish = () => {
                 anim = null;
                 details.style.overflow = "";
@@ -933,5 +986,15 @@ const jsonLd = [
                 details.classList.remove("closing");
             };
         });
+    }
+
+    // "How it works" video: plays (muted, looping) only while on screen; reduced motion = stays on its poster.
+    const how = document.querySelector<HTMLVideoElement>(".how-video");
+    if (how && !matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        new IntersectionObserver(
+            ([e]) =>
+                e.isIntersecting ? how.play().catch(() => {}) : how.pause(),
+            { threshold: 0.4 },
+        ).observe(how);
     }
 </script>
