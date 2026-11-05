@@ -120,6 +120,18 @@
 <div id="root"></div>
 <script>
 const DURATION = 20
+// Sound effects, on the same timeline as seek() below (scripts/video-audio.ts plays them). Move a cue with its animation.
+const CUES = [
+    { t: 0.3, kind: 'whoosh', dur: 0.8 }, { t: 0.6, kind: 'marker', dur: 0.55 },
+    { t: 3.1, kind: 'tap' }, { t: 3.25, kind: 'whoosh', dur: 0.45 }, { t: 4.5, kind: 'tap' }, { t: 4.8, kind: 'whoosh', dur: 0.35 },
+    { t: 5.4, kind: 'whoosh', dur: 0.55 },
+    { t: 6.4, kind: 'marker', dur: 0.45 }, { t: 6.9, kind: 'marker', dur: 0.45 }, { t: 7.4, kind: 'marker', dur: 0.45 }, { t: 8.1, kind: 'marker', dur: 0.5 },
+    { t: 8.8, kind: 'pop', pitch: 880 }, { t: 9.2, kind: 'pop', pitch: 1046.5 }, { t: 9.6, kind: 'chime' },
+    { t: 10.6, kind: 'whoosh', dur: 0.55 }, { t: 11.2, kind: 'marker', dur: 0.5 },
+    { t: 11.5, kind: 'pencil', dur: 0.5 }, { t: 12.0, kind: 'pencil', dur: 0.5 }, { t: 12.5, kind: 'pencil', dur: 0.5 }, { t: 12.8, kind: 'pencil', dur: 0.7 },
+    { t: 13.6, kind: 'whoosh', dur: 0.55 }, { t: 14.64, kind: 'thud' }, { t: 14.8, kind: 'whoosh', dur: 0.5 },
+    { t: 16.6, kind: 'whoosh', dur: 0.7 }, { t: 17.0, kind: 'chord' },
+]
 const V = {
     ms: { share: 'Kongsi', shareTo: 'Kongsi ke', apps: ['Bukuresipi', 'Mesej', 'Emel', 'Salin pautan'], hook: 'Ayam masak merah paling senang!',
         more: 'Resipi penuh dalam kapsyen 👇', ingredients: 'Bahan:', reading: 'Sedang membaca hantaran…', read: 'Siap dibaca', recipe: '✓ Resipi',

@@ -4,6 +4,7 @@
  *   public/video/how-it-works-<lang>.mp4   H.264 fallback (older Safari / iPhones without AV1)
  *   public/video/how-it-works-<lang>.webp  poster
  *   video-master/how-it-works-<lang>.mp4   near-lossless master, git-ignored: re-encode from it, never publish it
+ * Sound: scripts/video-audio.ts synthesises the music and effects in code (nothing licensed), on video.html's CUES.
  * (Animated WebP was measured: 2.5x the MP4 at half the frame rate, so it is not used.)
  *   bun run video
  * Text comes from src/i18n.ts, so the video says what the page says. A headless Chromium (BROWSER env, default Brave,
@@ -13,6 +14,7 @@ import { mkdirSync, mkdtempSync, rmSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import sharp from 'sharp'
 import { t } from '../src/i18n'
+import { type Cue, soundtrack } from './video-audio'
 
 const FPS = 30
 const SIZE = 1080
@@ -63,14 +65,17 @@ try {
         const data = { lang, stepsTitle: s.stepsTitle, steps: s.steps, nb: s.notebook, footer: s.footer, soon: s.soon, logo }
         await evaluate(`init(${JSON.stringify(data)}); window.ready`)
         const duration: number = await evaluate('DURATION')
+        const audio = `${profile}/soundtrack.wav`
+        await Bun.write(audio, soundtrack((await evaluate('CUES')) as Cue[], duration))
 
         const name = `how-it-works-${lang}`
         const master = `${masters}/${name}.mp4`
         // One pass over the frames, three files. SVT_LOG=1: SVT-AV1 prints only fatal errors.
-        const ffmpeg = Bun.spawn(['ffmpeg', '-y', '-loglevel', 'error', '-f', 'image2pipe', '-framerate', String(FPS), '-c:v', 'png', '-i', '-',
-            '-map', '0', '-c:v', 'libx264', '-preset', 'slow', '-crf', '12', '-pix_fmt', 'yuv420p', '-an', master,
-            '-map', '0', '-c:v', 'libsvtav1', '-preset', '4', '-crf', '38', '-pix_fmt', 'yuv420p', '-an', `${out}/${name}.webm`,
-            '-map', '0', '-c:v', 'libx264', '-preset', 'veryslow', '-crf', '26', '-pix_fmt', 'yuv420p', '-movflags', '+faststart', '-an', `${out}/${name}.mp4`,
+        // Sound: AAC for the MP4s, Opus for the WebM (small at 64-96 kb/s; the page starts muted, the user can unmute).
+        const ffmpeg = Bun.spawn(['ffmpeg', '-y', '-loglevel', 'error', '-f', 'image2pipe', '-framerate', String(FPS), '-c:v', 'png', '-i', '-', '-i', audio,
+            '-map', '0:v', '-map', '1:a', '-c:v', 'libx264', '-preset', 'slow', '-crf', '12', '-pix_fmt', 'yuv420p', '-c:a', 'aac', '-b:a', '192k', '-shortest', master,
+            '-map', '0:v', '-map', '1:a', '-c:v', 'libsvtav1', '-preset', '4', '-crf', '38', '-pix_fmt', 'yuv420p', '-c:a', 'libopus', '-b:a', '64k', '-shortest', `${out}/${name}.webm`,
+            '-map', '0:v', '-map', '1:a', '-c:v', 'libx264', '-preset', 'veryslow', '-crf', '26', '-pix_fmt', 'yuv420p', '-c:a', 'aac', '-b:a', '96k', '-movflags', '+faststart', '-shortest', `${out}/${name}.mp4`,
         ], { stdin: 'pipe', env: { ...process.env, SVT_LOG: '1' } })
         const frames = Math.round(duration * FPS)
         for (let f = 0; f < frames; f++) {
