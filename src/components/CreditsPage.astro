@@ -1,0 +1,125 @@
+---
+// Credits: who the app is for, then the open data, services and tools it is built on (the app's Credits screen lists
+// the same sources; OpenStreetMap's ODbL needs this attribution).
+import Base from "../layouts/Base.astro";
+import { type Lang, pathIn, t } from "../i18n";
+import Footer from "./Footer.astro";
+import Header from "./Header.astro";
+
+interface Props {
+    lang: Lang;
+}
+const { lang } = Astro.props;
+const c = t(lang).credits;
+---
+
+<Base lang={lang} path="/credits" title={c.title} description={c.description}>
+    <Header lang={lang} path="/credits" />
+    <main class="wrap credits">
+        <section class="dedication">
+            <p class="kicker">{c.dedicationKicker}</p>
+            {c.dedication.map((line) => <p>{line}</p>)}
+            <span class="heart" aria-hidden="true">♥</span>
+        </section>
+
+        <section class="thanks">
+            <h1>{c.thanksTitle}</h1>
+            <p class="lead">{c.thanksText}</p>
+            {
+                c.groups.map((g) => (
+                    <div class="group">
+                        <h2>{g.title}</h2>
+                        <ul>
+                            {g.items.map((i) => (
+                                <li>
+                                    <a
+                                        href={i.url}
+                                        rel="noopener"
+                                        target="_blank"
+                                    >
+                                        {i.name}
+                                    </a>
+                                    <span>{i.detail}</span>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                ))
+            }
+            <p class="testers">{c.testers}</p>
+            <p><a href={pathIn("/", lang)}>← {c.back}</a></p>
+        </section>
+    </main>
+    <Footer lang={lang} />
+</Base>
+
+<style>
+    .credits {
+        max-width: 760px;
+        padding-block: 2.5rem 4rem;
+    }
+    .dedication {
+        position: relative;
+        padding: 2rem clamp(1.25rem, 4vw, 2.5rem);
+        margin-bottom: 3rem;
+        background: var(--paper-raised);
+        border: 1px solid var(--line);
+        border-left: 3px solid var(--margin);
+        border-radius: 6px;
+        font-family: var(--hand);
+        font-size: var(--step-1);
+        line-height: 1.5;
+        color: var(--ink);
+    }
+    .dedication p {
+        margin: 0 0 0.75rem;
+    }
+    .dedication .kicker {
+        font-size: var(--step-2);
+        color: var(--margin);
+    }
+    .heart {
+        position: absolute;
+        right: 1.25rem;
+        bottom: 0.75rem;
+        color: var(--margin);
+        font-size: var(--step-2);
+    }
+    h1 {
+        font-size: var(--step-3);
+        margin: 0 0 0.5rem;
+    }
+    .lead {
+        color: var(--ink-soft);
+        margin-top: 0;
+    }
+    h2 {
+        font-size: var(--step-0);
+        margin: 2rem 0 0.5rem;
+        color: var(--pandan-deep);
+    }
+    ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+    }
+    li {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.25rem 0.75rem;
+        padding: 0.6rem 0;
+        border-bottom: 1px solid var(--line);
+    }
+    li a {
+        font-weight: 600;
+        color: var(--ink);
+    }
+    li span {
+        color: var(--ink-soft);
+    }
+    .testers {
+        margin-top: 2.5rem;
+        font-family: var(--hand);
+        font-size: var(--step-1);
+    }
+</style>

@@ -1,5 +1,7 @@
 {
   "extends": "astro/tsconfigs/strict",
   "include": [".astro/types.d.ts", "**/*"],
-  "exclude": ["dist"]
+  "exclude": ["dist"],
+  // Bun's globals (Bun, import.meta.dir, bun:test) for scripts/ and test/; newer TypeScript loads no @types by default.
+  "compilerOptions": { "types": ["bun"] }
 }

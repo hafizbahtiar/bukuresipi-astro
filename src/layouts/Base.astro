@@ -1,22 +1,29 @@
 ---
 // Every page: <head> SEO (canonical, hreflang, Open Graph, X card, JSON-LD), fonts, icons, global styles.
 // `path` is the language-neutral path ('/', '/auth/reset'); the page exists at pathIn(path, lang) in each language.
-import '../styles/global.css'
-import { type Lang, LANGS, pathIn, SITE, t } from '../i18n'
+import "../styles/global.css";
+import { type Lang, LANGS, pathIn, SITE, t } from "../i18n";
 
 interface Props {
-    lang: Lang
-    path: string
-    title: string
-    description: string
+    lang: Lang;
+    path: string;
+    title: string;
+    description: string;
     /** Auth pages and 404: kept out of search results and link previews. */
-    noindex?: boolean
-    jsonLd?: object[]
+    noindex?: boolean;
+    jsonLd?: object[];
 }
-const { lang, path, title, description, noindex = false, jsonLd = [] } = Astro.props
-const s = t(lang)
-const url = (l: Lang) => `${SITE}${pathIn(path, l)}`
-const ogImage = `${SITE}/og-${lang}.png`
+const {
+    lang,
+    path,
+    title,
+    description,
+    noindex = false,
+    jsonLd = [],
+} = Astro.props;
+const s = t(lang);
+const url = (l: Lang) => `${SITE}${pathIn(path, l)}`;
+const ogImage = `${SITE}/og-${lang}.png`;
 ---
 
 <!doctype html>
@@ -26,9 +33,24 @@ const ogImage = `${SITE}/og-${lang}.png`
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <title>{title}</title>
         <meta name="description" content={description} />
-        {noindex ? <meta name="robots" content="noindex, nofollow" /> : <link rel="canonical" href={url(lang)} />}
-        {!noindex && LANGS.map(l => <link rel="alternate" hreflang={l} href={url(l)} />)}
-        {!noindex && <link rel="alternate" hreflang="x-default" href={url('ms')} />}
+        {
+            noindex ? (
+                <meta name="robots" content="noindex, nofollow" />
+            ) : (
+                <link rel="canonical" href={url(lang)} />
+            )
+        }
+        {
+            !noindex &&
+                LANGS.map((l) => (
+                    <link rel="alternate" hreflang={l} href={url(l)} />
+                ))
+        }
+        {
+            !noindex && (
+                <link rel="alternate" hreflang="x-default" href={url("ms")} />
+            )
+        }
         {noindex && <meta name="referrer" content="no-referrer" />}
 
         <meta property="og:type" content="website" />
@@ -37,7 +59,10 @@ const ogImage = `${SITE}/og-${lang}.png`
         <meta property="og:description" content={description} />
         <meta property="og:url" content={url(lang)} />
         <meta property="og:locale" content={s.ogLocale} />
-        <meta property="og:locale:alternate" content={t(s.other.lang).ogLocale} />
+        <meta
+            property="og:locale:alternate"
+            content={t(s.other.lang).ogLocale}
+        />
         <meta property="og:image" content={ogImage} />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
@@ -48,7 +73,12 @@ const ogImage = `${SITE}/og-${lang}.png`
         <meta name="twitter:image" content={ogImage} />
 
         <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-        <link rel="icon" href="/icon-192.png" type="image/png" sizes="192x192" />
+        <link
+            rel="icon"
+            href="/icon-192.png"
+            type="image/png"
+            sizes="192x192"
+        />
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
         <link rel="manifest" href="/site.webmanifest" />
         <meta name="theme-color" content="#2f6b3b" />
@@ -57,11 +87,22 @@ const ogImage = `${SITE}/og-${lang}.png`
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
         <link
             rel="stylesheet"
-            href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600&family=Familjen+Grotesk:wght@400;500;600;700&display=swap"
+            href="https://fonts.googleapis.com/css2?family=Kalam:wght@400;700&family=Familjen+Grotesk:wght@400;500;600;700&display=swap"
         />
-        {jsonLd.map(d => <script type="application/ld+json" set:html={JSON.stringify(d)} />)}
+        <script is:inline>
+            document.documentElement.classList.add("js");
+        </script>
+        {
+            jsonLd.map((d) => (
+                <script
+                    type="application/ld+json"
+                    set:html={JSON.stringify(d)}
+                    is:inline
+                />
+            ))
+        }
     </head>
-    <body>
+    <body id="top">
         <slot />
     </body>
 </html>

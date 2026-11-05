@@ -1,54 +1,80 @@
 ---
-// Store buttons. Until STORES has a link they render as disabled "coming soon" badges. Text only: at launch, swap in
-// the official Google Play / App Store badge artwork (their brand rules forbid redrawing the logos).
-import { type Lang, STORES, t } from '../i18n'
+// Store button. Until STORES has a link it renders as a disabled "coming soon" badge. Text only: at launch, swap in
+// the official Google Play badge artwork (its brand rules forbid redrawing the logo). No App Store: Android only for now.
+import { type Lang, STORES, t } from "../i18n";
 
-interface Props { lang: Lang; tone?: 'light' | 'dark' }
-const { lang, tone = 'dark' } = Astro.props
-const s = t(lang).home
+interface Props {
+    lang: Lang;
+}
+const { lang } = Astro.props;
+const s = t(lang).home;
 const stores = [
-    { name: s.play, href: STORES.play },
-    { name: s.appStore, href: STORES.appStore },
-]
+    { name: s.play, href: STORES.play, note: s.soon },
+];
 ---
 
-<div class:list={['badges', tone]}>
-    {stores.map(st => st.href
-        ? <a class="badge" href={st.href}><span><small>{lang === 'en' ? 'Get it on' : 'Dapatkan di'}</small>{st.name}</span></a>
-        : <span class="badge soon" aria-disabled="true"><span><small>{s.soon}</small>{st.name}</span></span>)}
+<div class="badges">
+    {
+        stores.map((st) =>
+            st.href ? (
+                <a class="badge" href={st.href}>
+                    <span>
+                        <small>
+                            {lang === "en" ? "Get it on" : "Dapatkan di"}
+                        </small>
+                        {st.name}
+                    </span>
+                </a>
+            ) : (
+                <span class="badge soon" aria-disabled="true">
+                    <span>
+                        <small>{st.note}</small>
+                        {st.name}
+                    </span>
+                </span>
+            ),
+        )
+    }
 </div>
 
 <style>
     .badges {
         display: flex;
         flex-wrap: wrap;
-        gap: 0.75rem;
+        gap: 0.6rem;
     }
     .badge {
         display: inline-flex;
         align-items: center;
-        gap: 0.65rem;
-        min-width: 10rem;
-        padding: 0.6rem 1.1rem 0.6rem 0.9rem;
-        border-radius: 14px;
-        background: var(--ink);
-        color: #fff;
-        text-decoration: none;
-        line-height: 1.1;
-        font-size: 1.15rem;
+        min-width: 10.5rem;
+        padding: 0.45rem 0.9rem;
+        border: 2px solid var(--ink);
+        border-radius: 3px;
+        color: var(--ink);
+        line-height: 1.15;
+        font-size: 1.05rem;
         font-weight: 600;
+    }
+    a.badge {
+        text-decoration: none;
+        transition:
+            background-color 0.2s ease,
+            color 0.2s ease;
+    }
+    a.badge:hover {
+        background: var(--ink);
+        color: var(--paper);
     }
     .badge small {
         display: block;
-        font-size: 0.72rem;
-        font-weight: 500;
-        opacity: 0.8;
+        font-size: 0.65rem;
+        font-weight: 600;
+        letter-spacing: 0.09em;
+        text-transform: uppercase;
+        opacity: 0.65;
     }
     .soon {
+        border-style: dashed;
         cursor: default;
-    }
-    .light .badge {
-        background: #fff;
-        color: var(--pandan-deep);
     }
 </style>

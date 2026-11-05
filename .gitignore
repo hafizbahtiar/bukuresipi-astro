@@ -1,6 +1,9 @@
 # build output
 dist/
 
+# `bun run video` masters: kept locally to re-encode from, never published
+video-master/
+
 # generated types
 .astro/
 

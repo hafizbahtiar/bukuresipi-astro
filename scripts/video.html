@@ -1,0 +1,308 @@
+<!doctype html>
+<!-- "How it works" explainer, drawn frame by frame. scripts/video.ts calls init(data) with the site's own text
+     (src/i18n.ts), then seek(t) for every frame and screenshots it. Everything is a pure function of t, so the render
+     is the same every time. Open this file in a browser and run `play()` in the console to preview. -->
+<html>
+<head>
+<meta charset="utf-8" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Kalam:wght@400;700&family=Familjen+Grotesk:wght@400;500;600;700&display=block" rel="stylesheet" />
+<style>
+    :root {
+        --pandan: #2f6b3b; --pandan-deep: #1e4626; --pandan-mist: #eaf1e4; --ink: #1c2a20; --ink-soft: #536054;
+        --paper: #faf7ef; --paper-raised: #fffdf7; --rule: #cfe0f1; --margin: #c43d34; --kunyit: #f2c94c; --line: #ddd6c5;
+        --font: 'Familjen Grotesk', system-ui, sans-serif; --hand: 'Kalam', cursive;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { width: 1080px; height: 1080px; overflow: hidden; }
+    body {
+        position: relative; font-family: var(--font); color: var(--ink); background-color: var(--paper);
+        background-image: repeating-linear-gradient(180deg, transparent 0 47px, var(--rule) 47px 48px);
+    }
+    body::before { content: ""; position: absolute; left: 96px; top: 0; bottom: 0; width: 2px; background: var(--margin); opacity: .55; }
+    .abs { position: absolute; }
+
+    /* Left column text */
+    .copy { left: 140px; top: 540px; width: 390px; will-change: transform, opacity; }
+    .copy .num { font-family: var(--hand); font-weight: 700; font-size: 92px; line-height: 1; color: var(--margin); }
+    .copy h2 { font-size: 70px; line-height: 1.02; letter-spacing: -0.01em; margin: 6px 0 18px; }
+    .copy p { font-size: 29px; line-height: 1.38; color: var(--ink-soft); }
+    .intro h1 { font-size: 84px; line-height: 1; letter-spacing: -0.015em; }
+    .hl { position: relative; z-index: 0; }
+    .hl::after { content: ""; position: absolute; z-index: -1; left: -6px; right: -6px; bottom: 6px; height: 26px;
+        background: var(--kunyit); border-radius: 4px; transform-origin: left; transform: scaleX(var(--hl, 1)); }
+
+    /* Phone */
+    .phone { left: 580px; top: 110px; width: 400px; height: 860px; border-radius: 58px; background: var(--ink);
+        padding: 12px; box-shadow: 0 30px 60px -20px rgba(28, 42, 32, .45); }
+    .screen { position: relative; width: 376px; height: 836px; border-radius: 46px; overflow: hidden; background: #000; }
+    .notch { position: absolute; left: 50%; top: 12px; width: 110px; height: 30px; margin-left: -55px; border-radius: 15px; background: var(--ink); z-index: 20; }
+    .scr { position: absolute; inset: 0; will-change: transform, opacity; }
+
+    /* Screen 1: the video post */
+    .post { background: linear-gradient(160deg, #3d1d10 0%, #8a3d1a 45%, #d9822b 100%); color: #fff; }
+    .post .food { position: absolute; left: 50%; top: 40%; font-size: 150px; transform-origin: center; }
+    .post .food span { position: absolute; font-size: 70px; }
+    .post .bar { position: absolute; left: 18px; right: 18px; top: 56px; height: 3px; background: rgba(255,255,255,.3); border-radius: 2px; }
+    .post .bar i { display: block; height: 100%; background: #fff; border-radius: 2px; }
+    .post .side { position: absolute; right: 14px; top: 430px; display: flex; flex-direction: column; gap: 22px; align-items: center; font-size: 15px; font-weight: 600; }
+    .post .side div { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+    .post .side svg { width: 42px; height: 42px; filter: drop-shadow(0 1px 2px rgba(0,0,0,.4)); }
+    .post .cap { position: absolute; left: 18px; right: 84px; bottom: 34px; font-size: 19px; line-height: 1.35; text-shadow: 0 1px 2px rgba(0,0,0,.5); }
+    .post .cap b { display: block; font-size: 20px; margin-bottom: 4px; }
+    .sheet { position: absolute; left: 0; right: 0; bottom: 0; height: 330px; background: #fff; color: var(--ink);
+        border-radius: 28px 28px 0 0; padding: 18px 0 0; z-index: 10; }
+    .sheet .grab { width: 44px; height: 5px; border-radius: 3px; background: #d5d5d5; margin: 0 auto 18px; }
+    .sheet h4 { font-size: 20px; font-weight: 700; padding-left: 24px; margin-bottom: 26px; }
+    .sheet .apps { display: grid; grid-template-columns: repeat(4, 1fr); }
+    .sheet .app { display: flex; flex-direction: column; align-items: center; gap: 10px; font-size: 14px; text-align: center; }
+    .sheet .ico { width: 68px; height: 68px; border-radius: 18px; display: grid; place-items: center; }
+    .sheet .ico svg { width: 34px; height: 34px; }
+    .sheet .ico.logo svg { width: 68px; height: 68px; }
+
+    /* App screens */
+    .app-scr { background-color: var(--paper); background-image: repeating-linear-gradient(180deg, transparent 0 39px, var(--rule) 39px 40px); }
+    .app-scr::before { content: ""; position: absolute; left: 50px; top: 0; bottom: 0; width: 1.5px; background: var(--margin); opacity: .5; }
+    .top { position: absolute; left: 0; right: 0; top: 0; height: 104px; padding: 54px 22px 0 66px; display: flex; align-items: center; gap: 10px;
+        background: var(--paper); border-bottom: 1px solid var(--line); z-index: 2; }
+    .top .mk svg { width: 32px; height: 32px; display: block; }
+    .top b { font-size: 22px; letter-spacing: -0.01em; color: var(--pandan-deep); }
+    .status { position: absolute; left: 66px; top: 128px; font-size: 18px; font-weight: 600; color: var(--pandan-deep); display: flex; align-items: center; gap: 10px; }
+    .spin { width: 20px; height: 20px; border-radius: 50%; border: 3px solid var(--pandan-mist); border-top-color: var(--pandan); }
+    .tick { width: 22px; height: 22px; border-radius: 50%; background: var(--pandan); color: #fff; display: grid; place-items: center; font-size: 14px; }
+    .clip { position: absolute; left: 66px; right: 20px; top: 178px; padding: 26px 18px 20px; background: var(--paper-raised);
+        border: 1px solid var(--line); border-radius: 6px; box-shadow: 0 8px 18px -12px rgba(28,42,32,.5); transform: rotate(-1.2deg); font-size: 17.5px; line-height: 1.5; }
+    .clip::before { content: ""; position: absolute; left: 50%; top: -12px; width: 90px; height: 24px; margin-left: -45px; background: rgba(242, 201, 76, .6); transform: rotate(2deg); }
+    .clip .who { font-size: 14px; font-weight: 700; color: var(--ink-soft); margin-bottom: 6px; }
+    .clip .ln { position: relative; z-index: 0; display: block; width: fit-content; }
+    .clip .ln i { position: absolute; z-index: -1; left: -4px; right: -4px; top: 3px; bottom: 2px; border-radius: 3px; transform-origin: left; }
+    .clip .ln.r i { background: rgba(242, 201, 76, .7); }
+    .clip .ln.p i { background: #cfe5c6; }
+    .chips { position: absolute; left: 66px; top: 548px; display: flex; gap: 10px; }
+    .chip { padding: 8px 14px; border-radius: 999px; font-size: 17px; font-weight: 700; background: var(--pandan); color: #fff; }
+    .chip.p { background: var(--kunyit); color: var(--ink); }
+
+    .book .dish { position: absolute; left: 66px; right: 12px; top: 132px; font-family: var(--hand); font-weight: 700; font-size: 32px; line-height: 1.1; white-space: nowrap; }
+    .book .under { position: absolute; left: 66px; top: 180px; width: 250px; height: 4px; border-radius: 2px; background: var(--kunyit); transform-origin: left; }
+    .book .lbl { position: absolute; left: 66px; top: 214px; font-size: 14px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--pandan); }
+    .book .row { position: absolute; left: 66px; right: 16px; font-size: 20px; line-height: 40px; white-space: nowrap; }
+    .book .row b { font-weight: 700; }
+    .book .gap { position: absolute; left: 56px; right: 10px; top: 400px; font-family: var(--hand); font-size: 22px; color: var(--margin); line-height: 1.25; white-space: normal; }
+
+    .map { background: #e7eedf; }
+    .map svg.city { position: absolute; inset: 0; width: 100%; height: 100%; }
+    .pin { position: absolute; left: 188px; top: 330px; width: 0; height: 0; }
+    .pin svg { position: absolute; left: -26px; top: -68px; width: 52px; height: 68px; filter: drop-shadow(0 4px 4px rgba(0,0,0,.25)); }
+    .pin .shadow { position: absolute; left: -16px; top: -6px; width: 32px; height: 12px; border-radius: 50%; background: rgba(0,0,0,.22); }
+    .card { position: absolute; left: 14px; right: 14px; bottom: 22px; padding: 20px 20px 18px; background: var(--paper-raised); border-radius: 22px;
+        box-shadow: 0 12px 28px -12px rgba(28,42,32,.45); }
+    .card h5 { font-size: 24px; line-height: 1.15; }
+    .card .area { font-size: 16px; color: var(--ink-soft); margin: 4px 0 12px; }
+    .card .quote { font-size: 17px; font-style: italic; }
+    .card .src { font-size: 13px; color: var(--ink-soft); margin-top: 4px; }
+
+    /* Finger */
+    .finger { left: 0; top: 0; width: 64px; height: 64px; margin: -32px 0 0 -32px; border-radius: 50%; background: rgba(255,255,255,.55);
+        border: 3px solid rgba(28, 42, 32, .75); box-shadow: 0 6px 14px rgba(0,0,0,.25); z-index: 50; }
+    .ripple { left: 0; top: 0; width: 64px; height: 64px; margin: -32px 0 0 -32px; border-radius: 50%; border: 3px solid var(--kunyit); z-index: 49; }
+
+    /* End card */
+    .end { left: 0; top: 0; width: 1080px; height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
+    .end .mk svg { width: 170px; height: 170px; display: block; }
+    .end .word { font-size: 86px; font-weight: 700; letter-spacing: -0.02em; color: var(--pandan-deep); margin-top: 26px; line-height: 1; }
+    .end .tag { font-size: 34px; color: var(--ink-soft); max-width: 760px; margin-top: 22px; line-height: 1.3; }
+    .end .pill { margin-top: 40px; padding: 14px 28px; border: 3px solid var(--ink); border-radius: 6px; font-size: 28px; font-weight: 700; }
+    .end .pill small { font-weight: 500; color: var(--ink-soft); }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script>
+const DURATION = 20
+// Sound effects, on the same timeline as seek() below (scripts/video-audio.ts plays them). Move a cue with its animation.
+const CUES = [
+    { t: 0.3, kind: 'whoosh', dur: 0.8 }, { t: 0.6, kind: 'marker', dur: 0.55 },
+    { t: 3.1, kind: 'tap' }, { t: 3.25, kind: 'whoosh', dur: 0.45 }, { t: 4.5, kind: 'tap' }, { t: 4.8, kind: 'whoosh', dur: 0.35 },
+    { t: 5.4, kind: 'whoosh', dur: 0.55 },
+    { t: 6.4, kind: 'marker', dur: 0.45 }, { t: 6.9, kind: 'marker', dur: 0.45 }, { t: 7.4, kind: 'marker', dur: 0.45 }, { t: 8.1, kind: 'marker', dur: 0.5 },
+    { t: 8.8, kind: 'pop', pitch: 880 }, { t: 9.2, kind: 'pop', pitch: 1046.5 }, { t: 9.6, kind: 'chime' },
+    { t: 10.6, kind: 'whoosh', dur: 0.55 }, { t: 11.2, kind: 'marker', dur: 0.5 },
+    { t: 11.5, kind: 'pencil', dur: 0.5 }, { t: 12.0, kind: 'pencil', dur: 0.5 }, { t: 12.5, kind: 'pencil', dur: 0.5 }, { t: 12.8, kind: 'pencil', dur: 0.7 },
+    { t: 13.6, kind: 'whoosh', dur: 0.55 }, { t: 14.64, kind: 'thud' }, { t: 14.8, kind: 'whoosh', dur: 0.5 },
+    { t: 16.6, kind: 'whoosh', dur: 0.7 }, { t: 17.0, kind: 'chord' },
+]
+const V = {
+    ms: { share: 'Kongsi', shareTo: 'Kongsi ke', apps: ['Bukuresipi', 'Mesej', 'Emel', 'Salin pautan'], hook: 'Ayam masak merah paling senang!',
+        more: 'Resipi penuh dalam kapsyen 👇', ingredients: 'Bahan:', reading: 'Sedang membaca hantaran…', read: 'Siap dibaca', recipe: '✓ Resipi',
+        place: '✓ Kedai makan', book: 'Bahan' },
+    en: { share: 'Share', shareTo: 'Share to', apps: ['Bukuresipi', 'Messages', 'Email', 'Copy link'], hook: 'The easiest ayam masak merah!',
+        more: 'Full recipe in the caption 👇', ingredients: 'Ingredients:', reading: 'Reading the post…', read: 'Done reading', recipe: '✓ Recipe',
+        place: '✓ Food spot', book: 'Ingredients' },
+}
+const ICON = {
+    heart: '<svg viewBox="0 0 24 24" fill="#fff"><path d="M12 21s-7.5-4.6-10-9.3C.4 8.6 2.3 4.5 6.2 4.5c2.3 0 3.7 1.3 4.6 2.6l1.2 1.6 1.2-1.6c.9-1.3 2.3-2.6 4.6-2.6 3.9 0 5.8 4.1 4.2 7.2C19.5 16.4 12 21 12 21z"/></svg>',
+    chat: '<svg viewBox="0 0 24 24" fill="#fff"><path d="M12 3C6.5 3 2 6.8 2 11.5c0 2.4 1.2 4.6 3.1 6.1L4 21l4.3-2.2c1.2.4 2.4.6 3.7.6 5.5 0 10-3.8 10-8.5S17.5 3 12 3z"/></svg>',
+    share: '<svg viewBox="0 0 24 24" fill="#fff"><path d="M14 4v4C7 9 4 13.5 3 19c2.5-3.5 6-5.2 11-5.2V18l7-7-7-7z"/></svg>',
+    msg: '<svg viewBox="0 0 24 24" fill="#fff"><path d="M12 3C6.5 3 2 6.8 2 11.5c0 2.4 1.2 4.6 3.1 6.1L4 21l4.3-2.2c1.2.4 2.4.6 3.7.6 5.5 0 10-3.8 10-8.5S17.5 3 12 3z"/></svg>',
+    mail: '<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>',
+    link: '<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round"><path d="M10 14a4.5 4.5 0 0 0 6.4 0l3-3a4.5 4.5 0 0 0-6.4-6.4l-1 1"/><path d="M14 10a4.5 4.5 0 0 0-6.4 0l-3 3a4.5 4.5 0 0 0 6.4 6.4l1-1"/></svg>',
+    pin: '<svg viewBox="0 0 52 68"><path d="M26 2C12.7 2 2 12.5 2 25.6 2 43 26 66 26 66s24-23 24-40.4C50 12.5 39.3 2 26 2z" fill="#c43d34" stroke="#fff" stroke-width="3"/><circle cx="26" cy="25" r="8.5" fill="#fff"/></svg>',
+}
+
+let $ = {}
+function init(d) {
+    const v = V[d.lang], nb = d.nb
+    const lines = nb.lines.map(([q, r]) => `- ${q}${r}`)
+    document.documentElement.lang = d.lang
+    document.getElementById('root').innerHTML = `
+    <div class="abs copy intro" id="c0"><h1><span class="hl" id="hl0">${d.stepsTitle}</span></h1></div>
+    ${d.steps.map(([title, text], i) => `<div class="abs copy" id="c${i + 1}"><div class="num">0${i + 1}</div><h2>${title}</h2><p>${text}</p></div>`).join('')}
+    <div class="abs phone" id="phone"><div class="screen"><div class="notch"></div>
+        <div class="scr post" id="s1">
+            <div class="bar"><i id="bar"></i></div>
+            <div class="food" id="food">🍗<span style="left:110px;top:60px">🌶️</span><span style="left:-70px;top:80px">🧄</span></div>
+            <div class="side"><div>${ICON.heart}12.4k</div><div>${ICON.chat}318</div><div id="shareBtn">${ICON.share}${v.share}</div></div>
+            <div class="cap"><b>@dapur.makteh</b>${v.hook} ${v.more}</div>
+            <div class="sheet" id="sheet"><div class="grab"></div><h4>${v.shareTo}</h4><div class="apps">
+                <div class="app" id="appBuku"><div class="ico logo">${d.logo}</div>${v.apps[0]}</div>
+                <div class="app"><div class="ico" style="background:#34a853">${ICON.msg}</div>${v.apps[1]}</div>
+                <div class="app"><div class="ico" style="background:#4a7bd0">${ICON.mail}</div>${v.apps[2]}</div>
+                <div class="app"><div class="ico" style="background:#8a8f8b">${ICON.link}</div>${v.apps[3]}</div>
+            </div></div>
+        </div>
+        <div class="scr app-scr" id="s2">
+            <div class="top"><span class="mk">${d.logo}</span><b>bukuresipi</b></div>
+            <div class="status" id="status"></div>
+            <div class="clip"><div class="who">@dapur.makteh</div>
+                <span class="ln">${v.hook}</span><span class="ln" style="margin-top:6px">${v.ingredients}</span>
+                ${lines.map((l, i) => `<span class="ln r"><i id="h${i}"></i>${l}</span>`).join('')}
+                <span class="ln p" style="margin-top:6px"><i id="hp"></i>📍 ${nb.place}, Kuala Terengganu</span>
+            </div>
+            <div class="chips"><span class="chip" id="chip1">${v.recipe}</span><span class="chip p" id="chip2">${v.place}</span></div>
+        </div>
+        <div class="scr app-scr book" id="s3">
+            <div class="top"><span class="mk">${d.logo}</span><b>bukuresipi</b></div>
+            <div class="dish">${nb.dish}</div><div class="under" id="under"></div>
+            <div class="lbl">${v.book}</div>
+            ${nb.lines.map(([q, r], i) => `<div class="row" id="r${i}" style="top:${240 + i * 40}px"><b>${q}</b>${r}</div>`).join('')}
+            <div class="gap" id="gap">✎ ${nb.gap}</div>
+        </div>
+        <div class="scr map" id="s4">
+            <svg class="city" viewBox="0 0 376 836" preserveAspectRatio="none">
+                <rect x="24" y="120" width="120" height="150" rx="10" fill="#d5e4c8"/><rect x="230" y="90" width="130" height="110" rx="10" fill="#dfe6d6"/>
+                <rect x="250" y="420" width="110" height="160" rx="10" fill="#d5e4c8"/><rect x="20" y="430" width="140" height="120" rx="10" fill="#dfe6d6"/>
+                <path d="M-20 600 C 90 560, 160 650, 400 590" stroke="#c6dbef" stroke-width="34" fill="none"/>
+                <path d="M188 -10 V 846 M -10 330 H 386 M -10 220 C 120 240, 260 180, 386 250" stroke="#fff" stroke-width="16" fill="none"/>
+                <path d="M60 -10 V 846 M 320 -10 V 846 M -10 470 H 386" stroke="#fff" stroke-width="8" fill="none"/>
+            </svg>
+            <div class="pin" id="pin"><div class="shadow" id="pinShadow"></div><div id="pinHead">${ICON.pin}</div></div>
+            <div class="card" id="card"><h5>${nb.place}</h5><div class="area">${nb.area}</div>
+                <div class="quote">${nb.halal}</div><div class="src">ⓘ ${nb.halalSource}</div></div>
+        </div>
+    </div></div>
+    <div class="abs ripple" id="ripple"></div><div class="abs finger" id="finger"></div>
+    <div class="abs end" id="end"><span class="mk">${d.logo}</span><div class="word">bukuresipi</div><div class="tag">${d.footer}</div>
+        <div class="pill">Android <small>· ${d.soon}</small></div></div>`
+    for (const el of document.querySelectorAll('[id]')) $[el.id] = el
+    $.v = v
+    window.ready = document.fonts.ready.then(() => true)
+}
+
+// --- timing helpers: p() = progress of a window, eased below
+const clamp = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x))
+const p = (t, s, d) => clamp((t - s) / d)
+const out3 = x => 1 - Math.pow(1 - x, 3)
+const inOut = x => (x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2)
+const back = x => { const c = 1.70158; return 1 + (c + 1) * Math.pow(x - 1, 3) + c * Math.pow(x - 1, 2) }
+const lerp = (a, b, x) => a + (b - a) * x
+/** Fades in over [a, a+da], out over [b, b+db]; slides up while in, up again while out. */
+const shown = (t, a, da, b, db) => ({ o: Math.min(out3(p(t, a, da)), 1 - inOut(p(t, b, db))), y: (1 - out3(p(t, a, da))) * 40 - inOut(p(t, b, db)) * 40 })
+
+// Finger keyframes in page pixels; the screen's top-left corner is (592, 122).
+const SX = 592, SY = 122
+const FINGER = [
+    { t: 2.2, x: 940, y: 1040 }, { t: 3.0, x: SX + 348, y: SY + 650 }, { t: 3.4, x: SX + 348, y: SY + 650 },
+    { t: 4.2, x: SX + 47, y: SY + 650 }, { t: 4.8, x: SX + 47, y: SY + 650 }, { t: 5.5, x: SX + 120, y: 1040 },
+]
+const TAPS = [3.1, 4.5]
+
+function fingerAt(t) {
+    let k = FINGER.findIndex(f => f.t > t)
+    if (k === -1) k = FINGER.length - 1
+    if (k === 0) return FINGER[0]
+    const a = FINGER[k - 1], b = FINGER[k], x = inOut(clamp((t - a.t) / (b.t - a.t)))
+    return { x: lerp(a.x, b.x, x), y: lerp(a.y, b.y, x) }
+}
+
+function seek(t) {
+    const S = (el, css) => Object.assign(el.style, css)
+    // Copy blocks: intro, then one per step.
+    const blocks = [[0.2, 1.4], [1.6, 5.8], [6.2, 10.4], [10.8, 16.4]]
+    blocks.forEach(([a, b], i) => {
+        const s = shown(t, a, 0.6, b, 0.5)
+        S($['c' + i], { opacity: s.o, transform: `translateY(calc(-50% + ${s.y}px))` })
+    })
+    $.hl0.style.setProperty('--hl', out3(p(t, 0.6, 0.6)))
+
+    // Phone: in from the right, out at the end.
+    const pin = out3(p(t, 0.3, 0.9)), pout = inOut(p(t, 16.6, 0.7))
+    S($.phone, { opacity: Math.min(pin, 1 - pout), transform: `translateX(${(1 - pin) * 260 + pout * 260}px)` })
+
+    // Screen 1: the post (a slow zoom = it is a video), then the share sheet.
+    S($.food, { transform: `translate(-50%, -50%) scale(${1 + t * 0.03}) rotate(${Math.sin(t * 0.8) * 3}deg)` })
+    $.bar.style.width = `${clamp(t / 6) * 100}%`
+    const sheet = out3(p(t, 3.25, 0.45)) - inOut(p(t, 4.8, 0.4))
+    S($.sheet, { transform: `translateY(${(1 - sheet) * 340}px)` })
+    const tapB = p(t, 4.5, 0.35)
+    S($.appBuku, { transform: `scale(${1 - Math.sin(tapB * Math.PI) * 0.12})` })
+    $.shareBtn.style.transform = `scale(${1 - Math.sin(p(t, 3.1, 0.3) * Math.PI) * 0.15})`
+
+    // Screens slide in from the right, one after another.
+    const slides = [[5.4, 's2'], [10.6, 's3'], [13.6, 's4']]
+    slides.forEach(([at, id], i) => {
+        const x = inOut(p(t, at, 0.6))
+        const next = slides[i + 1] ? inOut(p(t, slides[i + 1][0], 0.6)) : 0
+        S($[id], { transform: `translateX(${(1 - x) * 100 - next * 30}%)`, opacity: x > 0 ? 1 : 0 })
+    })
+    S($.s1, { transform: `translateX(${-inOut(p(t, 5.4, 0.6)) * 30}%)` })
+
+    // Screen 2: reading - highlighter sweeps, then the verdict.
+    const done = t >= 9.6
+    $.status.innerHTML = done ? `<span class="tick">✓</span>${$.v.read}` : `<span class="spin" style="transform:rotate(${t * 400}deg)"></span>${$.v.reading}`
+    for (let i = 0; i < 3; i++) $['h' + i].style.transform = `scaleX(${out3(p(t, 6.4 + i * 0.5, 0.45))})`
+    $.hp.style.transform = `scaleX(${out3(p(t, 8.1, 0.5))})`
+    for (const [id, at] of [['chip1', 8.8], ['chip2', 9.2]]) {
+        const x = p(t, at, 0.4)
+        S($[id], { opacity: x > 0 ? 1 : 0, transform: `scale(${x > 0 ? back(x) : 0})` })
+    }
+
+    // Screen 3: the recipe written into the book, then the gap in red.
+    $.under.style.transform = `scaleX(${out3(p(t, 11.2, 0.5))})`
+    for (let i = 0; i < 3; i++) $['r' + i].style.clipPath = `inset(0 ${100 - out3(p(t, 11.5 + i * 0.5, 0.5)) * 100}% 0 0)`
+    $.gap.style.clipPath = `inset(0 ${100 - out3(p(t, 12.8, 0.7)) * 100}% 0 0)`
+
+    // Screen 4: the pin drops, the card rises.
+    const drop = p(t, 14.3, 0.6)
+    S($.pinHead, { transform: `translateY(${drop > 0 ? (1 - back(drop)) * -260 : -400}px)` })
+    S($.pinShadow, { opacity: drop, transform: `scale(${0.4 + 0.6 * drop})` })
+    const card = out3(p(t, 14.8, 0.6))
+    S($.card, { transform: `translateY(${(1 - card) * 260}px)`, opacity: card })
+
+    // Finger and tap ripples.
+    const f = fingerAt(t), fo = Math.min(out3(p(t, 2.2, 0.4)), 1 - p(t, 5.1, 0.4))
+    const press = TAPS.some(a => t >= a && t < a + 0.25)
+    S($.finger, { opacity: fo, transform: `translate(${f.x}px, ${f.y}px) scale(${press ? 0.85 : 1})` })
+    const tap = TAPS.map(a => p(t, a, 0.5)).find(x => x > 0 && x < 1) ?? 0
+    S($.ripple, { opacity: tap ? 1 - tap : 0, transform: `translate(${f.x}px, ${f.y}px) scale(${1 + tap * 1.6})` })
+
+    // End card.
+    const e = shown(t, 17.0, 0.7, 99, 1)
+    S($.end, { opacity: e.o, transform: `translateY(${e.y}px)` })
+}
+
+// Preview in a normal browser: play() runs it in real time.
+function play() { const t0 = performance.now(); const step = () => { const t = (performance.now() - t0) / 1000; seek(t % DURATION); requestAnimationFrame(step) }; step() }
+</script>
+</body>
+</html>

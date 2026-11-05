@@ -1,7 +1,7 @@
 // Indexable pages only (auth pages and 404 are noindex). Each page lists its other-language version (hreflang).
 import { LANGS, pathIn, SITE } from '../i18n'
 
-const PAGES = ['/']
+const PAGES = ['/', '/credits']
 
 export const GET = () => {
     const urls = PAGES.flatMap(path => LANGS.map(lang => {

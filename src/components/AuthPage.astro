@@ -6,15 +6,16 @@ import { type Lang, pathIn, t } from '../i18n'
 import Footer from './Footer.astro'
 import Header from './Header.astro'
 
-interface Props { lang: Lang; kind: 'verify' | 'reset' | 'forgot' }
+interface Props { lang: Lang; kind: 'verify' | 'reset' | 'forgot' | 'delete' }
 const { lang, kind } = Astro.props
 const a = t(lang).auth
 const k = a[kind]
 const path = `/auth/${kind}`
 const messages = {
     missing: a.missing, expired: a.expired, rate: a.rate, network: a.network, working: a.working,
-    done: k.done, weak: 'weak' in k ? k.weak : '', invalid: 'invalid' in k ? k.invalid : '',
+    done: k.done, weakPassword: 'weak' in k ? k.weak : '', invalid: 'invalid' in k ? k.invalid : '',
     mismatch: a.reset.mismatch, ...a.reset.levels,
+    confirm: a.delete.confirm, wrong: a.delete.wrong, owner: a.delete.owner,
 }
 const rules = Object.entries(a.reset.rules)
 ---
@@ -44,6 +45,16 @@ const rules = Object.entries(a.reset.rules)
                     </label>
                     <label class="check"><input type="checkbox" name="show" /> {a.reset.show}</label>
                 )}
+                {kind === 'delete' && (
+                    <label>
+                        {a.delete.email}
+                        <input type="email" name="email" autocomplete="email" maxlength="254" required />
+                    </label>
+                    <label>
+                        {a.delete.password}
+                        <input type="password" name="password" autocomplete="current-password" maxlength="200" required />
+                    </label>
+                )}
                 {kind === 'forgot' && (
                     <label>
                         {a.forgot.label}
@@ -55,6 +66,7 @@ const rules = Object.entries(a.reset.rules)
             <p class="status" role="status" aria-live="polite"></p>
             {kind === 'verify' && <p class="after" hidden>{a.verify.again}</p>}
             {kind === 'reset' && <p class="after" hidden><a href={pathIn('/auth/forgot', lang)}>{a.reset.again}</a></p>}
+            {kind === 'delete' && <p class="after"><a href={pathIn('/auth/forgot', lang)}>{a.forgot.title}</a></p>}
             <p class="home"><a href={pathIn('/', lang)}>{a.backHome}</a></p>
         </div>
     </main>
@@ -78,7 +90,7 @@ const rules = Object.entries(a.reset.rules)
             status.textContent = text
             status.dataset.tone = tone
         }
-        if (kind !== 'forgot' && !token) {
+        if (kind !== 'forgot' && kind !== 'delete' && !token) {
             form.hidden = true
             say(m.missing, 'bad')
         }
@@ -105,14 +117,18 @@ const rules = Object.entries(a.reset.rules)
             if (kind === 'verify') { route = 'verify-email'; body = { token } }
             if (kind === 'reset') {
                 const password = field('password')
-                if (!checkPassword(password).length) return say(m.weak, 'bad')
+                if (!checkPassword(password).length) return say(m.weakPassword, 'bad')
                 if (password !== field('confirm')) return say(m.mismatch, 'bad')
                 route = 'reset-password'; body = { token, password }
             }
-            if (kind === 'forgot') {
+            if (kind === 'forgot' || kind === 'delete') {
                 const email = field('email').trim()
                 if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return say(m.invalid, 'bad')
                 route = 'forgot-password'; body = { email }
+                if (kind === 'delete') {
+                    if (!confirm(m.confirm)) return
+                    route = 'delete-account'; body = { email, password: field('password') }
+                }
             }
             button.disabled = true
             say(m.working)
@@ -124,11 +140,13 @@ const rules = Object.entries(a.reset.rules)
                 const error = res.ok ? null : ((await res.json().catch(() => ({}))) as { error?: string }).error
                 if (res.ok) {
                     form.hidden = true
+                    if (after) after.hidden = true
                     return say(m.done, 'ok')
                 }
-                if (error === 'weak_password') return say(m.weak, 'bad')
+                if (error === 'weak_password') return say(m.weakPassword, 'bad')
                 if (error === 'rate_limited') return say(m.rate, 'bad')
                 if (error === 'invalid_input' && kind === 'forgot') return say(m.invalid, 'bad')
+                if (kind === 'delete') return say(error === 'owner_account' ? m.owner : error === 'invalid_input' ? m.invalid : m.wrong, 'bad')
                 form.hidden = true
                 say(m.expired, 'bad')
                 if (after) after.hidden = false
@@ -149,8 +167,11 @@ const rules = Object.entries(a.reset.rules)
         max-width: 30rem;
         margin-inline: auto;
         padding: clamp(1.5rem, 5vw, 2.5rem);
-        border-radius: 22px;
-        background: var(--pandan-mist);
+        border: 1.5px solid var(--line);
+        border-left: 7px solid var(--pandan);
+        border-radius: 4px 12px 12px 4px;
+        background: var(--paper-raised);
+        box-shadow: 5px 7px 0 rgba(28, 42, 32, 0.06);
     }
     h1 {
         font-size: var(--step-3);
@@ -173,8 +194,8 @@ const rules = Object.entries(a.reset.rules)
     input[type='text'] {
         width: 100%;
         padding: 0.8rem 0.9rem;
-        border: 1.5px solid #b9c9b8;
-        border-radius: 12px;
+        border: 1.5px solid #8a9687;
+        border-radius: 3px;
         background: #fff;
         font: inherit;
         color: inherit;
@@ -257,12 +278,13 @@ const rules = Object.entries(a.reset.rules)
         justify-self: start;
         padding: 0.85rem 1.5rem;
         border: 0;
-        border-radius: 999px;
+        border-radius: 3px;
         background: var(--pandan);
         color: #fff;
         font: inherit;
         font-weight: 700;
         cursor: pointer;
+        transition: background-color 0.2s ease;
     }
     button:hover {
         background: var(--pandan-deep);
@@ -277,8 +299,9 @@ const rules = Object.entries(a.reset.rules)
     .status {
         margin-top: 1.25rem;
         padding: 0.9rem 1rem;
-        border-radius: 12px;
-        background: #fff;
+        border: 1px solid var(--line);
+        border-radius: 3px;
+        background: var(--paper-raised);
     }
     .status[data-tone='ok'] {
         border-left: 5px solid var(--pandan);

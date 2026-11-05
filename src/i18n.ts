@@ -3,8 +3,8 @@ export const LANGS = ['ms', 'en'] as const
 export type Lang = (typeof LANGS)[number]
 
 export const SITE = 'https://bukuresipi.com'
-/** Store links: null = not published yet ("coming soon"). Set at launch. */
-export const STORES = { play: null as string | null, appStore: null as string | null }
+/** Store link: null = not published yet ("coming soon"). Set at launch. Android only: no iPhone version for now. */
+export const STORES = { play: null as string | null }
 
 /** URL path of a page in a language: ('/auth/reset', 'en') -> '/en/auth/reset'. */
 export const pathIn = (path: string, lang: Lang) => (lang === 'en' ? (path === '/' ? '/en' : `/en${path}`) : path)
@@ -19,11 +19,11 @@ const ms = {
         description:
             'Nampak resipi atau kedai makan sedap di TikTok, Instagram, Facebook atau YouTube? Kongsi ke Bukuresipi. Resipi masuk buku anda, kedai makan masuk peta anda.',
         ogAlt: 'Bukuresipi: resipi dari TikTok tersalin ke dalam buku latihan',
+        eyebrow: 'Buku resipi dan peta makan',
         h1: 'Resipi yang anda jumpa di TikTok, tersimpan dalam satu buku.',
         lead: 'Kongsi pautan atau tangkap layar ke Bukuresipi. Bahan, langkah dan nama kedai disalin daripada hantaran itu sendiri, terus ke buku resipi dan peta anda.',
         soon: 'Tidak lama lagi',
         play: 'Google Play',
-        appStore: 'App Store',
         notebook: {
             dish: 'Ayam masak merah',
             lines: [
@@ -63,12 +63,72 @@ const ms = {
             ['Apa yang boleh saya kongsi?', 'Pautan TikTok, Instagram, Facebook, YouTube, Google Maps dan laman web resipi, atau tangkap layar daripada mana-mana aplikasi.'],
             ['Adakah maklumat halal disahkan?', 'Tidak. Bukuresipi menunjukkan apa yang kedai atau hantaran itu sendiri katakan, berserta sumbernya. Ia bukan pensijilan JAKIM, jadi semak logo halal di premis.'],
             ['Bagaimana kalau hantaran tak lengkap?', 'Resipi tetap disimpan, dan bahagian yang tiada ditanda dengan jelas supaya anda boleh lengkapkannya sendiri.'],
-            ['Bila aplikasi dilancarkan?', 'Bukuresipi sedang dibina untuk Android dan iPhone. Butang muat turun di halaman ini akan aktif sebaik sahaja aplikasi tersedia.'],
+            ['Bila aplikasi dilancarkan?', 'Versi Android sedang diuji, dan butang Google Play di halaman ini akan aktif sebaik sahaja ia tersedia.'],
+            ['Ada versi iPhone?', 'Belum buat masa ini. Versi iPhone memerlukan akaun pembangun Apple yang berbayar, jadi kami akan mulakan apabila ada penaja.'],
             ['Bahasa apa yang disokong?', 'Bahasa Melayu dan English. Resipi disimpan dalam bahasa asal hantaran.'],
         ],
         ctaTitle: 'Buku resipi anda, diisi oleh skrol anda.',
-        ctaText: 'Aplikasi Android dan iPhone akan tersedia tidak lama lagi.',
+        ctaText: 'Versi Android sedang diuji.',
         footer: 'Resipi dan tempat makan dari media sosial, tersimpan di satu tempat.',
+        footerTop: 'Kembali ke atas',
+        footerDelete: 'Padam akaun',
+        footerCredits: 'Penghargaan',
+        tester: {
+            title: 'Jadi tester Android',
+            text: 'Kami sedang cari tester untuk versi Android. Tinggalkan emel akaun Google (Gmail) anda: Google Play hantar jemputan bila build sedia.',
+            label: 'Emel akaun Google',
+            placeholder: 'nama@gmail.com',
+            button: 'Daftar sebagai tester',
+            note: 'Android sahaja buat masa ini; tiada versi iPhone lagi.',
+            invalid: 'Masukkan alamat emel yang sah.',
+            done: 'Terima kasih! Anda dalam senarai. Jemputan datang dari Google Play ke emel ini.',
+            disposable: 'Gunakan emel tetap, bukan emel sementara.',
+            rate: 'Terlalu banyak cubaan. Cuba lagi sebentar.',
+            network: 'Tidak dapat dihantar. Semak sambungan anda dan cuba lagi.',
+            hero: 'Jadi tester Android',
+        },
+    },
+    credits: {
+        title: 'Penghargaan - Bukuresipi',
+        description: 'Untuk siapa Bukuresipi dibina, dan sumber terbuka serta perkhidmatan yang menjadikannya mungkin.',
+        dedicationKicker: 'Untuk isteri tercinta',
+        dedication: [
+            'Saya bina Bukuresipi untuk isteri saya, supaya setiap resipi dan kedai makan yang dia suka ada satu tempat, dan tidak hilang dalam skrol.',
+            'Kini ia untuk semua. Kalau ia berguna untuk anda juga, itu hadiah kedua yang sangat saya hargai.',
+        ],
+        thanksTitle: 'Terima kasih',
+        thanksText: 'Bukuresipi berdiri atas kerja ramai orang. Peta, data tempat dan alat ini dikongsi secara terbuka atau disediakan oleh:',
+        groups: [
+            {
+                title: 'Peta', items: [
+                    { name: 'OpenStreetMap contributors', detail: 'Data peta, ODbL.', url: 'https://www.openstreetmap.org/copyright' },
+                    { name: 'OpenFreeMap', detail: 'Jubin peta dan gaya Liberty.', url: 'https://openfreemap.org' },
+                    { name: 'OpenMapTiles', detail: 'Skema data peta.', url: 'https://openmaptiles.org' },
+                    { name: 'MapLibre', detail: 'Pemapar peta, BSD.', url: 'https://maplibre.org' },
+                ]
+            },
+            {
+                title: 'Data tempat dan alamat', items: [
+                    { name: 'Overture Maps', detail: 'Data tempat, CDLA-Permissive-2.0.', url: 'https://overturemaps.org' },
+                    { name: 'Nominatim', detail: 'Alamat ke lokasi, dari OpenStreetMap.', url: 'https://nominatim.org' },
+                    { name: 'Photon', detail: 'Alamat ke lokasi.', url: 'https://photon.komoot.io' },
+                    { name: 'HERE', detail: 'Mencari kedai mengikut nama.', url: 'https://www.here.com' },
+                    { name: 'Parallel', detail: 'Carian web untuk alamat cawangan.', url: 'https://parallel.ai' },
+                ]
+            },
+            {
+                title: 'Dibina dengan', items: [
+                    { name: 'Flutter', detail: 'Aplikasi, BSD.', url: 'https://flutter.dev' },
+                    { name: 'Cloudflare', detail: 'Workers, D1, R2 dan Workers AI.', url: 'https://www.cloudflare.com' },
+                    { name: 'Hono', detail: 'API, MIT.', url: 'https://hono.dev' },
+                    { name: 'Drizzle ORM', detail: 'Pangkalan data, Apache-2.0.', url: 'https://orm.drizzle.team' },
+                    { name: 'Astro', detail: 'Laman web ini, MIT.', url: 'https://astro.build' },
+                    { name: 'Google Fonts', detail: 'Familjen Grotesk, Caveat dan Kalam, SIL Open Font License.', url: 'https://fonts.google.com' },
+                ]
+            },
+        ],
+        testers: 'Dan terima kasih kepada setiap tester yang mencuba aplikasi ini sebelum orang lain.',
+        back: 'Kembali ke laman utama',
     },
     auth: {
         backHome: 'Ke laman utama',
@@ -114,8 +174,30 @@ const ms = {
             invalid: 'Masukkan alamat emel yang sah.',
             done: 'Jika emel ini berdaftar, pautan telah dihantar. Semak peti masuk dan folder spam. Pautan sah selama 1 jam.',
         },
+        delete: {
+            title: 'Padam akaun',
+            text: 'Ini memadam akaun Bukuresipi anda serta-merta dan tidak boleh dibatalkan: tempat dan resipi yang disimpan, perkongsian dan tangkapan skrin, penilaian dan ulasan, serta laporan anda. Restoran yang dikongsi oleh pengguna lain kekal.',
+            email: 'Emel',
+            password: 'Kata laluan',
+            button: 'Padam akaun saya',
+            confirm: 'Padam akaun ini selama-lamanya?',
+            invalid: 'Masukkan alamat emel yang sah.',
+            wrong: 'Emel atau kata laluan salah. Lupa kata laluan? Tetapkan semula dahulu.',
+            owner: 'Akaun pemilik tidak boleh dipadam.',
+            done: 'Akaun anda telah dipadam. Terima kasih kerana menggunakan Bukuresipi.',
+        },
     },
     notFound: { title: 'Halaman tidak dijumpai', text: 'Halaman ini tiada atau telah dipindahkan.', home: 'Ke laman utama' },
+    family: {
+        title: 'Jemputan keluarga',
+        h1: 'Anda dijemput ke keluarga di Bukuresipi',
+        lead: 'Satu keluarga berkongsi satu buku: kedai makan yang disimpan oleh sesiapa dalam keluarga muncul dalam buku dan peta semua, dan resipi boleh dikongsi bersama.',
+        steps: [
+            ['Sudah ada aplikasi?', 'Buka semula pautan ini dari WhatsApp (atau di mana anda menerimanya). Ia akan dibuka dalam Bukuresipi dan bertanya sama ada anda mahu menyertai.'],
+            ['Belum ada?', 'Pasang Bukuresipi, log masuk, kemudian ketik pautan jemputan sekali lagi.'],
+        ],
+        note: 'Pautan jemputan tamat tempoh selepas 7 hari. Minta pautan baharu daripada pemilik keluarga jika ia tidak berfungsi lagi.',
+    },
 }
 
 const en: typeof ms = {
@@ -128,11 +210,11 @@ const en: typeof ms = {
         description:
             'Found a great recipe or food spot on TikTok, Instagram, Facebook or YouTube? Share it to Bukuresipi. Recipes go into your book, restaurants onto your map.',
         ogAlt: 'Bukuresipi: a TikTok recipe copied into an exercise book',
+        eyebrow: 'Recipe book and food map',
         h1: 'The recipe you found on TikTok, kept in one book.',
         lead: 'Share a link or a screenshot to Bukuresipi. Ingredients, steps and the restaurant name are copied from the post itself, straight into your recipe book and map.',
         soon: 'Coming soon',
         play: 'Google Play',
-        appStore: 'App Store',
         notebook: {
             dish: 'Ayam masak merah',
             lines: [
@@ -171,12 +253,72 @@ const en: typeof ms = {
             ['What can I share?', 'Links from TikTok, Instagram, Facebook, YouTube, Google Maps and recipe websites, or a screenshot from any app.'],
             ['Is the halal information verified?', 'No. Bukuresipi shows what the restaurant or post itself says, with its source. It is not JAKIM certification, so check for the halal logo at the premises.'],
             ['What if a post is incomplete?', 'The recipe is still saved, and the missing parts are clearly marked so you can fill them in yourself.'],
-            ['When does the app launch?', 'Bukuresipi is being built for Android and iPhone. The download buttons on this page go live as soon as the app is available.'],
+            ['When does the app launch?', 'The Android version is in testing, and the Google Play button on this page goes live as soon as it is available.'],
+            ['Is there an iPhone version?', "Not for now. An iPhone version needs a paid Apple developer account, so we'll start once we have a sponsor."],
             ['Which languages are supported?', 'Malay and English. Recipes are kept in the language of the original post.'],
         ],
         ctaTitle: 'Your recipe book, filled by your scrolling.',
-        ctaText: 'The Android and iPhone apps are coming soon.',
+        ctaText: 'The Android build is in testing.',
         footer: 'Recipes and places to eat from social media, kept in one place.',
+        footerTop: 'Back to top',
+        footerDelete: 'Delete account',
+        footerCredits: 'Credits',
+        tester: {
+            title: 'Become an Android tester',
+            text: 'We are looking for testers for the Android build. Leave your Google (Gmail) account email: Google Play sends the invite when the build is ready.',
+            label: 'Google account email',
+            placeholder: 'you@gmail.com',
+            button: 'Join as a tester',
+            note: 'Android only for now; no iPhone version yet.',
+            invalid: 'Enter a valid email address.',
+            done: "Thanks! You're on the list. The invite comes from Google Play to this email.",
+            disposable: 'Use a permanent email address, not a temporary one.',
+            rate: 'Too many tries. Try again in a moment.',
+            network: "Couldn't send. Check your connection and try again.",
+            hero: 'Join the Android beta',
+        },
+    },
+    credits: {
+        title: 'Credits - Bukuresipi',
+        description: 'Who Bukuresipi was built for, and the open sources and services that make it possible.',
+        dedicationKicker: 'For my lovely wife',
+        dedication: [
+            'I built Bukuresipi for my wife, so every recipe and food spot she loves has one place, instead of getting lost in the scroll.',
+            "Now it's for everyone. If it's useful to you too, that's a second gift I truly appreciate.",
+        ],
+        thanksTitle: 'Thank you',
+        thanksText: 'Bukuresipi stands on the work of many people. The maps, place data and tools are shared openly or provided by:',
+        groups: [
+            {
+                title: 'Map', items: [
+                    { name: 'OpenStreetMap contributors', detail: 'Map data, ODbL.', url: 'https://www.openstreetmap.org/copyright' },
+                    { name: 'OpenFreeMap', detail: 'Map tiles and the Liberty style.', url: 'https://openfreemap.org' },
+                    { name: 'OpenMapTiles', detail: 'Map data schema.', url: 'https://openmaptiles.org' },
+                    { name: 'MapLibre', detail: 'Map renderer, BSD.', url: 'https://maplibre.org' },
+                ]
+            },
+            {
+                title: 'Place data and addresses', items: [
+                    { name: 'Overture Maps', detail: 'Place data, CDLA-Permissive-2.0.', url: 'https://overturemaps.org' },
+                    { name: 'Nominatim', detail: 'Address to location, from OpenStreetMap.', url: 'https://nominatim.org' },
+                    { name: 'Photon', detail: 'Address to location.', url: 'https://photon.komoot.io' },
+                    { name: 'HERE', detail: 'Finding shops by name.', url: 'https://www.here.com' },
+                    { name: 'Parallel', detail: 'Web search for branch addresses.', url: 'https://parallel.ai' },
+                ]
+            },
+            {
+                title: 'Built with', items: [
+                    { name: 'Flutter', detail: 'The app, BSD.', url: 'https://flutter.dev' },
+                    { name: 'Cloudflare', detail: 'Workers, D1, R2 and Workers AI.', url: 'https://www.cloudflare.com' },
+                    { name: 'Hono', detail: 'The API, MIT.', url: 'https://hono.dev' },
+                    { name: 'Drizzle ORM', detail: 'Database, Apache-2.0.', url: 'https://orm.drizzle.team' },
+                    { name: 'Astro', detail: 'This website, MIT.', url: 'https://astro.build' },
+                    { name: 'Google Fonts', detail: 'Familjen Grotesk, Caveat and Kalam, SIL Open Font License.', url: 'https://fonts.google.com' },
+                ]
+            },
+        ],
+        testers: 'And thank you to every tester who tried the app before anyone else.',
+        back: 'Back to the home page',
     },
     auth: {
         backHome: 'Go to the home page',
@@ -222,8 +364,30 @@ const en: typeof ms = {
             invalid: 'Enter a valid email address.',
             done: 'If this email is registered, a link is on its way. Check your inbox and spam folder. The link works for 1 hour.',
         },
+        delete: {
+            title: 'Delete account',
+            text: 'This deletes your Bukuresipi account at once and cannot be undone: your saved places and recipes, shares and screenshots, ratings and reviews, and your reports. Restaurants other users shared stay.',
+            email: 'Email',
+            password: 'Password',
+            button: 'Delete my account',
+            confirm: 'Delete this account for good?',
+            invalid: 'Enter a valid email address.',
+            wrong: 'Wrong email or password. Forgot your password? Reset it first.',
+            owner: 'The owner account cannot be deleted.',
+            done: 'Your account has been deleted. Thank you for using Bukuresipi.',
+        },
     },
     notFound: { title: 'Page not found', text: 'This page does not exist or has moved.', home: 'Go to the home page' },
+    family: {
+        title: 'Family invite',
+        h1: "You're invited to a family on Bukuresipi",
+        lead: 'A family shares one book: a place anyone in the family saves shows in everyone\'s book and map, and recipes can be shared too.',
+        steps: [
+            ['Have the app?', 'Open this link again from WhatsApp (or wherever you got it). It opens in Bukuresipi and asks if you want to join.'],
+            ['Not yet?', 'Install Bukuresipi, sign in, then tap the invite link again.'],
+        ],
+        note: 'Invite links expire after 7 days. Ask the family owner for a new link if this one no longer works.',
+    },
 }
 
 export const t = (lang: Lang) => (lang === 'en' ? en : ms)

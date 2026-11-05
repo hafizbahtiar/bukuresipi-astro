@@ -1,41 +1,127 @@
 ---
-import logo from '../assets/logo-mark.svg?raw'
-import { type Lang, t } from '../i18n'
+import logo from "../assets/logo-mark.svg?raw";
+import { type Lang, pathIn, t } from "../i18n";
 
-interface Props { lang: Lang }
-const { lang } = Astro.props
+interface Props {
+    lang: Lang;
+    nav?: boolean;
+}
+const { lang, nav = false } = Astro.props;
+const s = t(lang);
 ---
 
-<footer class="wrap foot">
-    <div class="who">
-        <span class="mark" set:html={logo} />
-        <p><strong>Bukuresipi</strong><br />{t(lang).home.footer}</p>
+<footer class="foot">
+    <div class="wrap foot-main">
+        <a class="who" href={pathIn("/", lang)} aria-label="Bukuresipi">
+            <span class="mark" set:html={logo} />
+            <span class="who-text">
+                <span class="name">Bukuresipi</span>
+                <span class="tag">{s.home.footer}</span>
+            </span>
+        </a>
+        {
+            nav && (
+                <nav aria-label={lang === "en" ? "Footer" : "Pengaki"}>
+                    <a href="#cara">{s.nav.how}</a>
+                    <a href="#soalan">{s.nav.faq}</a>
+                </nav>
+            )
+        }
     </div>
-    <p class="copy">© {new Date().getFullYear()} Bukuresipi</p>
+    <div class="wrap foot-base">
+        <p>
+            © {new Date().getFullYear()} Bukuresipi · <a
+                href={pathIn("/credits", lang)}>{s.home.footerCredits}</a
+            > · <a href={pathIn("/auth/delete", lang)}>{s.home.footerDelete}</a>
+        </p>
+        <a class="top" href="#top"
+            >{s.home.footerTop} <span aria-hidden="true">↑</span></a
+        >
+    </div>
 </footer>
 
 <style>
     .foot {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: space-between;
-        align-items: flex-end;
-        gap: 1.5rem;
-        padding-block: 2.5rem;
+        padding-block: 2.5rem 2rem;
+        border-top: 1px solid var(--line);
         font-size: var(--step--1);
         color: var(--ink-soft);
     }
+    .foot-main {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 2rem;
+    }
     .who {
         display: flex;
-        gap: 0.8rem;
-        align-items: center;
+        gap: 0.9rem;
+        align-items: flex-start;
+        color: inherit;
+        text-decoration: none;
     }
-    .who strong {
-        color: var(--ink);
+    .who:hover .name {
+        text-decoration: underline;
+        text-decoration-color: var(--margin);
+        text-underline-offset: 0.2em;
     }
     .mark :global(svg) {
         display: block;
-        width: 34px;
-        height: 34px;
+        width: 38px;
+        height: 38px;
+    }
+    .name {
+        display: block;
+        font-size: 1.05rem;
+        font-weight: 700;
+        line-height: 1.2;
+        color: var(--ink);
+    }
+    .tag {
+        display: block;
+        margin-top: 0.3rem;
+        max-width: 34ch;
+        line-height: 1.45;
+    }
+    nav {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1.5rem;
+        font-weight: 600;
+    }
+    nav a {
+        color: var(--ink);
+        text-decoration: none;
+        border-bottom: 1px solid transparent;
+        transition: border-color 0.2s ease;
+    }
+    nav a:hover {
+        border-color: var(--margin);
+    }
+    .foot-base {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 1rem;
+        margin-top: 2rem;
+        padding-top: 1rem;
+        border-top: 1px solid var(--line);
+    }
+    .top {
+        color: var(--ink-soft);
+        text-decoration: none;
+        transition: color 0.2s ease;
+    }
+    .top:hover {
+        color: var(--ink);
+    }
+    @media (max-width: 640px) {
+        .foot-main {
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+        .foot-base {
+            flex-wrap: wrap;
+        }
     }
 </style>
