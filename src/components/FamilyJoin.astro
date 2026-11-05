@@ -1,0 +1,92 @@
+---
+// /family/join?t=<token>: the family invite link. With the app installed, Android opens the app (App Link) and this
+// page is never shown. Without it: what a family is and how to join. The token stays in the URL only: this page never
+// reads or sends it (noindex = no-referrer, so fonts and stores never see it).
+import Base from "../layouts/Base.astro";
+import { type Lang, t } from "../i18n";
+import Footer from "./Footer.astro";
+import Header from "./Header.astro";
+import StoreBadges from "./StoreBadges.astro";
+
+interface Props {
+    lang: Lang;
+}
+const { lang } = Astro.props;
+const s = t(lang).family;
+---
+
+<Base
+    lang={lang}
+    path="/family/join"
+    title={`${s.title} - Bukuresipi`}
+    description={s.lead}
+    noindex
+>
+    <Header lang={lang} path="/family/join" />
+    <main class="wrap join">
+        <h1>{s.h1}</h1>
+        <p class="lead">{s.lead}</p>
+        <ol>
+            {
+                s.steps.map(([title, text]) => (
+                    <li>
+                        <>
+                            <h2>{title}</h2>
+                            <p>{text}</p>
+                        </>
+                    </li>
+                ))
+            }
+        </ol>
+        <StoreBadges lang={lang} />
+        <p class="note">{s.note}</p>
+    </main>
+    <Footer lang={lang} />
+</Base>
+
+<script>
+    // The language switch keeps the invite token, so the other-language page is the same link.
+    const other = document.querySelector<HTMLAnchorElement>(".site-head .lang");
+    if (other && location.search) other.search = location.search;
+</script>
+
+<style>
+    .join {
+        max-width: 42rem;
+        padding-block: clamp(2.5rem, 8vw, 5rem);
+    }
+    h1 {
+        font-size: var(--step-3);
+    }
+    .lead {
+        margin-block: 1rem 2rem;
+        font-size: var(--step-1);
+        line-height: 1.45;
+        color: var(--ink-soft);
+    }
+    ol {
+        display: grid;
+        gap: 1.25rem;
+        margin: 0 0 2rem;
+        padding: 0;
+        list-style: none;
+        border-top: 1px solid var(--line);
+    }
+    li {
+        padding-top: 1.25rem;
+        border-bottom: 1px solid var(--line);
+        padding-bottom: 1.25rem;
+    }
+    h2 {
+        margin-bottom: 0.35rem;
+        font-size: var(--step-1);
+    }
+    li p {
+        color: var(--ink-soft);
+    }
+    .note {
+        margin-top: 1.5rem;
+        font-size: var(--step--1);
+        color: var(--ink-soft);
+    }
+</style>
