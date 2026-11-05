@@ -1,6 +1,6 @@
 ---
-// Store buttons. Until STORES has a link they render as disabled "coming soon" badges. Text only: at launch, swap in
-// the official Google Play / App Store badge artwork (their brand rules forbid redrawing the logos).
+// Store button. Until STORES has a link it renders as a disabled "coming soon" badge. Text only: at launch, swap in
+// the official Google Play badge artwork (its brand rules forbid redrawing the logo). No App Store: Android only for now.
 import { type Lang, STORES, t } from "../i18n";
 
 interface Props {
@@ -10,7 +10,6 @@ const { lang } = Astro.props;
 const s = t(lang).home;
 const stores = [
     { name: s.play, href: STORES.play, note: s.soon },
-    { name: s.appStore, href: STORES.appStore, note: s.iosNote },
 ];
 ---
 

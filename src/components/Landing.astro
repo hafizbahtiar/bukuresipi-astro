@@ -31,7 +31,7 @@ const jsonLd = [
         "@context": "https://schema.org",
         "@type": "MobileApplication",
         name: "Bukuresipi",
-        operatingSystem: "Android, iOS",
+        operatingSystem: "Android",
         applicationCategory: "LifestyleApplication",
         description: s.description,
         inLanguage: ["ms", "en"],
@@ -187,8 +187,12 @@ const jsonLd = [
                     <form
                         class="tester"
                         novalidate
+                        data-lang={lang}
                         data-invalid={s.tester.invalid}
-                        data-pending={s.tester.pending}
+                        data-done={s.tester.done}
+                        data-disposable={s.tester.disposable}
+                        data-rate={s.tester.rate}
+                        data-network={s.tester.network}
                     >
                         <h3 class="tester-title">
                             {s.tester.title}
@@ -663,7 +667,8 @@ const jsonLd = [
     summary:hover {
         color: var(--pandan-deep);
     }
-    details[open] summary::after {
+    /* .closing: still open while it slides shut (the script removes [open] at the end). */
+    details[open]:not(.closing) summary::after {
         transform: rotate(45deg);
     }
     details p {
@@ -673,24 +678,6 @@ const jsonLd = [
         color: var(--ink-soft);
     }
 
-    @supports (interpolate-size: allow-keywords) {
-        details::details-content {
-            block-size: 0;
-            overflow: hidden;
-            transition:
-                block-size 0.3s cubic-bezier(0.16, 1, 0.3, 1),
-                content-visibility 0.3s;
-            transition-behavior: allow-discrete;
-        }
-        details[open]::details-content {
-            block-size: auto;
-        }
-    }
-    @media (prefers-reduced-motion: reduce) {
-        details::details-content {
-            transition: none;
-        }
-    }
 
     .cta {
         padding-block: clamp(2.5rem, 6vw, 4.5rem);
@@ -812,6 +799,9 @@ const jsonLd = [
     .tester-status[data-tone="bad"] {
         color: var(--margin);
     }
+    .tester-status[data-tone="ok"] {
+        color: var(--pandan);
+    }
 
     @media (max-width: 880px) {
         .hero,
@@ -868,20 +858,80 @@ const jsonLd = [
     const tester = document.querySelector<HTMLFormElement>(".tester");
     if (tester) {
         const status = tester.querySelector<HTMLElement>(".tester-status")!;
-        tester.addEventListener("submit", (event) => {
+        const button = tester.querySelector<HTMLButtonElement>("button")!;
+        const say = (key: string, tone: string) => {
+            status.textContent = tester.dataset[key] ?? "";
+            status.dataset.tone = tone;
+        };
+        tester.addEventListener("submit", async (event) => {
             event.preventDefault();
             const email = tester.querySelector<HTMLInputElement>(
                 'input[type="email"]',
             )!;
             if (!email.value.trim() || !email.checkValidity()) {
-                status.textContent = tester.dataset.invalid ?? "";
-                status.dataset.tone = "bad";
+                say("invalid", "bad");
                 email.focus();
                 return;
             }
-            // Backend later: POST this email to the tester endpoint.
-            status.textContent = tester.dataset.pending ?? "";
-            status.dataset.tone = "";
+            button.disabled = true;
+            try {
+                // Same origin: the website Worker passes /api/* to the API Worker (service binding).
+                const res = await fetch("/api/v1/testers", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        email: email.value.trim(),
+                        lang: tester.dataset.lang,
+                    }),
+                });
+                if (res.ok) {
+                    say("done", "ok");
+                    email.value = "";
+                    return;
+                }
+                const { error } = (await res.json().catch(() => ({}))) as {
+                    error?: string;
+                };
+                say(
+                    error === "disposable_email"
+                        ? "disposable"
+                        : error === "rate_limited"
+                          ? "rate"
+                          : "invalid",
+                    "bad",
+                );
+            } catch {
+                say("network", "bad");
+            } finally {
+                button.disabled = false;
+            }
+        });
+    }
+
+    // FAQ: slide open and shut in every browser (a plain <details> jumps). The script animates the height of the whole
+    // <details>; [open] stays on until a close finishes. Reduced motion or no script: the plain jump.
+    const still = matchMedia("(prefers-reduced-motion: reduce)");
+    for (const details of document.querySelectorAll<HTMLDetailsElement>(".faq details")) {
+        const summary = details.querySelector("summary")!;
+        let anim: Animation | null = null;
+        summary.addEventListener("click", (event) => {
+            if (still.matches) return;
+            event.preventDefault();
+            const from = details.getBoundingClientRect().height; // mid-slide when clicked again
+            anim?.cancel();
+            const closing = details.open && !details.classList.contains("closing");
+            details.classList.toggle("closing", closing);
+            details.open = true;
+            const border = details.offsetHeight - details.clientHeight;
+            const to = closing ? summary.offsetHeight + border : details.offsetHeight;
+            details.style.overflow = "hidden";
+            anim = details.animate({ height: [`${from}px`, `${to}px`] }, { duration: 320, easing: "cubic-bezier(0.16, 1, 0.3, 1)" });
+            anim.onfinish = () => {
+                anim = null;
+                details.style.overflow = "";
+                if (closing) details.open = false;
+                details.classList.remove("closing");
+            };
         });
     }
 </script>
