@@ -24,6 +24,8 @@ const jsonLd = [
         "@context": "https://schema.org",
         "@type": "WebSite",
         name: "Bukuresipi",
+        // People spell it "resepi" as often as "resipi", and split the words.
+        alternateName: ["Buku Resipi", "Bukuresepi", "Buku Resepi"],
         url: `${SITE}${pathIn("/", lang)}`,
         inLanguage: lang,
     },
@@ -35,6 +37,7 @@ const jsonLd = [
         applicationCategory: "LifestyleApplication",
         description: s.description,
         inLanguage: ["ms", "en"],
+        offers: { "@type": "Offer", price: "0", priceCurrency: "MYR" },
     },
     {
         "@context": "https://schema.org",
