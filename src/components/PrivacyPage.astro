@@ -1,0 +1,97 @@
+---
+// Privacy policy (the link given to Google Play and the Google sign-in consent screen). Text in i18n.ts.
+import Base from "../layouts/Base.astro";
+import { CONTACT, type Lang, pathIn, t } from "../i18n";
+import Footer from "./Footer.astro";
+import Header from "./Header.astro";
+
+interface Props {
+    lang: Lang;
+}
+const { lang } = Astro.props;
+const p = t(lang).privacy;
+---
+
+<Base lang={lang} path="/privacy" title={p.title} description={p.description}>
+    <Header lang={lang} path="/privacy" />
+    <main class="wrap privacy">
+        <h1>{p.heading}</h1>
+        <p class="updated">{p.updated}</p>
+        <p class="lead">{p.intro}</p>
+        {
+            p.sections.map((s) => (
+                <section>
+                    <h2>{s.title}</h2>
+                    {"paras" in s &&
+                        s.paras?.map((text) =>
+                            text.includes(CONTACT) ? (
+                                <p>
+                                    {text.replace(CONTACT, "")}
+                                    <a href={`mailto:${CONTACT}`}>{CONTACT}</a>
+                                </p>
+                            ) : (
+                                <p>{text}</p>
+                            ),
+                        )}
+                    {"items" in s && (
+                        <ul>
+                            {s.items?.map((i) => (
+                                <li>{i}</li>
+                            ))}
+                        </ul>
+                    )}
+                </section>
+            ))
+        }
+        <p class="links">
+            <a href={pathIn("/auth/delete", lang)}>{p.deleteLink} →</a>
+            <a href={pathIn("/", lang)}>← {p.back}</a>
+        </p>
+    </main>
+    <Footer lang={lang} />
+</Base>
+
+<style>
+    .privacy {
+        max-width: 760px;
+        padding-block: 2.5rem 4rem;
+    }
+    h1 {
+        font-size: var(--step-3);
+        margin: 0;
+    }
+    .updated {
+        color: var(--ink-soft);
+        font-size: var(--step--1);
+        margin: 0.25rem 0 1.5rem;
+    }
+    .lead {
+        font-size: var(--step-1);
+        line-height: 1.5;
+    }
+    h2 {
+        font-size: var(--step-0);
+        margin: 2rem 0 0.5rem;
+        color: var(--pandan-deep);
+    }
+    ul {
+        margin: 0;
+        padding-left: 1.25rem;
+    }
+    li {
+        padding: 0.3rem 0;
+        line-height: 1.55;
+    }
+    a {
+        overflow-wrap: anywhere;
+    }
+    .links {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        gap: 1rem;
+        margin-top: 3rem;
+        padding-top: 1rem;
+        border-top: 1px solid var(--line);
+    }
+</style>

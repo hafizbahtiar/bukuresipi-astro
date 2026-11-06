@@ -3,6 +3,7 @@ export const LANGS = ['ms', 'en'] as const
 export type Lang = (typeof LANGS)[number]
 
 export const SITE = 'https://bukuresipi.com'
+export const CONTACT = 'hafiz@hafizbahtiar.com'
 /** Store link: null = not published yet ("coming soon"). Set at launch. Android only: no iPhone version for now. */
 export const STORES = { play: null as string | null }
 
@@ -73,6 +74,7 @@ const ms = {
         footerTop: 'Kembali ke atas',
         footerDelete: 'Padam akaun',
         footerCredits: 'Penghargaan',
+        footerPrivacy: 'Privasi',
         tester: {
             title: 'Jadi tester Android',
             text: 'Kami sedang cari tester untuk versi Android. Tinggalkan emel akaun Google (Gmail) anda: Google Play hantar jemputan bila build sedia.',
@@ -87,6 +89,77 @@ const ms = {
             network: 'Tidak dapat dihantar. Semak sambungan anda dan cuba lagi.',
             hero: 'Jadi tester Android',
         },
+    },
+    privacy: {
+        title: 'Dasar Privasi - Bukuresipi',
+        description: 'Data yang Bukuresipi kumpul, untuk apa, siapa yang memprosesnya, dan cara memadamnya.',
+        heading: 'Dasar Privasi',
+        updated: 'Dikemas kini 6 November 2026',
+        intro: 'Bukuresipi menyimpan resipi dan kedai makan yang anda kongsi dari media sosial. Halaman ini menerangkan data yang kami kumpul, kenapa, dan cara memadamnya. Kami tidak menjual data anda dan tidak menunjukkan iklan.',
+        sections: [
+            {
+                title: 'Data yang kami kumpul', items: [
+                    'Akaun: emel, kata laluan (disimpan sebagai cincangan bcrypt, bukan teks asal), nama yang anda tetapkan, dan bahasa aplikasi.',
+                    'Log masuk dengan Google: ID akaun Google, emel dan nama anda. Tiada gambar profil, kenalan atau data lain.',
+                    'Apa yang anda kongsi: pautan siaran, tangkapan skrin, dan teks yang kami baca daripadanya (kapsyen, keterangan halaman).',
+                    'Kandungan anda: resipi, kedai simpanan, nota, senarai beli-belah, penilaian, ulasan, undi, laporan, dan pin peta yang anda letak.',
+                    'Peranti yang log masuk: nama dan model peranti, versi Android dan aplikasi, dan bandar anggaran daripada alamat IP (untuk halaman "Peranti log masuk").',
+                    'Token notifikasi (Firebase), untuk menghantar notifikasi kepada telefon anda.',
+                    'Lokasi: hanya semasa anda mencari kedai berdekatan. Ia digunakan untuk carian itu dan tidak disimpan.',
+                    'Borang tester di laman ini: emel yang anda masukkan.',
+                ]
+            },
+            {
+                title: 'Untuk apa', items: [
+                    'Menjadikan siaran yang anda kongsi resipi atau kedai makan, dan menunjukkannya kepada anda.',
+                    'Log masuk, keselamatan akaun (contohnya amaran log masuk baharu), dan emel akaun (sahkan emel, set semula kata laluan).',
+                    'Berkongsi dengan keluarga anda: ahli keluarga melihat nama anda, kedai dan resipi yang anda tidak tanda "Hanya saya". Emel anda tidak pernah ditunjukkan kepada pengguna lain.',
+                    'Resipi yang anda terbitkan kepada komuniti, dan ulasan anda, boleh dilihat oleh pengguna lain bersama nama anda.',
+                ]
+            },
+            {
+                title: 'Siapa yang memproses data', paras: [
+                    'Kami menggunakan perkhidmatan ini untuk menjalankan Bukuresipi. Mereka menerima hanya apa yang perlu untuk tugas mereka:',
+                ], items: [
+                    'Cloudflare: pelayan, pangkalan data, storan gambar, dan Workers AI yang membaca siaran dan tangkapan skrin.',
+                    'Command Code (model DeepSeek): membaca teks siaran untuk mengeluarkan resipi atau butiran kedai.',
+                    'Google Firebase: menghantar notifikasi. Google Sign-In: log masuk dengan Google.',
+                    'Resend: menghantar emel akaun.',
+                    'OpenStreetMap (Nominatim, Overpass), Photon, HERE dan Parallel: mencari lokasi kedai daripada nama dan alamatnya. Lokasi anda tidak dihantar.',
+                ]
+            },
+            {
+                title: 'Simpanan dan pemadaman', items: [
+                    'Data anda disimpan selagi akaun anda wujud. Setiap log masuk tamat selepas 30 hari, kemudian anda log masuk semula.',
+                    'Anda boleh padam akaun dalam aplikasi (Akaun > Padam akaun) atau di halaman Padam akaun. Ini memadam akaun, tangkapan skrin, resipi, kedai simpanan, penilaian, ulasan dan peranti anda serta-merta.',
+                    'Yang kekal: maklumat kedai makan awam (nama, alamat, lokasi) yang dikongsi semua pengguna, dan gambar kecil siaran awam. Ia tidak dikaitkan dengan anda lagi.',
+                ]
+            },
+            {
+                title: 'Keselamatan', items: [
+                    'Semua sambungan menggunakan HTTPS. Kata laluan disimpan sebagai cincangan, dan pautan emel sekali guna.',
+                    'Tangkapan skrin anda disimpan secara peribadi; hanya anda (dan keluarga anda, bagi kedai yang dikongsi) boleh melihatnya.',
+                ]
+            },
+            {
+                title: 'Kanak-kanak', paras: [
+                    'Bukuresipi bukan untuk kanak-kanak di bawah 13 tahun, dan kami tidak sengaja mengumpul data mereka.',
+                ]
+            },
+            {
+                title: 'Hak anda', paras: [
+                    'Di bawah Akta Perlindungan Data Peribadi 2010, anda boleh meminta salinan, pembetulan atau pemadaman data anda. Kebanyakannya boleh dibuat dalam aplikasi; untuk yang lain, emel kami.',
+                ]
+            },
+            {
+                title: 'Hubungi kami', paras: [
+                    'Soalan atau permintaan tentang data anda: hafiz@hafizbahtiar.com',
+                    'Jika dasar ini berubah, kami kemas kini tarikh di atas, dan memaklumkan dalam aplikasi untuk perubahan besar.',
+                ]
+            },
+        ],
+        deleteLink: 'Padam akaun',
+        back: 'Kembali ke laman utama',
     },
     credits: {
         title: 'Penghargaan - Bukuresipi',
@@ -263,6 +336,7 @@ const en: typeof ms = {
         footerTop: 'Back to top',
         footerDelete: 'Delete account',
         footerCredits: 'Credits',
+        footerPrivacy: 'Privacy',
         tester: {
             title: 'Become an Android tester',
             text: 'We are looking for testers for the Android build. Leave your Google (Gmail) account email: Google Play sends the invite when the build is ready.',
@@ -277,6 +351,77 @@ const en: typeof ms = {
             network: "Couldn't send. Check your connection and try again.",
             hero: 'Join the Android beta',
         },
+    },
+    privacy: {
+        title: 'Privacy Policy - Bukuresipi',
+        description: 'What data Bukuresipi collects, what for, who processes it, and how to delete it.',
+        heading: 'Privacy Policy',
+        updated: 'Updated 6 November 2026',
+        intro: 'Bukuresipi saves the recipes and places to eat you share from social media. This page explains what data we collect, why, and how to delete it. We do not sell your data and show no ads.',
+        sections: [
+            {
+                title: 'What we collect', items: [
+                    'Account: your email, password (stored as a bcrypt hash, never as text), the name you set, and the app language.',
+                    'Sign in with Google: your Google account ID, email and name. No profile photo, contacts or anything else.',
+                    'What you share: post links, screenshots, and the text we read from them (captions, page descriptions).',
+                    'Your content: recipes, saved places, notes, shopping lists, ratings, reviews, votes, reports, and map pins you place.',
+                    'Signed-in devices: device name and model, Android and app version, and an approximate city from your IP address (for the "Signed-in devices" page).',
+                    'A notification token (Firebase), to send notifications to your phone.',
+                    'Location: only while you search for places nearby. It is used for that search and not stored.',
+                    'The tester form on this website: the email you enter.',
+                ]
+            },
+            {
+                title: 'What we use it for', items: [
+                    'Turning the posts you share into recipes or places to eat, and showing them to you.',
+                    'Sign-in, account security (for example new sign-in alerts), and account emails (confirm email, reset password).',
+                    'Sharing with your family: members see your name, and the places and recipes you did not mark "Only me". Your email is never shown to other users.',
+                    'Recipes you publish to the community, and your reviews, can be seen by other users with your name.',
+                ]
+            },
+            {
+                title: 'Who processes data', paras: [
+                    'We use these services to run Bukuresipi. Each gets only what its job needs:',
+                ], items: [
+                    'Cloudflare: servers, database, image storage, and Workers AI, which reads posts and screenshots.',
+                    'Command Code (DeepSeek models): reads post text to pull out a recipe or a restaurant\'s details.',
+                    'Google Firebase: sends notifications. Google Sign-In: signing in with Google.',
+                    'Resend: sends account emails.',
+                    'OpenStreetMap (Nominatim, Overpass), Photon, HERE and Parallel: find a restaurant\'s location from its name and address. Your location is not sent.',
+                ]
+            },
+            {
+                title: 'Keeping and deleting', items: [
+                    'Your data is kept while your account exists. Each sign-in ends after 30 days, then you sign in again.',
+                    'You can delete your account in the app (Account > Delete account) or on the Delete account page. This deletes your account, screenshots, recipes, saved places, ratings, reviews and devices at once.',
+                    'What stays: public restaurant details (name, address, location) shared by all users, and thumbnails of public posts. They are no longer linked to you.',
+                ]
+            },
+            {
+                title: 'Security', items: [
+                    'Every connection uses HTTPS. Passwords are stored as hashes, and email links work once.',
+                    'Your screenshots are stored privately; only you (and your family, for a shared place) can see them.',
+                ]
+            },
+            {
+                title: 'Children', paras: [
+                    'Bukuresipi is not for children under 13, and we do not knowingly collect their data.',
+                ]
+            },
+            {
+                title: 'Your rights', paras: [
+                    'Under Malaysia\'s Personal Data Protection Act 2010, you can ask for a copy of your data, a correction, or its deletion. Most of this can be done in the app; for anything else, email us.',
+                ]
+            },
+            {
+                title: 'Contact us', paras: [
+                    'Questions or requests about your data: hafiz@hafizbahtiar.com',
+                    'If this policy changes, we update the date above, and tell you in the app for a big change.',
+                ]
+            },
+        ],
+        deleteLink: 'Delete account',
+        back: 'Back to home',
     },
     credits: {
         title: 'Credits - Bukuresipi',
