@@ -16,9 +16,9 @@ const ms = {
     other: { lang: 'en' as Lang, label: 'English' },
     nav: { how: 'Cara guna', faq: 'Soalan lazim' },
     home: {
-        title: 'Bukuresipi: simpan resipi dan tempat makan dari TikTok, Instagram dan YouTube',
+        title: 'Bukuresipi: aplikasi simpan resepi & tempat makan dari TikTok',
         description:
-            'Nampak resipi atau kedai makan sedap di TikTok, Instagram, Facebook atau YouTube? Kongsi ke Bukuresipi. Resipi masuk buku anda, kedai makan masuk peta anda.',
+            'Buku resipi percuma untuk resepi yang anda jumpa di TikTok, Instagram, Facebook atau YouTube. Kongsi ke Bukuresipi: resepi masuk buku anda, kedai makan masuk peta anda.',
         ogAlt: 'Bukuresipi: resipi dari TikTok tersalin ke dalam buku latihan',
         eyebrow: 'Buku resipi dan peta makan',
         h1: 'Resipi yang anda jumpa di TikTok, tersimpan dalam satu buku.',
@@ -66,6 +66,8 @@ const ms = {
             ['Bagaimana kalau hantaran tak lengkap?', 'Resipi tetap disimpan, dan bahagian yang tiada ditanda dengan jelas supaya anda boleh lengkapkannya sendiri.'],
             ['Bila aplikasi dilancarkan?', 'Versi Android sedang diuji, dan butang Google Play di halaman ini akan aktif sebaik sahaja ia tersedia.'],
             ['Ada versi iPhone?', 'Belum buat masa ini. Versi iPhone memerlukan akaun pembangun Apple yang berbayar, jadi kami akan mulakan apabila ada penaja.'],
+            ['Bukuresipi percuma?', 'Ya. Aplikasi buku resipi ini percuma dan tiada iklan buat masa ini.'],
+            ['Resipi atau resepi?', 'Kedua-duanya betul di sini. "Resipi" ejaan Dewan Bahasa, "resepi" ejaan yang ramai guna. Bukuresipi menyimpan apa sahaja resepi yang anda jumpa: lauk, kek, kuih, pencuci mulut atau minuman.'],
             ['Bahasa apa yang disokong?', 'Bahasa Melayu dan English. Resipi disimpan dalam bahasa asal hantaran.'],
         ],
         ctaTitle: 'Buku resipi anda, diisi oleh skrol anda.',
@@ -352,9 +354,9 @@ const en: typeof ms = {
     other: { lang: 'ms', label: 'Bahasa Melayu' },
     nav: { how: 'How it works', faq: 'FAQ' },
     home: {
-        title: 'Bukuresipi: save recipes and places to eat from TikTok, Instagram and YouTube',
+        title: 'Bukuresipi: recipe book app for recipes and food spots from TikTok',
         description:
-            'Found a great recipe or food spot on TikTok, Instagram, Facebook or YouTube? Share it to Bukuresipi. Recipes go into your book, restaurants onto your map.',
+            'A free recipe book app for the recipes and food spots you find on TikTok, Instagram, Facebook or YouTube. Share to Bukuresipi: recipes go into your book, restaurants onto your map.',
         ogAlt: 'Bukuresipi: a TikTok recipe copied into an exercise book',
         eyebrow: 'Recipe book and food map',
         h1: 'The recipe you found on TikTok, kept in one book.',
@@ -401,6 +403,8 @@ const en: typeof ms = {
             ['What if a post is incomplete?', 'The recipe is still saved, and the missing parts are clearly marked so you can fill them in yourself.'],
             ['When does the app launch?', 'The Android version is in testing, and the Google Play button on this page goes live as soon as it is available.'],
             ['Is there an iPhone version?', "Not for now. An iPhone version needs a paid Apple developer account, so we'll start once we have a sponsor."],
+            ['Is Bukuresipi free?', 'Yes. The recipe book app is free, with no ads for now.'],
+            ['Is it for Malaysian recipes only?', 'No. Any recipe you find works: Malaysian lauk, cakes, kuih, desserts or drinks, in Malay or English.'],
             ['Which languages are supported?', 'Malay and English. Recipes are kept in the language of the original post.'],
         ],
         ctaTitle: 'Your recipe book, filled by your scrolling.',
