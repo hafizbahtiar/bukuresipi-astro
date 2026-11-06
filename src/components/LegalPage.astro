@@ -1,5 +1,5 @@
 ---
-// Privacy policy (the link given to Google Play and the Google sign-in consent screen). Text in i18n.ts.
+// Privacy policy and terms (the links given to Google Play and the Google sign-in consent screen). Text in i18n.ts.
 import Base from "../layouts/Base.astro";
 import { CONTACT, type Lang, pathIn, t } from "../i18n";
 import Footer from "./Footer.astro";
@@ -7,13 +7,15 @@ import Header from "./Header.astro";
 
 interface Props {
     lang: Lang;
+    doc: "privacy" | "terms";
 }
-const { lang } = Astro.props;
-const p = t(lang).privacy;
+const { lang, doc } = Astro.props;
+const p = t(lang)[doc];
+const path = `/${doc}`;
 ---
 
-<Base lang={lang} path="/privacy" title={p.title} description={p.description}>
-    <Header lang={lang} path="/privacy" />
+<Base lang={lang} path={path} title={p.title} description={p.description}>
+    <Header lang={lang} path={path} />
     <main class="wrap privacy">
         <h1>{p.heading}</h1>
         <p class="updated">{p.updated}</p>

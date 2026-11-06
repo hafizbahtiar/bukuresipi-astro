@@ -75,6 +75,7 @@ const ms = {
         footerDelete: 'Padam akaun',
         footerCredits: 'Penghargaan',
         footerPrivacy: 'Privasi',
+        footerTerms: 'Terma',
         tester: {
             title: 'Jadi tester Android',
             text: 'Kami sedang cari tester untuk versi Android. Tinggalkan emel akaun Google (Gmail) anda: Google Play hantar jemputan bila build sedia.',
@@ -89,6 +90,78 @@ const ms = {
             network: 'Tidak dapat dihantar. Semak sambungan anda dan cuba lagi.',
             hero: 'Jadi tester Android',
         },
+    },
+    terms: {
+        title: 'Terma Penggunaan - Bukuresipi',
+        description: 'Peraturan menggunakan Bukuresipi: akaun, kandungan yang anda kongsi, ketepatan maklumat, dan tanggungjawab.',
+        heading: 'Terma Penggunaan',
+        updated: 'Dikemas kini 6 November 2026',
+        intro: 'Bukuresipi dikendalikan oleh Hafiz Bahtiar di Malaysia. Dengan menggunakan aplikasi atau laman web ini, anda bersetuju dengan terma ini. Cara kami mengendalikan data anda diterangkan dalam Dasar Privasi.',
+        sections: [
+            {
+                title: 'Akaun anda', items: [
+                    'Anda mesti berumur 13 tahun ke atas.',
+                    'Gunakan emel yang sah dan jaga kata laluan anda. Anda bertanggungjawab atas apa yang dibuat melalui akaun anda.',
+                    'Satu akaun untuk seorang. Jangan menyamar sebagai orang lain.',
+                ]
+            },
+            {
+                title: 'Kandungan yang anda kongsi', items: [
+                    'Kongsi hanya siaran yang awam atau yang anda berhak kongsi. Siaran asal kekal milik penciptanya; Bukuresipi menyimpan pautan dan maklumat yang dibaca daripadanya untuk anda.',
+                    'Resipi, nota, ulasan dan gambar anda kekal milik anda. Anda membenarkan kami menyimpan, memproses dan menunjukkannya kepada anda, keluarga anda, atau komuniti, mengikut pilihan anda.',
+                ]
+            },
+            {
+                title: 'Peraturan', paras: ['Jangan gunakan Bukuresipi untuk:'], items: [
+                    'spam, iklan, atau ulasan dan penilaian palsu;',
+                    'kandungan yang menghina, lucah, membenci, mengganggu, atau menyalahi undang-undang;',
+                    'maklumat palsu tentang kedai, termasuk dakwaan halal palsu;',
+                    'bot, mengikis data, memintas had, atau menyerang perkhidmatan.',
+                ]
+            },
+            {
+                title: 'Kawalan kandungan', paras: [
+                    'Kami boleh menyembunyikan atau membuang kandungan, dan menggantung atau menutup akaun, yang melanggar terma ini. Anda boleh melaporkan ulasan dan resipi dalam aplikasi.',
+                ]
+            },
+            {
+                title: 'Ketepatan maklumat', items: [
+                    'Resipi dan butiran kedai dibaca secara automatik (AI) daripada siaran, dan boleh salah atau tidak lengkap. Semak sebelum memasak atau pergi.',
+                    'Senarai alahan hanya meliputi bahan yang dikenal pasti. Tiada senarai bermakna "tidak diketahui", bukan "bebas alahan". Jika anda ada alahan, semak sendiri setiap bahan.',
+                    'Halal yang ditunjukkan ialah petikan daripada sumber, dengan pautannya. Ia bukan pensijilan halal (contohnya JAKIM). Sahkan dengan kedai.',
+                    'Lokasi, alamat dan cawangan kedai boleh salah atau lapuk.',
+                ]
+            },
+            {
+                title: 'Perkhidmatan', items: [
+                    'Bukuresipi percuma buat masa ini. Kami mungkin menunjukkan iklan atau menawarkan pelan berbayar pada masa hadapan, dan akan memaklumkannya terlebih dahulu.',
+                    'Kami boleh menukar, menghadkan atau menghentikan ciri. Ada had harian (contohnya bilangan kongsian sehari).',
+                ]
+            },
+            {
+                title: 'Menamatkan', paras: [
+                    'Anda boleh memadam akaun anda pada bila-bila masa dalam aplikasi atau di halaman Padam akaun. Kami boleh menutup akaun yang melanggar terma ini.',
+                ]
+            },
+            {
+                title: 'Tanggungjawab', paras: [
+                    'Bukuresipi disediakan "seadanya". Setakat yang dibenarkan undang-undang, kami tidak bertanggungjawab atas kerugian tidak langsung daripada penggunaannya, termasuk maklumat yang salah. Tiada apa-apa dalam terma ini menghadkan hak anda di bawah Akta Perlindungan Pengguna 1999 atau undang-undang lain yang tidak boleh diketepikan.',
+                ]
+            },
+            {
+                title: 'Undang-undang', paras: [
+                    'Terma ini tertakluk kepada undang-undang Malaysia.',
+                ]
+            },
+            {
+                title: 'Perubahan dan hubungi kami', paras: [
+                    'Jika terma ini berubah, kami kemas kini tarikh di atas, dan memaklumkan dalam aplikasi untuk perubahan besar.',
+                    'Soalan: hafiz@hafizbahtiar.com',
+                ]
+            },
+        ],
+        deleteLink: 'Padam akaun',
+        back: 'Kembali ke laman utama',
     },
     privacy: {
         title: 'Dasar Privasi - Bukuresipi',
@@ -337,6 +410,7 @@ const en: typeof ms = {
         footerDelete: 'Delete account',
         footerCredits: 'Credits',
         footerPrivacy: 'Privacy',
+        footerTerms: 'Terms',
         tester: {
             title: 'Become an Android tester',
             text: 'We are looking for testers for the Android build. Leave your Google (Gmail) account email: Google Play sends the invite when the build is ready.',
@@ -351,6 +425,78 @@ const en: typeof ms = {
             network: "Couldn't send. Check your connection and try again.",
             hero: 'Join the Android beta',
         },
+    },
+    terms: {
+        title: 'Terms of Use - Bukuresipi',
+        description: 'The rules for using Bukuresipi: your account, what you share, how accurate the information is, and liability.',
+        heading: 'Terms of Use',
+        updated: 'Updated 6 November 2026',
+        intro: 'Bukuresipi is run by Hafiz Bahtiar in Malaysia. By using the app or this website you agree to these terms. How we handle your data is in the Privacy Policy.',
+        sections: [
+            {
+                title: 'Your account', items: [
+                    'You must be 13 or older.',
+                    'Use a real email and keep your password safe. You are responsible for what is done with your account.',
+                    'One account per person. Do not pretend to be someone else.',
+                ]
+            },
+            {
+                title: 'What you share', items: [
+                    'Share only posts that are public or that you have the right to share. The original post stays its creator\'s; Bukuresipi keeps the link and what it reads from it for you.',
+                    'Your recipes, notes, reviews and photos stay yours. You let us store, process and show them to you, your family, or the community, as you choose.',
+                ]
+            },
+            {
+                title: 'Rules', paras: ['Do not use Bukuresipi for:'], items: [
+                    'spam, advertising, or fake reviews and ratings;',
+                    'insulting, sexual, hateful, harassing or illegal content;',
+                    'false information about a restaurant, including false halal claims;',
+                    'bots, scraping, getting around limits, or attacking the service.',
+                ]
+            },
+            {
+                title: 'Moderation', paras: [
+                    'We may hide or remove content, and suspend or close accounts, that break these terms. You can report reviews and recipes in the app.',
+                ]
+            },
+            {
+                title: 'Accuracy', items: [
+                    'Recipes and restaurant details are read automatically (by AI) from posts, and can be wrong or incomplete. Check before you cook or go.',
+                    'The allergen list only covers the ingredients we recognised. No list means "unknown", not "allergen free". If you have an allergy, check every ingredient yourself.',
+                    'Halal shown is a quote from the source, with its link. It is not halal certification (for example JAKIM). Confirm with the restaurant.',
+                    'Restaurant locations, addresses and branches can be wrong or out of date.',
+                ]
+            },
+            {
+                title: 'The service', items: [
+                    'Bukuresipi is free for now. We may show ads or offer a paid plan in the future, and will say so first.',
+                    'We may change, limit or stop features. There are daily limits (for example shares per day).',
+                ]
+            },
+            {
+                title: 'Ending', paras: [
+                    'You can delete your account at any time in the app or on the Delete account page. We may close accounts that break these terms.',
+                ]
+            },
+            {
+                title: 'Liability', paras: [
+                    'Bukuresipi is provided "as is". As far as the law allows, we are not liable for indirect loss from using it, including wrong information. Nothing in these terms limits your rights under Malaysia\'s Consumer Protection Act 1999 or other law that cannot be set aside.',
+                ]
+            },
+            {
+                title: 'Law', paras: [
+                    'These terms are governed by the laws of Malaysia.',
+                ]
+            },
+            {
+                title: 'Changes and contact', paras: [
+                    'If these terms change, we update the date above, and tell you in the app for a big change.',
+                    'Questions: hafiz@hafizbahtiar.com',
+                ]
+            },
+        ],
+        deleteLink: 'Delete account',
+        back: 'Back to home',
     },
     privacy: {
         title: 'Privacy Policy - Bukuresipi',
