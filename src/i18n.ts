@@ -169,7 +169,7 @@ const ms = {
         title: 'Dasar Privasi - Bukuresipi',
         description: 'Data yang Bukuresipi kumpul, untuk apa, siapa yang memprosesnya, dan cara memadamnya.',
         heading: 'Dasar Privasi',
-        updated: 'Dikemas kini 6 November 2026',
+        updated: 'Dikemas kini 8 November 2026',
         intro: 'Bukuresipi menyimpan resipi dan kedai makan yang anda kongsi dari media sosial. Halaman ini menerangkan data yang kami kumpul, kenapa, dan cara memadamnya. Kami tidak menjual data anda dan tidak menunjukkan iklan.',
         sections: [
             {
@@ -178,9 +178,11 @@ const ms = {
                     'Log masuk dengan Google: ID akaun Google, emel dan nama anda. Tiada gambar profil, kenalan atau data lain.',
                     'Apa yang anda kongsi: pautan siaran, tangkapan skrin, dan teks yang kami baca daripadanya (kapsyen, keterangan halaman).',
                     'Kandungan anda: resipi, kedai simpanan, nota, senarai beli-belah, penilaian, ulasan, undi, laporan, dan pin peta yang anda letak.',
+                    'Gambar profil: hanya jika anda menambahnya. Hanya anda dan keluarga anda melihatnya.',
+                    'Resit: gambar resit kedai makan yang anda tambah, dan apa yang kami baca daripadanya (kedai, alamat, tarikh dan masa, jumlah, serta nama, kuantiti dan harga setiap item). Gambar dipadam sebaik anda menyimpan resit, atau selepas 30 hari jika tidak disimpan. Nombor kad dan nama orang tidak pernah dibaca atau disimpan. Ringkasan perbelanjaan anda hanya ditunjukkan kepada anda, bukan kepada keluarga.',
                     'Peranti yang log masuk: nama dan model peranti, versi Android dan aplikasi, dan bandar anggaran daripada alamat IP (untuk halaman "Peranti log masuk").',
                     'Token notifikasi (Firebase), untuk menghantar notifikasi kepada telefon anda.',
-                    'Lokasi: hanya semasa anda mencari kedai berdekatan. Ia digunakan untuk carian itu dan tidak disimpan.',
+                    'Lokasi: hanya semasa anda mencari di peta. Untuk carian yang anda hantar, kami simpan kata carian, bilangan hasil dan kawasan (dibundarkan kira-kira 1 km) selama 90 hari, untuk mengetahui kedai yang perlu ditambah.',
                     'Borang tester di laman ini: emel yang anda masukkan.',
                 ]
             },
@@ -197,23 +199,24 @@ const ms = {
                     'Kami menggunakan perkhidmatan ini untuk menjalankan Bukuresipi. Mereka menerima hanya apa yang perlu untuk tugas mereka:',
                 ], items: [
                     'Cloudflare: pelayan, pangkalan data, storan gambar, dan Workers AI yang membaca siaran dan tangkapan skrin.',
-                    'Command Code (model DeepSeek): membaca teks siaran untuk mengeluarkan resipi atau butiran kedai.',
+                    'Command Code (model DeepSeek): membaca teks siaran untuk mengeluarkan resipi atau butiran kedai, dan membaca gambar resit.',
                     'Google Firebase: menghantar notifikasi. Google Sign-In: log masuk dengan Google.',
                     'Resend: menghantar emel akaun.',
-                    'OpenStreetMap (Nominatim, Overpass), Photon, HERE dan Parallel: mencari lokasi kedai daripada nama dan alamatnya. Lokasi anda tidak dihantar.',
+                    'OpenStreetMap (Nominatim, Overpass), Photon, HERE dan Parallel: mencari lokasi kedai daripada nama dan alamatnya. Apabila carian peta menemui sedikit hasil, Photon menerima kata carian dan titik peta.',
+                    'Amazon Location Service (GrabMaps): mencari lokasi kedai daripada nama dan kawasannya.',
                 ]
             },
             {
                 title: 'Simpanan dan pemadaman', items: [
                     'Data anda disimpan selagi akaun anda wujud. Setiap log masuk tamat selepas 30 hari, kemudian anda log masuk semula.',
-                    'Anda boleh padam akaun dalam aplikasi (Akaun > Padam akaun) atau di halaman Padam akaun. Ini memadam akaun, tangkapan skrin, resipi, kedai simpanan, penilaian, ulasan dan peranti anda serta-merta.',
+                    'Anda boleh padam akaun dalam aplikasi (Akaun > Padam akaun) atau di halaman Padam akaun. Ini memadam akaun, tangkapan skrin, resit, gambar profil, resipi, kedai simpanan, penilaian, ulasan, carian dan peranti anda serta-merta.',
                     'Yang kekal: maklumat kedai makan awam (nama, alamat, lokasi) yang dikongsi semua pengguna, dan gambar kecil siaran awam. Ia tidak dikaitkan dengan anda lagi.',
                 ]
             },
             {
                 title: 'Keselamatan', items: [
                     'Semua sambungan menggunakan HTTPS. Kata laluan disimpan sebagai cincangan, dan pautan emel sekali guna.',
-                    'Tangkapan skrin anda disimpan secara peribadi; hanya anda (dan keluarga anda, bagi kedai yang dikongsi) boleh melihatnya.',
+                    'Tangkapan skrin dan gambar resit anda disimpan secara peribadi; hanya anda (dan keluarga anda, bagi tangkapan skrin kedai yang dikongsi) boleh melihatnya.',
                 ]
             },
             {
@@ -506,7 +509,7 @@ const en: typeof ms = {
         title: 'Privacy Policy - Bukuresipi',
         description: 'What data Bukuresipi collects, what for, who processes it, and how to delete it.',
         heading: 'Privacy Policy',
-        updated: 'Updated 6 November 2026',
+        updated: 'Updated 8 November 2026',
         intro: 'Bukuresipi saves the recipes and places to eat you share from social media. This page explains what data we collect, why, and how to delete it. We do not sell your data and show no ads.',
         sections: [
             {
@@ -515,9 +518,11 @@ const en: typeof ms = {
                     'Sign in with Google: your Google account ID, email and name. No profile photo, contacts or anything else.',
                     'What you share: post links, screenshots, and the text we read from them (captions, page descriptions).',
                     'Your content: recipes, saved places, notes, shopping lists, ratings, reviews, votes, reports, and map pins you place.',
+                    'Profile photo: only if you add one. Only you and your family see it.',
+                    'Receipts: the photo of a restaurant receipt you add, and what we read from it (shop, address, date and time, total, and each item\'s name, quantity and price). The photo is deleted once you save the receipt, or after 30 days if you don\'t. Card numbers and the names of people are never read or stored. Your spending summary is shown only to you, never to your family.',
                     'Signed-in devices: device name and model, Android and app version, and an approximate city from your IP address (for the "Signed-in devices" page).',
                     'A notification token (Firebase), to send notifications to your phone.',
-                    'Location: only while you search for places nearby. It is used for that search and not stored.',
+                    'Location: only while you search the map. For a search you submit we keep the words, the number of results and the area rounded to about 1 km for 90 days, to learn which places to add.',
                     'The tester form on this website: the email you enter.',
                 ]
             },
@@ -534,23 +539,24 @@ const en: typeof ms = {
                     'We use these services to run Bukuresipi. Each gets only what its job needs:',
                 ], items: [
                     'Cloudflare: servers, database, image storage, and Workers AI, which reads posts and screenshots.',
-                    'Command Code (DeepSeek models): reads post text to pull out a recipe or a restaurant\'s details.',
+                    'Command Code (DeepSeek models): reads post text to pull out a recipe or a restaurant\'s details, and reads receipt photos.',
                     'Google Firebase: sends notifications. Google Sign-In: signing in with Google.',
                     'Resend: sends account emails.',
-                    'OpenStreetMap (Nominatim, Overpass), Photon, HERE and Parallel: find a restaurant\'s location from its name and address. Your location is not sent.',
+                    'OpenStreetMap (Nominatim, Overpass), Photon, HERE and Parallel: find a restaurant\'s location from its name and address. When a map search finds few results, Photon gets the search words and the map point.',
+                    'Amazon Location Service (GrabMaps): find a restaurant\'s location from its name and area.',
                 ]
             },
             {
                 title: 'Keeping and deleting', items: [
                     'Your data is kept while your account exists. Each sign-in ends after 30 days, then you sign in again.',
-                    'You can delete your account in the app (Account > Delete account) or on the Delete account page. This deletes your account, screenshots, recipes, saved places, ratings, reviews and devices at once.',
+                    'You can delete your account in the app (Account > Delete account) or on the Delete account page. This deletes your account, screenshots, receipts, profile photo, recipes, saved places, ratings, reviews, searches and devices at once.',
                     'What stays: public restaurant details (name, address, location) shared by all users, and thumbnails of public posts. They are no longer linked to you.',
                 ]
             },
             {
                 title: 'Security', items: [
                     'Every connection uses HTTPS. Passwords are stored as hashes, and email links work once.',
-                    'Your screenshots are stored privately; only you (and your family, for a shared place) can see them.',
+                    'Your screenshots and receipt photos are stored privately; only you (and your family, for a shared place\'s screenshot) can see them.',
                 ]
             },
             {
