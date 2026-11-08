@@ -342,7 +342,6 @@ const ms = {
     family: {
         title: 'Jemputan keluarga',
         h1: 'Anda dijemput ke keluarga di Bukuresipi',
-        openApp: 'Buka dalam aplikasi',
         lead: 'Satu keluarga berkongsi satu buku: kedai makan yang disimpan oleh sesiapa dalam keluarga muncul dalam buku dan peta semua, dan resipi boleh dikongsi bersama.',
         steps: [
             ['Sudah ada aplikasi?', 'Buka semula pautan ini dari WhatsApp (atau di mana anda menerimanya). Ia akan dibuka dalam Bukuresipi dan bertanya sama ada anda mahu menyertai.'],
@@ -683,7 +682,6 @@ const en: typeof ms = {
     family: {
         title: 'Family invite',
         h1: "You're invited to a family on Bukuresipi",
-        openApp: 'Open in the app',
         lead: 'A family shares one book: a place anyone in the family saves shows in everyone\'s book and map, and recipes can be shared too.',
         steps: [
             ['Have the app?', 'Open this link again from WhatsApp (or wherever you got it). It opens in Bukuresipi and asks if you want to join.'],
