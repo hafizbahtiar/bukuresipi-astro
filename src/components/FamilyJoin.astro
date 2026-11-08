@@ -26,6 +26,7 @@ const s = t(lang).family;
     <main class="wrap join">
         <h1>{s.h1}</h1>
         <p class="lead">{s.lead}</p>
+        <a class="open-app" id="open-app" hidden>{s.openApp}</a>
         <ol>
             {
                 s.steps.map(([title, text]) => (
@@ -48,6 +49,14 @@ const s = t(lang).family;
     // The language switch keeps the invite token, so the other-language page is the same link.
     const other = document.querySelector<HTMLAnchorElement>(".site-head .lang");
     if (other && location.search) other.search = location.search;
+
+    // Android: an intent link to the app itself. Chrome opens it in Bukuresipi even when Android has not verified the
+    // App Link (or the link was opened in a browser); without the app, Android offers the Play Store.
+    const open = document.querySelector<HTMLAnchorElement>("#open-app");
+    if (open && /Android/i.test(navigator.userAgent)) {
+        open.href = `intent://${location.host}${location.pathname}${location.search}#Intent;scheme=https;package=com.bukuresipi;end`;
+        open.hidden = false;
+    }
 </script>
 
 <style>
@@ -63,6 +72,19 @@ const s = t(lang).family;
         font-size: var(--step-1);
         line-height: 1.45;
         color: var(--ink-soft);
+    }
+    .open-app {
+        display: inline-block;
+        margin-bottom: 2rem;
+        padding: 0.8rem 1.4rem;
+        border-radius: 999px;
+        background: var(--ink);
+        color: var(--paper);
+        font-weight: 700;
+        text-decoration: none;
+    }
+    .open-app[hidden] {
+        display: none;
     }
     ol {
         display: grid;
