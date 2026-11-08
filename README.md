@@ -19,3 +19,15 @@ email links open (`/auth/verify`, `/auth/reset`, `/auth/forgot`, and `/en/auth/.
   the app should claim `/auth/*` and `/en/auth/*`.
 
 Env: `.env` = production Worker secrets (git-ignored, template `.env.example`, none needed yet). No build settings.
+
+## App Links (`public/.well-known/assetlinks.json`)
+
+Android opens `bukuresipi.com/auth/*` and `/family/join` links in the app only when this file lists the app's
+signing certificates (package `com.bukuresipi`). Without it, every such link opens in the browser. It lists three
+SHA-256 fingerprints:
+- Google Play's app signing key (every install from Play): Play Console > Test and release > Setup > App signing >
+  "App signing key certificate" SHA-256;
+- the upload key (`android/key.properties`: a release APK installed by hand);
+- this machine's debug key (`flutter run`).
+
+Android checks the file when the app is installed or updated, so after a change, reinstall the app to test it.
