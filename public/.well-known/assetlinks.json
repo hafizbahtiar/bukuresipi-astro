@@ -1,7 +1,8 @@
 [
   {
     "relation": [
-      "delegate_permission/common.handle_all_urls"
+      "delegate_permission/common.handle_all_urls",
+      "delegate_permission/common.get_login_creds"
     ],
     "target": {
       "namespace": "android_app",
@@ -9,7 +10,9 @@
       "sha256_cert_fingerprints": [
         "93:4B:EB:83:C0:66:7A:62:ED:C8:DD:43:10:F5:73:DB:89:80:A6:FF:91:BC:B9:77:B3:0C:AA:F7:7E:D5:DF:EF",
         "B8:39:B3:2C:B5:3D:88:85:1E:9A:89:5D:19:03:15:92:A4:34:76:E1:0D:5F:81:E0:8D:D2:9D:3A:6D:44:87:D5",
-        "9C:81:6D:7A:87:00:55:6E:9F:A5:BC:D6:E5:EC:15:AD:14:7C:B3:AC:E3:EB:97:CA:C3:31:D7:D7:83:CD:60:DD"
+        "9C:81:6D:7A:87:00:55:6E:9F:A5:BC:D6:E5:EC:15:AD:14:7C:B3:AC:E3:EB:97:CA:C3:31:D7:D7:83:CD:60:DD",
+        "53:16:E2:30:88:B1:CB:09:43:49:B7:A3:66:44:9E:ED:7F:64:47:D5:D8:80:59:8A:13:A1:7C:D9:F9:BE:CA:B3",
+        "BE:43:27:3F:DF:A9:5B:9F:13:59:50:8A:2A:23:4D:02:57:69:63:AC:24:88:F1:2D:FF:50:39:14:C7:02:5E:B5"
       ]
     }
   }
