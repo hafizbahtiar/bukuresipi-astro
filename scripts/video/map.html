@@ -1,0 +1,105 @@
+<!doctype html>
+<!-- Feature video: search the map, save a place, see it with its branches. Frame and clock: ../video-kit.js. -->
+<html>
+<head>
+<meta charset="utf-8" />
+<link href="https://fonts.googleapis.com/css2?family=Kalam:wght@400;700&family=Familjen+Grotesk:wght@400;500;600;700&display=block" rel="stylesheet" />
+<link rel="stylesheet" href="../video-kit.css" />
+<style>
+    .bar { position: absolute; left: 16px; right: 16px; top: 58px; height: 54px; border-radius: 27px; background: var(--paper-raised);
+        box-shadow: 0 6px 16px -8px rgba(28,42,32,.45); display: flex; align-items: center; gap: 10px; padding: 0 18px; font-size: 18px; color: var(--ink-soft); z-index: 3; }
+    .bar .q { color: var(--ink); font-weight: 600; }
+    .bar .caret { display: inline-block; width: 2px; height: 22px; background: var(--pandan); vertical-align: middle; }
+    .results { position: absolute; left: 16px; right: 16px; top: 122px; border-radius: 16px; background: var(--paper-raised);
+        box-shadow: 0 10px 24px -12px rgba(28,42,32,.5); overflow: hidden; transform-origin: top; z-index: 3; }
+    .res { display: flex; align-items: center; gap: 12px; padding: 14px 16px; border-bottom: 1px solid var(--line); }
+    .res:last-child { border-bottom: 0; }
+    .res .dot { width: 34px; height: 34px; border-radius: 50%; background: var(--pandan-mist); display: grid; place-items: center; font-size: 18px; flex: none; }
+    .res b { display: block; font-size: 17px; }
+    .res small { font-size: 14px; color: var(--ink-soft); }
+    .res .km { margin-left: auto; font-size: 15px; font-weight: 700; color: var(--pandan); }
+    .card h5 { font-size: 24px; line-height: 1.15; }
+    .card .area { font-size: 16px; color: var(--ink-soft); margin: 4px 0 18px; }
+    .save { position: relative; height: 54px; border-radius: 27px; background: var(--pandan); color: #fff; display: grid; place-items: center; font-size: 19px; font-weight: 700; }
+    .save.done { position: absolute; inset: 0; background: var(--pandan-mist); color: var(--pandan-deep); }
+    .count { position: absolute; left: 16px; top: 62px; padding: 10px 16px; border-radius: 999px; background: var(--paper-raised); font-size: 17px; font-weight: 700;
+        box-shadow: 0 6px 16px -8px rgba(28,42,32,.45); z-index: 3; }
+    .branch { position: absolute; width: 22px; height: 22px; margin: -11px 0 0 -11px; border-radius: 50%; background: #fff; border: 5px solid var(--margin); }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script>
+const DURATION = 20, POSTER = 14.5
+const CUES = [
+    { t: 0.3, kind: 'whoosh', dur: 0.8 }, { t: 0.6, kind: 'marker', dur: 0.55 },
+    { t: 2.6, kind: 'tap' }, ...[2.9, 3.1, 3.3, 3.5, 3.7].map(t => ({ t, kind: 'tap' })),
+    { t: 4.0, kind: 'whoosh', dur: 0.4 }, { t: 5.2, kind: 'tap' },
+    { t: 6.2, kind: 'whoosh', dur: 0.55 }, { t: 7.0, kind: 'thud' }, { t: 8.4, kind: 'tap' }, { t: 8.6, kind: 'chime' },
+    { t: 11.0, kind: 'whoosh', dur: 0.55 }, { t: 11.8, kind: 'pop', pitch: 784 }, { t: 12.1, kind: 'pop', pitch: 880 }, { t: 12.4, kind: 'pop', pitch: 1046.5 },
+    { t: 13.2, kind: 'whoosh', dur: 0.5 },
+    { t: 16.6, kind: 'whoosh', dur: 0.7 }, { t: 17.0, kind: 'chord' },
+]
+const V = {
+    ms: { search: 'Cari dalam peta', query: 'nasi kerabu', area: 'Kota Bharu, Kelantan', save: 'Simpan ke buku saya', saved: '✓ Disimpan ke buku anda',
+        count: '📖 12 kedai', branches: '3 cawangan · terdekat 0.8 km' },
+    en: { search: 'Search your map', query: 'nasi kerabu', area: 'Kota Bharu, Kelantan', save: 'Save to my book', saved: '✓ Saved to your book',
+        count: '📖 12 places', branches: '3 branches · nearest 0.8 km' },
+}
+const SHOPS = [['Nasi Kerabu Kak Yah', 'Jalan Hospital', '0.8 km'], ['Nasi Kerabu Tok Wan', 'Wakaf Che Yeh', '1.6 km'], ['Kerabu Mek Na', 'Pasar Siti Khadijah', '2.3 km']]
+// Other saved places on the zoomed-out map, and the new place's branches (screen pixels).
+const OTHERS = [[96, 250, 11.8], [290, 160, 12.1], [250, 520, 12.4]]
+const BRANCHES = [[120, 470], [300, 380]]
+
+const screens = (d, v) => `
+    <div class="scr map" id="s1">${ICON.city}
+        <div class="bar">${ICON.search}<span id="typed"></span></div>
+        <div class="results" id="results">${SHOPS.map(([n, a, km], i) => `<div class="res" id="res${i}"><span class="dot">🍛</span><span><b>${n}</b><small>${a}</small></span><span class="km">${km}</span></div>`).join('')}</div>
+    </div>
+    <div class="scr map" id="s2">${ICON.city}
+        <div class="pin" id="newPin" style="left:188px;top:330px">${ICON.pin()}</div>
+        <div class="card sheet" id="card"><div class="grab"></div><h5>${SHOPS[0][0]}</h5><div class="area">${SHOPS[0][1]}, ${v.area}</div>
+            <div class="save" id="saveBtn">${v.save}<div class="save done" id="savedBtn">${v.saved}</div></div></div>
+    </div>
+    <div class="scr map" id="s3"><div id="zoom" style="position:absolute;inset:0">${ICON.city}</div>
+        <div class="count" id="count">${v.count}</div>
+        ${OTHERS.map(([x, y], i) => `<div class="pin" id="o${i}" style="left:${x}px;top:${y}px">${ICON.pin()}</div>`).join('')}
+        ${BRANCHES.map(([x, y], i) => `<div class="branch" id="b${i}" style="left:${x}px;top:${y}px"></div>`).join('')}
+        <div class="pin" id="mine" style="left:188px;top:330px">${ICON.pin()}</div>
+        <div class="sheet" id="card3"><div class="grab"></div><h5 style="font-size:22px">${SHOPS[0][0]}</h5>
+            <div style="font-size:17px;color:var(--pandan);font-weight:700;margin-top:6px">📍 ${v.branches}</div></div>
+    </div>`
+
+const FINGER = [
+    [{ t: 2.0, x: 200, y: 600 }, { t: 2.6, x: 180, y: 85 }, { t: 3.9, x: 180, y: 85 }, { t: 4.8, x: 150, y: 152 }, { t: 5.6, x: 150, y: 152 }],
+    [{ t: 7.6, x: 220, y: 700 }, { t: 8.4, x: 188, y: 778 }, { t: 9.2, x: 188, y: 778 }],
+]
+const TAPS = [2.6, 5.2, 8.4]
+
+function scene(t) {
+    // 1: type the dish, the nearest places drop down, tap the first.
+    const n = Math.round(clamp((t - 2.85) / 0.9) * $.v.query.length)
+    $.typed.innerHTML = t < 2.6 ? $.v.search : `<span class="q">${$.v.query.slice(0, n)}</span><span class="caret" style="opacity:${Math.floor(t * 2.5) % 2 || n < $.v.query.length ? 1 : 0}"></span>`
+    const r = out3(p(t, 4.0, 0.45))
+    S($.results, { opacity: r, transform: `scaleY(${0.6 + 0.4 * r})` })
+    $.res0.style.background = t >= 5.2 ? 'var(--pandan-mist)' : ''
+
+    // 2: its pin drops, the card rises, Save turns into Saved.
+    const drop = p(t, 6.6, 0.6)
+    S($.newPin, { transform: `translateY(${drop > 0 ? (1 - back(drop)) * -260 : -400}px)` })
+    S($.card, { transform: `translateY(${(1 - out3(p(t, 7.0, 0.5))) * 300}px)` })
+    S($.saveBtn, { transform: `scale(${1 - Math.sin(p(t, 8.4, 0.3) * Math.PI) * 0.06})` })
+    S($.savedBtn, { opacity: out3(p(t, 8.55, 0.3)) })
+
+    // 3: zoom out to the whole book; the other branches light up.
+    S($.zoom, { transform: `scale(${1.25 - 0.25 * inOut(p(t, 11.2, 1.2))})` })
+    S($.count, pop(t, 11.6))
+    for (const [i, [, , at]] of OTHERS.entries()) S($['o' + i], pop(t, at))
+    for (let i = 0; i < BRANCHES.length; i++) S($['b' + i], pop(t, 13.4 + i * 0.25))
+    S($.mine, { transform: `scale(${1 + Math.sin(clamp((t - 13.2) / 0.5) * Math.PI) * 0.25})` })
+    S($.card3, { transform: `translateY(${(1 - out3(p(t, 13.2, 0.5))) * 200}px)` })
+}
+</script>
+<script src="../video-kit.js"></script>
+</body>
+</html>

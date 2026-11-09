@@ -167,6 +167,46 @@ const jsonLd = [
             </div>
         </section>
 
+        <section class="wrap features" aria-labelledby="features-title">
+            <h2 id="features-title"><span class="hl">{s.featuresTitle}</span></h2>
+            {
+                s.features.map((f) => (
+                    <article class="how feature" id={f.id}>
+                        <div>
+                            <h3>{f.title}</h3>
+                            <p>{f.text}</p>
+                            <ol class="feature-steps">
+                                {f.steps.map(([title, text]) => (
+                                    <li>
+                                        <b>{title}.</b> {text}
+                                    </li>
+                                ))}
+                            </ol>
+                        </div>
+                        <!-- Made by `bun run video` (scripts/video/<id>.html). Silent: the steps beside it carry the same words. -->
+                        <video
+                            class="how-video"
+                            poster={`/video/${f.id}-${lang}.webp`}
+                            width="1080"
+                            height="1080"
+                            muted
+                            loop
+                            playsinline
+                            controls
+                            preload="none"
+                            aria-label={f.title}
+                        >
+                            <source
+                                src={`/video/${f.id}-${lang}.webm`}
+                                type='video/webm; codecs="av01.0.08M.08, opus"'
+                            />
+                            <source src={`/video/${f.id}-${lang}.mp4`} type="video/mp4" />
+                        </video>
+                    </article>
+                ))
+            }
+        </section>
+
         <section class="wrap honest">
             <h2>{s.honestTitle}</h2>
             <p class="honest-lead">{s.honestLead}</p>
@@ -588,6 +628,36 @@ const jsonLd = [
         margin-top: 0.85rem;
         max-width: 32em;
         color: var(--ink-soft);
+    }
+
+    .features {
+        padding-block: clamp(3rem, 7vw, 5rem) 0;
+        padding-left: var(--page-indent);
+    }
+    .features h2 {
+        font-size: var(--step-3);
+    }
+    .feature {
+        padding-top: 1.35rem;
+        border-top: 1.5px solid var(--ink);
+    }
+    .feature h3 {
+        font-size: var(--step-2);
+    }
+    .feature p {
+        margin-top: 0.85rem;
+        max-width: 32em;
+        color: var(--ink-soft);
+    }
+    .feature-steps {
+        display: grid;
+        gap: 0.6rem;
+        margin: 1.25rem 0 0;
+        padding-left: 1.4rem;
+        color: var(--ink-soft);
+    }
+    .feature-steps b {
+        color: var(--ink);
     }
 
     .honest {
