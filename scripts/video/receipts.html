@@ -1,0 +1,124 @@
+<!doctype html>
+<!-- Feature video: snap a receipt, check what was read, see the month's spending. Frame and clock: ../video-kit.js. -->
+<html>
+<head>
+<meta charset="utf-8" />
+<link href="https://fonts.googleapis.com/css2?family=Kalam:wght@400;700&family=Familjen+Grotesk:wght@400;500;600;700&display=block" rel="stylesheet" />
+<link rel="stylesheet" href="../video-kit.css" />
+<style>
+    .cam { background: #141614; }
+    .paper { position: absolute; left: 58px; top: 120px; width: 260px; padding: 20px 18px 26px; background: #fbfbf7; color: #222;
+        font: 13px/1.55 ui-monospace, Menlo, monospace; box-shadow: 0 10px 30px rgba(0,0,0,.5); transform: rotate(-2deg); }
+    .paper .c { text-align: center; }
+    .paper .r { display: flex; justify-content: space-between; }
+    .paper hr { border: 0; border-top: 1px dashed #999; margin: 8px 0; }
+    .frame { position: absolute; left: 34px; top: 96px; width: 308px; height: 520px; }
+    .frame i { position: absolute; width: 36px; height: 36px; border: 4px solid #fff; }
+    .shutter { position: absolute; left: 50%; top: 700px; width: 84px; height: 84px; margin-left: -42px; border-radius: 50%; border: 5px solid #fff; padding: 5px; }
+    .shutter div { width: 100%; height: 100%; border-radius: 50%; background: #fff; }
+    .flash { position: absolute; inset: 0; background: #fff; z-index: 4; }
+
+    .h { position: absolute; left: 66px; right: 18px; top: 122px; font-size: 18px; font-weight: 600; color: var(--pandan-deep); display: flex; gap: 10px; align-items: center; }
+    .help { position: absolute; left: 66px; right: 18px; top: 160px; font-size: 15px; color: var(--ink-soft); line-height: 1.35; }
+    .field { position: absolute; left: 66px; right: 18px; }
+    .field small { display: block; font-size: 13px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--pandan); }
+    .field b { display: block; font-size: 21px; margin-top: 2px; }
+    .item { position: absolute; left: 66px; right: 18px; display: flex; justify-content: space-between; font-size: 17px; }
+
+    .big { position: absolute; left: 66px; top: 130px; }
+    .big small { font-size: 15px; color: var(--ink-soft); font-weight: 600; }
+    .big b { display: block; font-size: 44px; letter-spacing: -0.02em; font-feature-settings: 'tnum'; }
+    .bars { position: absolute; left: 66px; right: 22px; top: 250px; height: 200px; display: flex; align-items: flex-end; gap: 14px; }
+    .bars div { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 6px; height: 100%; justify-content: flex-end; font-size: 13px; color: var(--ink-soft); }
+    .bars i { width: 100%; border-radius: 6px 6px 2px 2px; background: #b9cfae; transform-origin: bottom; }
+    .bars div:last-child i { background: var(--pandan); }
+    .top3 { position: absolute; left: 66px; right: 18px; }
+    .top3 b { font-size: 18px; } .top3 small { display: block; font-size: 14px; color: var(--ink-soft); }
+    .only { position: absolute; left: 66px; top: 730px; font-size: 15px; color: var(--ink-soft); font-weight: 600; }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script>
+const DURATION = 20, POSTER = 9.2
+const CUES = [
+    { t: 0.3, kind: 'whoosh', dur: 0.8 }, { t: 0.6, kind: 'marker', dur: 0.55 },
+    { t: 4.4, kind: 'tap' }, { t: 4.45, kind: 'thud' },
+    { t: 6.2, kind: 'whoosh', dur: 0.55 }, { t: 7.7, kind: 'chime' },
+    { t: 7.9, kind: 'pencil', dur: 0.4 }, { t: 8.2, kind: 'pencil', dur: 0.4 }, { t: 8.5, kind: 'pencil', dur: 0.4 }, { t: 8.8, kind: 'pencil', dur: 0.6 },
+    { t: 9.9, kind: 'tap' }, { t: 10.1, kind: 'pop', pitch: 1046.5 },
+    { t: 11.0, kind: 'whoosh', dur: 0.55 }, ...[11.7, 11.85, 12.0, 12.15, 12.3, 12.45].map((t, i) => ({ t, kind: 'pop', pitch: 523.25 * 2 ** (i / 6) })),
+    { t: 13.4, kind: 'marker', dur: 0.4 }, { t: 13.8, kind: 'marker', dur: 0.4 },
+    { t: 16.6, kind: 'whoosh', dur: 0.7 }, { t: 17.0, kind: 'chord' },
+]
+const V = {
+    ms: { reading: 'Membaca resit…', check: 'Kami baca, anda semak. Tiada yang dikira sehingga anda simpan.', place: 'Tempat', date: 'Tarikh dan masa',
+        dateVal: '8 Nov 2026, 1:42 ptg', total: 'Jumlah (RM)', save: 'Simpan', saved: 'Disimpan. Foto dipadam; nombor kekal.',
+        month: 'Belanja makan, November', months: ['Jun', 'Jul', 'Ogo', 'Sep', 'Okt', 'Nov'], visits: 'lawatan', only: '🔒 Hanya anda yang nampak ini' },
+    en: { reading: 'Reading the receipt…', check: 'We read, you check. Nothing counts until you save.', place: 'Place', date: 'Date and time',
+        dateVal: '8 Nov 2026, 1:42 pm', total: 'Total (RM)', save: 'Save', saved: 'Saved. The photo is deleted; the numbers stay.',
+        month: 'Eating out, November', months: ['Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov'], visits: 'visits', only: '🔒 Only you see this' },
+}
+const SHOP = 'Restoran Selera Kampung'
+const ITEMS = [['2 Nasi campur', '19.00'], ['2 Teh o ais', '5.60'], ['1 Ayam goreng', '7.50']]
+const BARS = [0.55, 0.7, 0.48, 0.82, 0.64, 0.9]
+const TOP = [[SHOP, 4], ['Nasi Kerabu Kak Yah', 3], ['Warung Mak Teh', 2]]
+
+const screens = (d, v) => `
+    <div class="scr cam" id="s1">
+        <div class="paper"><div class="c"><b>${SHOP.toUpperCase()}</b><br>No 12, Jalan Besar<br>43000 Kajang</div><hr>
+            <div class="r"><span>08/11/2026</span><span>13:42</span></div><hr>
+            ${ITEMS.map(([n, a]) => `<div class="r"><span>${n}</span><span>${a}</span></div>`).join('')}<hr>
+            <div class="r"><b>JUMLAH</b><b>32.10</b></div><div class="c" style="margin-top:10px">TERIMA KASIH</div></div>
+        <div class="frame"><i style="left:0;top:0;border-width:4px 0 0 4px"></i><i style="right:0;top:0;border-width:4px 4px 0 0"></i>
+            <i style="left:0;bottom:0;border-width:0 0 4px 4px"></i><i style="right:0;bottom:0;border-width:0 4px 4px 0"></i></div>
+        <div class="shutter" id="shutter"><div></div></div><div class="flash" id="flash"></div>
+    </div>
+    <div class="scr app-scr" id="s2">
+        <div class="top"><span class="mk">${d.logo}</span><b>bukuresipi</b></div>
+        <div class="h" id="status"></div><div class="help" id="help">${v.check}</div>
+        <div class="field" id="f0" style="top:236px"><small>${v.place}</small><b>${SHOP}</b></div>
+        <div class="field" id="f1" style="top:306px"><small>${v.date}</small><b>${v.dateVal}</b></div>
+        <div class="field" id="f2" style="top:376px"><small>${v.total}</small><b>32.10</b></div>
+        ${ITEMS.map(([n, a], i) => `<div class="item" id="i${i}" style="top:${460 + i * 40}px"><span>${n}</span><span>${a}</span></div>`).join('')}
+        <div class="btn" id="saveBtn" style="top:640px">${v.save}</div>
+        <div class="snack" id="snack">${v.saved}</div>
+    </div>
+    <div class="scr app-scr" id="s3">
+        <div class="top"><span class="mk">${d.logo}</span><b>bukuresipi</b></div>
+        <div class="big"><small>${v.month}</small><b id="sum">RM 0.00</b></div>
+        <div class="bars">${BARS.map((h, i) => `<div><i id="bar${i}" style="height:${h * 85}%"></i>${v.months[i]}</div>`).join('')}</div>
+        ${TOP.map(([n, c], i) => `<div class="top3" id="t${i}" style="top:${490 + i * 64}px"><b>${i + 1}. ${n}</b><small>${c} ${v.visits}</small></div>`).join('')}
+        <div class="only" id="only">${v.only}</div>
+    </div>`
+
+const FINGER = [
+    [{ t: 3.4, x: 240, y: 900 }, { t: 4.4, x: 188, y: 742 }, { t: 5.0, x: 188, y: 742 }],
+    [{ t: 9.1, x: 260, y: 800 }, { t: 9.9, x: 200, y: 667 }, { t: 10.5, x: 200, y: 667 }],
+]
+const TAPS = [4.4, 9.9]
+
+function scene(t) {
+    // 1: the receipt in the viewfinder, the shutter, a flash.
+    S($.shutter, { transform: `scale(${1 - Math.sin(p(t, 4.4, 0.3) * Math.PI) * 0.12})` })
+    $.flash.style.opacity = t < 4.45 ? 0 : 1 - out3(p(t, 4.45, 0.6))
+
+    // 2: reading, then each field written in; Save; the snackbar.
+    const done = t >= 7.7
+    $.status.innerHTML = done ? '' : `<span class="spin" style="transform:rotate(${t * 400}deg)"></span>${$.v.reading}`
+    $.help.style.opacity = out3(p(t, 7.7, 0.4))
+    for (let i = 0; i < 3; i++) $['f' + i].style.clipPath = write(t, 7.9 + i * 0.3, 0.4)
+    for (let i = 0; i < 3; i++) $['i' + i].style.clipPath = write(t, 8.8 + i * 0.15, 0.4)
+    S($.saveBtn, { opacity: out3(p(t, 9.0, 0.3)), transform: `scale(${1 - Math.sin(p(t, 9.9, 0.3) * Math.PI) * 0.06})` })
+    S($.snack, { opacity: out3(p(t, 10.1, 0.3)), transform: `translateY(${(1 - out3(p(t, 10.1, 0.3))) * 30}px)` })
+
+    // 3: the months grow, the total counts up, the places most visited.
+    for (let i = 0; i < BARS.length; i++) $['bar' + i].style.transform = `scaleY(${out3(p(t, 11.7 + i * 0.15, 0.5))})`
+    $.sum.textContent = `RM ${(486.4 * out3(p(t, 11.7, 1.4))).toFixed(2)}`
+    for (let i = 0; i < TOP.length; i++) { const s = shown(t, 13.4 + i * 0.4, 0.5, 99, 1); S($['t' + i], { opacity: s.o, transform: `translateY(${s.y / 2}px)` }) }
+    $.only.style.opacity = out3(p(t, 14.8, 0.5))
+}
+</script>
+<script src="../video-kit.js"></script>
+</body>
+</html>
