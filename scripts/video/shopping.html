@@ -1,0 +1,116 @@
+<!doctype html>
+<!-- Feature video: a recipe to the shopping list, tick while shopping, a new badge. Frame and clock: ../video-kit.js. -->
+<html>
+<head>
+<meta charset="utf-8" />
+<link href="https://fonts.googleapis.com/css2?family=Kalam:wght@400;700&family=Familjen+Grotesk:wght@400;500;600;700&display=block" rel="stylesheet" />
+<link rel="stylesheet" href="../video-kit.css" />
+<style>
+    .dish { position: absolute; left: 66px; top: 128px; font-family: var(--hand); font-weight: 700; font-size: 32px; }
+    .lbl { position: absolute; left: 66px; top: 214px; font-size: 14px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--pandan); }
+    .row { position: absolute; left: 66px; right: 16px; font-size: 19px; line-height: 40px; white-space: nowrap; }
+    .h3 { position: absolute; left: 66px; top: 124px; font-size: 26px; font-weight: 700; }
+    .it { position: absolute; left: 66px; right: 16px; display: flex; gap: 14px; align-items: flex-start; }
+    .box { width: 26px; height: 26px; border-radius: 6px; border: 2.5px solid var(--ink-soft); flex: none; margin-top: 2px; display: grid; place-items: center; color: #fff; font-size: 16px; font-weight: 700; }
+    .it b { font-size: 19px; position: relative; } .it small { display: block; font-size: 14px; color: var(--ink-soft); }
+    .it s { position: absolute; left: 0; top: 50%; height: 2px; width: 100%; background: var(--ink-soft); transform-origin: left; transform: scaleX(0); }
+    /* The badge art has a white background: multiply drops it on the paper. */
+    img { mix-blend-mode: multiply; }
+    .clear { position: absolute; left: 66px; top: 560px; font-size: 17px; font-weight: 700; color: var(--pandan); }
+    .grid { position: absolute; left: 62px; right: 14px; top: 180px; display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .bc { height: 150px; border-radius: 14px; border: 1px solid var(--line); background: var(--paper-raised); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; font-size: 14px; font-weight: 700; }
+    .bc i { width: 76px; height: 76px; border-radius: 50%; background: #e3e0d6; }
+    .bc img { width: 84px; height: 84px; }
+    .new { text-align: center; }
+    .new h4 { font-size: 30px; font-weight: 800; }
+    .new img { width: 200px; height: 200px; display: block; margin: 8px auto; }
+    .new b { font-size: 19px; }
+    .new .ok { position: relative; margin-top: 18px; height: 54px; border-radius: 27px; background: var(--pandan); color: #fff; display: grid; place-items: center; font-size: 19px; font-weight: 700; }
+    .dim { position: absolute; inset: 0; background: rgba(28,42,32,.45); z-index: 5; }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script>
+const DURATION = 20, POSTER = 12.6
+const CUES = [
+    { t: 0.3, kind: 'whoosh', dur: 0.8 }, { t: 0.6, kind: 'marker', dur: 0.55 },
+    { t: 4.0, kind: 'tap' }, { t: 4.2, kind: 'pop', pitch: 1046.5 },
+    { t: 6.2, kind: 'whoosh', dur: 0.55 }, { t: 7.4, kind: 'tap' }, { t: 7.5, kind: 'pencil', dur: 0.3 }, { t: 8.2, kind: 'tap' }, { t: 8.3, kind: 'pencil', dur: 0.3 },
+    { t: 9.4, kind: 'tap' }, { t: 9.6, kind: 'whoosh', dur: 0.4 },
+    { t: 11.0, kind: 'whoosh', dur: 0.55 }, { t: 11.6, kind: 'whoosh', dur: 0.4 }, { t: 11.9, kind: 'chord' },
+    { t: 14.2, kind: 'tap' }, { t: 14.4, kind: 'whoosh', dur: 0.4 }, { t: 15.0, kind: 'pop', pitch: 1046.5 },
+    { t: 16.6, kind: 'whoosh', dur: 0.7 }, { t: 17.0, kind: 'chord' },
+]
+const V = {
+    ms: { book: 'Bahan', add: 'Tambah ke senarai', added: '4 barang ditambah ke senarai belanja', list: 'Senarai belanja', for: 'Untuk',
+        clear: 'Buang barang yang sudah dibeli', badges: 'Lencana', earned: '1 daripada 30 diperoleh', new: 'Lencana baru!', badge: 'Tukang Masak · Gangsa', nice: 'Hebat!',
+        names: ['Tukang Masak', 'Peneroka', 'Pengembara', 'Pelanggan Setia', 'Pengulas', 'Penyumbang'] },
+    en: { book: 'Ingredients', add: 'Add to list', added: '4 items added to your shopping list', list: 'Shopping list', for: 'For',
+        clear: 'Clear bought items', badges: 'Badges', earned: '1 of 30 earned', new: 'New badge!', badge: 'Cook · Bronze', nice: 'Nice!',
+        names: ['Cook', 'Explorer', 'Traveller', 'Regular', 'Critic', 'Helper'] },
+}
+const LINES = [['2 ekor', ' ayam, potong 12'], ['10 tangkai', ' cili kering'], ['3 sudu besar', ' sos tomato'], ['5 ulas', ' bawang merah']]
+// The list adds up the same ingredient from two recipes: 10 + 5 tangkai cili kering.
+const ITEMS = [['2 ekor ayam', 'Ayam masak merah'], ['15 tangkai cili kering', 'Ayam masak merah, Sambal tumis'], ['3 sudu besar sos tomato', 'Ayam masak merah'], ['5 ulas bawang merah', 'Ayam masak merah']]
+const TICKED = [[0, 7.4], [1, 8.2]]
+
+const screens = (d, v) => `
+    <div class="scr app-scr" id="s1">
+        <div class="top"><span class="mk">${d.logo}</span><b>bukuresipi</b></div>
+        <div class="dish">Ayam masak merah</div><div class="lbl">${v.book}</div>
+        ${LINES.map(([q, r], i) => `<div class="row" style="top:${240 + i * 40}px"><b>${q}</b>${r}</div>`).join('')}
+        <div class="btn" id="addBtn" style="top:440px">🛒 ${v.add}</div>
+        <div class="snack" id="snack">${v.added}</div>
+    </div>
+    <div class="scr app-scr" id="s2">
+        <div class="top"><span class="mk">${d.logo}</span><b>bukuresipi</b></div>
+        <div class="h3">${v.list}</div>
+        ${ITEMS.map(([n, f], i) => `<div class="it" id="it${i}" style="top:${184 + i * 84}px"><span class="box" id="bx${i}"></span><span><b>${n}<s id="st${i}"></s></b><small>${v.for} ${f}</small></span></div>`).join('')}
+        <div class="clear" id="clear">✕ ${v.clear}</div>
+    </div>
+    <div class="scr app-scr" id="s3">
+        <div class="top"><span class="mk">${d.logo}</span><b>bukuresipi</b></div>
+        <div class="h3">${v.badges}<div style="font-size:15px;color:var(--ink-soft);font-weight:600">${v.earned}</div></div>
+        <div class="grid">${v.names.map((n, i) => `<div class="bc">${i ? '<i></i>' : '<img src="cook-bronze.png" alt="">'}${n}</div>`).join('')}</div>
+        <div class="dim" id="dim"></div>
+        <div class="sheet new" id="sheet"><div class="grab"></div><h4>${v.new}</h4><img id="medal" src="cook-bronze.png" alt=""><b>${v.badge}</b>
+            <div class="ok" id="okBtn">${v.nice}</div></div>
+    </div>`
+
+const FINGER = [
+    [{ t: 3.2, x: 240, y: 760 }, { t: 4.0, x: 200, y: 467 }, { t: 4.6, x: 200, y: 467 }],
+    [{ t: 6.9, x: 240, y: 760 }, { t: 7.4, x: 79, y: 199 }, { t: 7.8, x: 79, y: 199 }, { t: 8.2, x: 79, y: 283 }, { t: 8.8, x: 140, y: 570 }, { t: 9.4, x: 140, y: 570 }, { t: 9.9, x: 200, y: 760 }],
+    [{ t: 13.6, x: 260, y: 900 }, { t: 14.2, x: 188, y: 780 }, { t: 14.7, x: 188, y: 780 }],
+]
+const TAPS = [4.0, 7.4, 8.2, 9.4, 14.2]
+
+function scene(t) {
+    // 1: Add to list, the snackbar says how many.
+    S($.addBtn, { transform: `scale(${1 - Math.sin(p(t, 4.0, 0.3) * Math.PI) * 0.06})` })
+    S($.snack, { opacity: out3(p(t, 4.2, 0.3)), transform: `translateY(${(1 - out3(p(t, 4.2, 0.3))) * 30}px)` })
+
+    // 2: tick two, struck through; Clear takes them off and the rest move up.
+    for (const [i, at] of TICKED) {
+        const on = t >= at
+        S($['bx' + i], { background: on ? 'var(--pandan)' : '', borderColor: on ? 'var(--pandan)' : '' })
+        $['bx' + i].textContent = on ? '✓' : ''
+        $['st' + i].style.transform = `scaleX(${out3(p(t, at + 0.05, 0.3))})`
+        $['it' + i].style.opacity = (on ? 0.55 : 1) * (1 - out3(p(t, 9.6, 0.35)))
+    }
+    const up = out3(p(t, 9.8, 0.4)) * 168
+    for (const i of [2, 3]) $['it' + i].style.transform = `translateY(${-up}px)`
+    S($.clear, { opacity: 1 - out3(p(t, 9.6, 0.35)) })
+
+    // 3: the "New badge!" sheet, the medal popping in; Nice! shows the badges page.
+    const sheet = out3(p(t, 11.6, 0.45)) - inOut(p(t, 14.4, 0.4))
+    S($.sheet, { transform: `translateY(${(1 - sheet) * 520}px)` })
+    $.dim.style.opacity = sheet
+    const m = p(t, 11.9, 0.9)
+    $.medal.style.transform = `scale(${m > 0 ? 0.4 + 0.6 * (1 - Math.pow(2, -10 * m) * Math.cos(m * 10)) : 0.4})`
+    S($.okBtn, { transform: `scale(${1 - Math.sin(p(t, 14.2, 0.3) * Math.PI) * 0.06})` })
+}
+</script>
+<script src="../video-kit.js"></script>
+</body>
+</html>

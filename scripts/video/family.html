@@ -1,0 +1,112 @@
+<!doctype html>
+<!-- Feature video: start a family, send the invite, they join, their places show on your map. Frame: ../video-kit.js. -->
+<html>
+<head>
+<meta charset="utf-8" />
+<link href="https://fonts.googleapis.com/css2?family=Kalam:wght@400;700&family=Familjen+Grotesk:wght@400;500;600;700&display=block" rel="stylesheet" />
+<link rel="stylesheet" href="../video-kit.css" />
+<style>
+    .fam { position: absolute; left: 66px; right: 18px; top: 126px; }
+    .fam h3 { font-family: var(--hand); font-size: 34px; line-height: 1.1; }
+    .fam small { font-size: 16px; color: var(--ink-soft); font-weight: 600; }
+    .mem { position: absolute; left: 66px; right: 18px; display: flex; align-items: center; gap: 14px; font-size: 19px; }
+    .mem small { display: block; font-size: 14px; color: var(--ink-soft); }
+    .av { width: 48px; height: 48px; border-radius: 50%; display: grid; place-items: center; color: #fff; font-weight: 700; font-size: 20px; flex: none;
+        border: 3px solid #fff; box-shadow: 0 2px 6px rgba(0,0,0,.2); }
+    .opt { display: flex; align-items: center; gap: 14px; padding: 14px 4px; font-size: 18px; font-weight: 600; }
+    .opt i { width: 44px; height: 44px; border-radius: 50%; display: grid; place-items: center; color: #fff; font-style: normal; font-size: 20px; }
+    .chat { background: #e9e2d6; }
+    .bubble { position: absolute; right: 14px; top: 330px; width: 270px; padding: 12px 14px 8px; border-radius: 14px 14px 4px 14px; background: #d6f5c4;
+        font-size: 16px; line-height: 1.35; box-shadow: 0 1px 2px rgba(0,0,0,.15); }
+    .bubble u { color: #2a6db0; text-decoration: none; }
+    .bubble small { display: block; text-align: right; font-size: 12px; color: #5a8a6a; }
+    .banner { position: absolute; left: 12px; right: 12px; top: 52px; padding: 14px 16px; border-radius: 16px; background: var(--paper-raised);
+        box-shadow: 0 10px 24px -10px rgba(28,42,32,.5); font-size: 15px; line-height: 1.3; z-index: 5; display: flex; gap: 12px; align-items: center; }
+    .face { position: absolute; width: 0; height: 0; }
+    .face .av { position: absolute; left: -26px; top: -60px; width: 52px; height: 52px; }
+    .face::after { content: ""; position: absolute; left: -7px; top: -12px; border: 7px solid transparent; border-top: 10px solid #fff; }
+    .card h5 { font-size: 22px; } .card .by { display: flex; align-items: center; gap: 10px; margin-top: 10px; font-size: 16px; color: var(--ink-soft); }
+    .card .by .av { width: 32px; height: 32px; font-size: 14px; border-width: 2px; }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script>
+const DURATION = 20, POSTER = 14.6
+const CUES = [
+    { t: 0.3, kind: 'whoosh', dur: 0.8 }, { t: 0.6, kind: 'marker', dur: 0.55 },
+    { t: 2.8, kind: 'tap' }, { t: 3.0, kind: 'whoosh', dur: 0.4 }, { t: 4.2, kind: 'tap' }, { t: 4.6, kind: 'whoosh', dur: 0.4 }, { t: 5.0, kind: 'pop', pitch: 880 },
+    { t: 6.2, kind: 'whoosh', dur: 0.55 }, { t: 7.2, kind: 'chime' }, { t: 7.3, kind: 'pop', pitch: 784 }, { t: 8.6, kind: 'chime' }, { t: 8.7, kind: 'pop', pitch: 1046.5 },
+    { t: 11.0, kind: 'whoosh', dur: 0.55 }, { t: 11.9, kind: 'pop', pitch: 784 }, { t: 12.2, kind: 'pop', pitch: 880 }, { t: 12.5, kind: 'pop', pitch: 1046.5 },
+    { t: 13.4, kind: 'whoosh', dur: 0.5 },
+    { t: 16.6, kind: 'whoosh', dur: 0.7 }, { t: 17.0, kind: 'chord' },
+]
+const V = {
+    ms: { family: 'Keluarga kami', count: n => `${n} daripada 3 orang`, you: 'Anda', owner: 'Pemilik', invite: 'Jemput', whatsapp: 'Hantar di WhatsApp',
+        copy: 'Salin pautan', until: 'Pautan sah hingga 15 Nov', msg: 'Sertai keluarga saya di Bukuresipi:', joined: n => `<b>${n}</b> menyertai Keluarga kami`,
+        member: 'Ahli', savedBy: n => `Disimpan oleh ${n}` },
+    en: { family: 'Our family', count: n => `${n} of 3 people`, you: 'You', owner: 'Owner', invite: 'Invite', whatsapp: 'Send on WhatsApp',
+        copy: 'Copy link', until: 'Link valid until 15 Nov', msg: 'Join my family on Bukuresipi:', joined: n => `<b>${n}</b> joined Our family`,
+        member: 'Member', savedBy: n => `Saved by ${n}` },
+}
+// Initials in a colour: the app shows each person's photo here.
+const PEOPLE = [['H', '#2f6b3b'], ['Aisyah', '#c46a2f'], ['Ali', '#3a6fb0']]
+const av = ([n, c]) => `<span class="av" style="background:${c}">${n[0]}</span>`
+const FACES = [[0, 110, 260, 11.9], [1, 270, 190, 12.2], [2, 240, 520, 12.5], [1, 188, 380, 12.8]]
+
+const screens = (d, v) => `
+    <div class="scr app-scr" id="s1">
+        <div class="top"><span class="mk">${d.logo}</span><b>bukuresipi</b></div>
+        <div class="fam"><h3>${v.family}</h3><small>${v.count(1)}</small></div>
+        <div class="mem" style="top:226px">${av(PEOPLE[0])}<span>${v.you}<small>${v.owner}</small></span></div>
+        <div class="btn" id="inviteBtn" style="top:320px">${v.invite}</div>
+        <div class="sheet" id="sheet"><div class="grab"></div>
+            <div class="opt" id="wa"><i style="background:#25a35a">✆</i>${v.whatsapp}</div>
+            <div class="opt"><i style="background:#8a8f8b">⧉</i>${v.copy}</div>
+            <div style="font-size:14px;color:var(--ink-soft);margin-top:6px">${v.until}</div></div>
+        <div class="scr chat" id="chat"><div class="bubble" id="bubble">${v.msg} <u>bukuresipi.com/family/join?t=…</u><small>13:05 ✓✓</small></div></div>
+    </div>
+    <div class="scr app-scr" id="s2">
+        <div class="top"><span class="mk">${d.logo}</span><b>bukuresipi</b></div>
+        <div class="fam"><h3>${v.family}</h3><small id="count"></small></div>
+        ${PEOPLE.map((x, i) => `<div class="mem" id="m${i}" style="top:${226 + i * 76}px">${av(x)}<span>${i ? x[0] : v.you}<small>${i ? v.member : v.owner}</small></span></div>`).join('')}
+        <div class="banner" id="banner1">${av(PEOPLE[1])}<span>${v.joined(PEOPLE[1][0])}</span></div>
+        <div class="banner" id="banner2">${av(PEOPLE[2])}<span>${v.joined(PEOPLE[2][0])}</span></div>
+    </div>
+    <div class="scr map" id="s3">${ICON.city}
+        ${FACES.map(([w, x, y], i) => `<div class="face" id="fc${i}" style="left:${x}px;top:${y}px">${av(PEOPLE[w])}</div>`).join('')}
+        <div class="card sheet" id="card"><div class="grab"></div><h5>Laksa Johor Mak Su</h5>
+            <div class="by">${av(PEOPLE[1])}${v.savedBy(PEOPLE[1][0])}</div></div>
+    </div>`
+
+const FINGER = [
+    [{ t: 2.0, x: 230, y: 700 }, { t: 2.8, x: 200, y: 347 }, { t: 3.4, x: 200, y: 347 }, { t: 4.2, x: 150, y: 672 }, { t: 4.7, x: 150, y: 672 }],
+    [{ t: 13.0, x: 260, y: 640 }, { t: 13.4, x: 188, y: 360 }, { t: 13.9, x: 188, y: 360 }],
+]
+const TAPS = [2.8, 4.2, 13.4]
+
+function scene(t) {
+    // 1: Invite -> the share sheet -> the link sent in a chat.
+    S($.inviteBtn, { transform: `scale(${1 - Math.sin(p(t, 2.8, 0.3) * Math.PI) * 0.06})` })
+    S($.sheet, { transform: `translateY(${(1 - out3(p(t, 3.0, 0.45))) * 300}px)` })
+    $.wa.style.background = t >= 4.2 ? 'var(--pandan-mist)' : ''
+    S($.chat, { transform: `translateX(${(1 - inOut(p(t, 4.6, 0.5))) * 100}%)` })
+    S($.bubble, pop(t, 5.0))
+
+    // 2: they join, one after the other.
+    const n = t < 7.2 ? 1 : t < 8.6 ? 2 : 3
+    $.count.textContent = $.v.count(n)
+    for (const [i, at] of [[1, 7.3], [2, 8.7]]) S($['m' + i], { opacity: out3(p(t, at, 0.4)), transform: `translateX(${(1 - out3(p(t, at, 0.4))) * 40}px)` })
+    for (const [id, at] of [['banner1', 7.2], ['banner2', 8.6]]) {
+        const s = shown(t, at, 0.4, at + 1.1, 0.3)
+        S($[id], { opacity: s.o, transform: `translateY(${-Math.abs(s.y) * 2}px)` })
+    }
+
+    // 3: everyone's places on your map, each with the face of who saved it; tap one.
+    for (const [i, [, , , at]] of FACES.entries()) S($['fc' + i], pop(t, at))
+    S($.card, { transform: `translateY(${(1 - out3(p(t, 13.6, 0.5))) * 220}px)` })
+}
+</script>
+<script src="../video-kit.js"></script>
+</body>
+</html>

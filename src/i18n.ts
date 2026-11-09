@@ -50,6 +50,50 @@ const ms = {
         mapTitle: 'Peta makan',
         mapText:
             'Setiap kedai yang anda simpan muncul di peta. Bukuresipi cari cawangannya sekali, jadi anda tahu yang mana paling dekat.',
+        featuresTitle: 'Lagi dalam Bukuresipi',
+        // One video per feature (scripts/video/<id>.html, `bun run video`): the steps are its captions too.
+        features: [
+            {
+                id: 'map',
+                title: 'Cari kedai berdekatan',
+                text: 'Cari kedai makan di peta, simpan ke buku anda, dan nampak cawangannya sekali.',
+                steps: [
+                    ['Cari', 'Taip nama makanan atau kedai. Yang paling dekat ditunjuk dahulu.'],
+                    ['Simpan', 'Ketik kedai itu dan simpan ke buku anda. Pinnya datang dari peta.'],
+                    ['Peta anda', 'Semua kedai simpanan di satu peta, berserta cawangan lain yang dijumpai.'],
+                ],
+            },
+            {
+                id: 'receipts',
+                title: 'Resit jadi rekod',
+                text: 'Ambil gambar resit kedai makan. Bukuresipi baca kedai, tarikh dan jumlahnya; anda semak, kemudian simpan.',
+                steps: [
+                    ['Ambil gambar', 'Tekan + dan pilih Resit. Satu gambar sudah cukup.'],
+                    ['Semak', 'Kedai, tarikh, jumlah dan item dibaca untuk anda. Tiada yang dikira sehingga anda simpan, dan gambarnya dipadam.'],
+                    ['Perbelanjaan', 'Lihat belanja makan setiap bulan dan kedai yang paling kerap. Hanya anda yang nampak.'],
+                ],
+            },
+            {
+                id: 'family',
+                title: 'Satu buku sekeluarga',
+                text: 'Kedai yang disimpan oleh sesiapa dalam keluarga muncul dalam buku dan peta semua.',
+                steps: [
+                    ['Jemput', 'Mulakan keluarga dan hantar pautan jemputan di WhatsApp. Pautan sah 7 hari.'],
+                    ['Sertai', 'Mereka buka pautan dan sertai. Satu keluarga sehingga 3 orang.'],
+                    ['Berkongsi', 'Kedai mereka muncul di peta anda dengan wajah yang menyimpannya. Pilih "Hanya saya" untuk yang peribadi.'],
+                ],
+            },
+            {
+                id: 'shopping',
+                title: 'Senarai belanja dan lencana',
+                text: 'Bahan resipi terus ke senarai belanja, dan lencana dikumpul sambil anda menggunakan Bukuresipi.',
+                steps: [
+                    ['Tambah', 'Di halaman resipi, tekan Tambah ke senarai. Bahan yang sama dari resipi lain dijumlahkan.'],
+                    ['Tanda', 'Tanda barang semasa membeli, kemudian buang yang sudah dibeli sekali gus.'],
+                    ['Lencana', 'Simpan kedai, resipi dan resit untuk naik dari Gangsa hingga Berlian. Hanya anda yang melihatnya.'],
+                ],
+            },
+        ],
         honestTitle: 'Tiada yang direka.',
         honestLead:
             'Setiap bahan, langkah dan nama kedai mesti datang daripada hantaran itu. Kalau video tak sebut sukatan, Bukuresipi tulis "tidak disebut", bukan meneka.',
@@ -390,6 +434,49 @@ const en: typeof ms = {
             'Quantities are kept as written: "a small handful" stays a small handful. Steps stay in order, and ingredients are matched to a catalogue so allergens like nuts or milk are marked.',
         mapTitle: 'Food map',
         mapText: 'Every place you save shows up on your map. Bukuresipi finds its other branches too, so you know which one is closest.',
+        featuresTitle: 'More in Bukuresipi',
+        features: [
+            {
+                id: 'map',
+                title: 'Find places nearby',
+                text: 'Search the map for places to eat, save one to your book, and see its other branches too.',
+                steps: [
+                    ['Search', 'Type a dish or a shop name. The nearest come first.'],
+                    ['Save', 'Tap the place and save it to your book. Its pin comes from the map.'],
+                    ['Your map', 'Every place you saved on one map, with the other branches we found.'],
+                ],
+            },
+            {
+                id: 'receipts',
+                title: 'Receipts become a record',
+                text: 'Snap a restaurant receipt. Bukuresipi reads the shop, date and total; you check, then save.',
+                steps: [
+                    ['Snap', 'Tap + and pick Receipt. One photo is enough.'],
+                    ['Check', 'The shop, date, total and items are read for you. Nothing counts until you save, and the photo is deleted.'],
+                    ['Spending', 'See what you spend eating out each month and where you go most. Only you see it.'],
+                ],
+            },
+            {
+                id: 'family',
+                title: 'One book for the family',
+                text: 'A place anyone in the family saves shows in everyone\'s book and map.',
+                steps: [
+                    ['Invite', 'Start a family and send the invite link on WhatsApp. The link lasts 7 days.'],
+                    ['Join', 'They open the link and join. A family has up to 3 people.'],
+                    ['Share', 'Their places show on your map with the face of who saved them. Pick "Only me" for the private ones.'],
+                ],
+            },
+            {
+                id: 'shopping',
+                title: 'Shopping list and badges',
+                text: 'A recipe\'s ingredients go straight to your shopping list, and you collect badges as you use Bukuresipi.',
+                steps: [
+                    ['Add', 'On a recipe, tap Add to list. The same ingredient from other recipes is added up.'],
+                    ['Tick', 'Tick items off as you shop, then clear the bought ones in one go.'],
+                    ['Badges', 'Save places, recipes and receipts to climb from Bronze to Diamond. Only you see them.'],
+                ],
+            },
+        ],
         honestTitle: 'Nothing made up.',
         honestLead:
             'Every ingredient, step and restaurant name has to come from the post. If the video never gives a quantity, Bukuresipi writes "not mentioned" instead of guessing.',
