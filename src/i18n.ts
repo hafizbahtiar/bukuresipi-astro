@@ -361,6 +361,14 @@ const ms = {
             done: 'Kata laluan disimpan. Log masuk di aplikasi dengan kata laluan baharu. Peranti lain telah dilog keluar.',
             again: 'Minta pautan baharu',
         },
+        undo: {
+            title: 'Bukan saya: batalkan pertukaran emel',
+            text: 'Pilih kata laluan baharu. Emel lama anda akan kembali ke akaun, dan semua peranti akan dilog keluar, termasuk sesiapa yang menukarnya.',
+            button: 'Batalkan dan simpan kata laluan',
+            weak: 'Gunakan 8 hingga 72 aksara, bukan ruang kosong sahaja.',
+            done: 'Selesai. Emel anda kembali ke akaun. Log masuk di aplikasi dengan emel ini dan kata laluan baharu.',
+            taken: 'Kata laluan disimpan dan semua peranti dilog keluar, tetapi emel lama anda kini digunakan akaun lain. Log masuk dengan {email} dan kata laluan baharu, kemudian tukar emel di aplikasi.',
+        },
         forgot: {
             title: 'Lupa kata laluan',
             text: 'Masukkan emel akaun anda. Kami akan hantar pautan untuk tetapkan kata laluan baharu.',
@@ -743,6 +751,14 @@ const en: typeof ms = {
             weak: 'Use 8 to 72 characters, not only spaces.',
             done: 'Password saved. Sign in to the app with your new password. Other devices have been signed out.',
             again: 'Ask for a new link',
+        },
+        undo: {
+            title: "This wasn't me: undo the email change",
+            text: 'Choose a new password. Your old email goes back on the account, and every device is signed out, including whoever changed it.',
+            button: 'Undo and save password',
+            weak: 'Use 8 to 72 characters, not only spaces.',
+            done: 'Done. Your email is back on the account. Sign in to the app with this email and your new password.',
+            taken: 'Password saved and every device signed out, but your old email is now used by another account. Sign in with {email} and your new password, then change the email in the app.',
         },
         forgot: {
             title: 'Forgot password',

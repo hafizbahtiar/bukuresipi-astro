@@ -6,16 +6,18 @@ import { type Lang, pathIn, t } from '../i18n'
 import Footer from './Footer.astro'
 import Header from './Header.astro'
 
-interface Props { lang: Lang; kind: 'verify' | 'reset' | 'forgot' | 'delete' }
+interface Props { lang: Lang; kind: 'verify' | 'reset' | 'forgot' | 'delete' | 'undo' }
 const { lang, kind } = Astro.props
 const a = t(lang).auth
 const k = a[kind]
-const path = `/auth/${kind}`
+// Undo lives outside /auth/ on purpose: the app opens /auth/* links, and this page is for the browser only.
+const path = kind === 'undo' ? '/account/undo-email' : `/auth/${kind}`
+const newPassword = kind === 'reset' || kind === 'undo'
 const messages = {
     missing: a.missing, expired: a.expired, rate: a.rate, network: a.network, working: a.working,
     done: k.done, weakPassword: 'weak' in k ? k.weak : '', invalid: 'invalid' in k ? k.invalid : '',
     mismatch: a.reset.mismatch, ...a.reset.levels,
-    confirm: a.delete.confirm, wrong: a.delete.wrong, owner: a.delete.owner,
+    confirm: a.delete.confirm, wrong: a.delete.wrong, owner: a.delete.owner, taken: 'taken' in k ? k.taken : '',
 }
 const rules = Object.entries(a.reset.rules)
 ---
@@ -27,7 +29,7 @@ const rules = Object.entries(a.reset.rules)
             <h1>{k.title}</h1>
             <p class="text">{k.text}</p>
             <form novalidate>
-                {kind === 'reset' && (
+                {newPassword && (
                     <label>
                         {a.reset.label}
                         <input type="password" name="password" autocomplete="new-password" maxlength="200" required aria-describedby="meter" />
@@ -115,11 +117,11 @@ const rules = Object.entries(a.reset.rules)
             const field = (name: string) => form.querySelector<HTMLInputElement>(`[name=${name}]`)!.value
             let route = '', body = {}
             if (kind === 'verify') { route = 'verify-email'; body = { token } }
-            if (kind === 'reset') {
+            if (kind === 'reset' || kind === 'undo') {
                 const password = field('password')
                 if (!checkPassword(password).length) return say(m.weakPassword, 'bad')
                 if (password !== field('confirm')) return say(m.mismatch, 'bad')
-                route = 'reset-password'; body = { token, password }
+                route = kind === 'reset' ? 'reset-password' : 'undo-email-change'; body = { token, password }
             }
             if (kind === 'forgot' || kind === 'delete') {
                 const email = field('email').trim()
@@ -141,7 +143,8 @@ const rules = Object.entries(a.reset.rules)
                 if (res.ok) {
                     form.hidden = true
                     if (after) after.hidden = true
-                    return say(m.done, 'ok')
+                    const undone = kind === 'undo' ? ((await res.json()) as { restored: boolean; email: string }) : null
+                    return say(undone && !undone.restored ? m.taken.replace('{email}', undone.email) : m.done, 'ok')
                 }
                 if (error === 'weak_password') return say(m.weakPassword, 'bad')
                 if (error === 'rate_limited') return say(m.rate, 'bad')
