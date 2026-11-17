@@ -106,11 +106,11 @@ const ms = {
         faqTitle: 'Soalan lazim',
         faq: [
             ['Apa yang boleh saya kongsi?', 'Pautan TikTok, Instagram, Facebook, YouTube, Google Maps dan laman web resipi, atau tangkap layar daripada mana-mana aplikasi.'],
-            ['Adakah maklumat halal disahkan?', 'Tidak. Bukuresipi menunjukkan apa yang kedai atau hantaran itu sendiri katakan, berserta sumbernya. Ia bukan pensijilan JAKIM, jadi semak logo halal di premis.'],
+            ['Adakah maklumat halal disahkan?', 'Bukuresipi menunjukkan dua perkara berasingan: apa yang kedai atau hantaran itu sendiri katakan, berserta sumbernya; dan, jika dijumpai, premis itu dalam direktori halal awam JAKIM, dengan tarikh tamat sijil dan pautan untuk semak sendiri. Kami bukan badan pensijilan, dan data boleh lapuk. Semak sijil halal yang dipamerkan di premis.'],
             ['Bagaimana kalau hantaran tak lengkap?', 'Resipi tetap disimpan, dan bahagian yang tiada ditanda dengan jelas supaya anda boleh lengkapkannya sendiri.'],
             ['Bila aplikasi dilancarkan?', 'Versi Android sedang diuji, dan butang Google Play di halaman ini akan aktif sebaik sahaja ia tersedia.'],
             ['Ada versi iPhone?', 'Belum buat masa ini. Versi iPhone memerlukan akaun pembangun Apple yang berbayar, jadi kami akan mulakan apabila ada penaja.'],
-            ['Bukuresipi percuma?', 'Ya. Aplikasi buku resipi ini percuma dan tiada iklan buat masa ini.'],
+            ['Bukuresipi percuma?', 'Ya. Aplikasi ini percuma, dan ada iklan di halaman Utama yang membantu menampung kosnya.'],
             ['Resipi atau resepi?', 'Kedua-duanya betul di sini. "Resipi" ejaan Dewan Bahasa, "resepi" ejaan yang ramai guna. Bukuresipi menyimpan apa sahaja resepi yang anda jumpa: lauk, kek, kuih, pencuci mulut atau minuman.'],
             ['Bahasa apa yang disokong?', 'Bahasa Melayu dan English. Resipi disimpan dalam bahasa asal hantaran.'],
         ],
@@ -141,7 +141,7 @@ const ms = {
         title: 'Terma Penggunaan - Bukuresipi',
         description: 'Peraturan menggunakan Bukuresipi: akaun, kandungan yang anda kongsi, ketepatan maklumat, dan tanggungjawab.',
         heading: 'Terma Penggunaan',
-        updated: 'Dikemas kini 6 November 2026',
+        updated: 'Dikemas kini 17 November 2026',
         intro: 'Bukuresipi dikendalikan oleh Hafiz Bahtiar di Malaysia. Dengan menggunakan aplikasi atau laman web ini, anda bersetuju dengan terma ini. Cara kami mengendalikan data anda diterangkan dalam Dasar Privasi.',
         sections: [
             {
@@ -174,13 +174,22 @@ const ms = {
                 title: 'Ketepatan maklumat', items: [
                     'Resipi dan butiran kedai dibaca secara automatik (AI) daripada siaran, dan boleh salah atau tidak lengkap. Semak sebelum memasak atau pergi.',
                     'Senarai alahan hanya meliputi bahan yang dikenal pasti. Tiada senarai bermakna "tidak diketahui", bukan "bebas alahan". Jika anda ada alahan, semak sendiri setiap bahan.',
-                    'Halal yang ditunjukkan ialah petikan daripada sumber, dengan pautannya. Ia bukan pensijilan halal (contohnya JAKIM). Sahkan dengan kedai.',
                     'Lokasi, alamat dan cawangan kedai boleh salah atau lapuk.',
                 ]
             },
             {
+                title: 'Maklumat halal (penafian)', items: [
+                    'Bukuresipi bukan badan pensijilan halal, dan tidak mengesahkan status halal mana-mana kedai atau makanan.',
+                    '"Kata halal" ialah petikan daripada hantaran atau laman kedai itu sendiri, dengan pautannya. Ia bukan pensijilan.',
+                    '"Halal JAKIM" bermaksud kami menjumpai premis itu dalam direktori halal awam JAKIM (halal.gov.my), dengan tarikh tamat sijilnya dan tarikh kami menyemaknya. Padanan dibuat secara automatik dan boleh salah, dan status sijil boleh berubah selepas kami menyemaknya.',
+                    'Sijil halal JAKIM diberi kepada setiap premis secara berasingan. Jenama yang ada premis bersijil tidak bermakna setiap cawangannya bersijil.',
+                    'Tiada maklumat halal tidak bermakna kedai itu tidak halal: mungkin kami tidak menjumpainya.',
+                    'Sebelum bergantung padanya, semak di pautan JAKIM dan sijil yang dipamerkan di premis.',
+                ]
+            },
+            {
                 title: 'Perkhidmatan', items: [
-                    'Bukuresipi percuma buat masa ini. Kami mungkin menunjukkan iklan atau menawarkan pelan berbayar pada masa hadapan, dan akan memaklumkannya terlebih dahulu.',
+                    'Bukuresipi percuma. Aplikasi menunjukkan iklan di halaman Utama, ditanda "Iklan", untuk menampung kos. Kami mungkin menawarkan pelan berbayar tanpa iklan pada masa hadapan.',
                     'Kami boleh menukar, menghadkan atau menghentikan ciri. Ada had harian (contohnya bilangan kongsian sehari).',
                 ]
             },
@@ -213,8 +222,8 @@ const ms = {
         title: 'Dasar Privasi - Bukuresipi',
         description: 'Data yang Bukuresipi kumpul, untuk apa, siapa yang memprosesnya, dan cara memadamnya.',
         heading: 'Dasar Privasi',
-        updated: 'Dikemas kini 8 November 2026',
-        intro: 'Bukuresipi menyimpan resipi dan kedai makan yang anda kongsi dari media sosial. Halaman ini menerangkan data yang kami kumpul, kenapa, dan cara memadamnya. Kami tidak menjual data anda dan tidak menunjukkan iklan.',
+        updated: 'Dikemas kini 17 November 2026',
+        intro: 'Bukuresipi menyimpan resipi dan kedai makan yang anda kongsi dari media sosial. Halaman ini menerangkan data yang kami kumpul, kenapa, dan cara memadamnya. Kami tidak menjual data anda. Aplikasi menunjukkan iklan daripada Google AdMob (lihat di bawah).',
         sections: [
             {
                 title: 'Data yang kami kumpul', items: [
@@ -225,7 +234,11 @@ const ms = {
                     'Gambar profil: hanya jika anda menambahnya. Hanya anda dan keluarga anda melihatnya.',
                     'Resit: gambar resit kedai makan yang anda tambah, dan apa yang kami baca daripadanya (kedai, alamat, tarikh dan masa, jumlah, serta nama, kuantiti dan harga setiap item). Gambar dipadam sebaik anda menyimpan resit, atau selepas 30 hari jika tidak disimpan. Nombor kad dan nama orang tidak pernah dibaca atau disimpan. Ringkasan perbelanjaan anda hanya ditunjukkan kepada anda, bukan kepada keluarga.',
                     'Peranti yang log masuk: nama dan model peranti, versi Android dan aplikasi, dan bandar anggaran daripada alamat IP (untuk halaman "Peranti log masuk").',
+                    'Gambar hidangan (Snap hidangan): dihantar untuk menamakan hidangan dan menganggar kalori, kemudian tidak disimpan. Hidangan, masa dan kalori yang anda simpan kekal dalam akaun anda.',
+                    'Bahagi bil: nama yang anda taip untuk orang yang berkongsi resit. Mereka tidak perlu akaun; nama itu dipadam bersama resit.',
                     'Token notifikasi (Firebase), untuk menghantar notifikasi kepada telefon anda.',
+                    'Penggunaan aplikasi (Google Analytics for Firebase): skrin yang dibuka, model dan versi peranti, serta ID pemasangan aplikasi. Tiada emel, resipi atau kedai anda.',
+                    'Iklan (Google AdMob): ID pengiklanan peranti, maklumat peranti dan aplikasi, serta interaksi dengan iklan, untuk menunjukkan dan mengukur iklan. Di tempat yang undang-undang memerlukannya, aplikasi meminta persetujuan anda dahulu (Google UMP). Anda boleh menetapkan semula atau memadam ID pengiklanan dalam tetapan Android.',
                     'Lokasi: hanya semasa anda mencari di peta. Untuk carian yang anda hantar, kami simpan kata carian, bilangan hasil dan kawasan (dibundarkan kira-kira 1 km) selama 90 hari, untuk mengetahui kedai yang perlu ditambah.',
                     'Borang tester di laman ini: emel yang anda masukkan.',
                 ]
@@ -244,7 +257,9 @@ const ms = {
                 ], items: [
                     'Cloudflare: pelayan, pangkalan data, storan gambar, dan Workers AI yang membaca siaran dan tangkapan skrin.',
                     'Command Code (model DeepSeek): membaca teks siaran untuk mengeluarkan resipi atau butiran kedai, dan membaca gambar resit.',
-                    'Google Firebase: menghantar notifikasi. Google Sign-In: log masuk dengan Google.',
+                    'Google Firebase: menghantar notifikasi dan mengukur penggunaan aplikasi. Google Sign-In: log masuk dengan Google.',
+                    'Google AdMob: memilih dan menunjukkan iklan di halaman Utama. Kami tidak menghantar data akaun, resipi, kedai atau lokasi anda kepada AdMob. Cara Google menggunakan data: https://policies.google.com/technologies/partner-sites',
+                    'Direktori halal JAKIM (halal.gov.my): menerima nama dan negeri kedai sahaja, untuk mencari sijil halalnya. Tiada data anda.',
                     'Resend: menghantar emel akaun.',
                     'OpenStreetMap (Nominatim, Overpass), Photon, HERE dan Parallel: mencari lokasi kedai daripada nama dan alamatnya. Apabila carian peta menemui sedikit hasil, Photon menerima kata carian dan titik peta.',
                     'Amazon Location Service (GrabMaps): mencari lokasi kedai daripada nama dan kawasannya.',
@@ -497,11 +512,11 @@ const en: typeof ms = {
         faqTitle: 'Frequently asked questions',
         faq: [
             ['What can I share?', 'Links from TikTok, Instagram, Facebook, YouTube, Google Maps and recipe websites, or a screenshot from any app.'],
-            ['Is the halal information verified?', 'No. Bukuresipi shows what the restaurant or post itself says, with its source. It is not JAKIM certification, so check for the halal logo at the premises.'],
+            ['Is the halal information verified?', 'Bukuresipi shows two separate things: what the restaurant or post itself says, with its source; and, when found, the premises in JAKIM\'s public halal directory, with the certificate\'s expiry date and a link to check it yourself. We are not a certification body, and the data can be out of date. Check the halal certificate displayed at the premises.'],
             ['What if a post is incomplete?', 'The recipe is still saved, and the missing parts are clearly marked so you can fill them in yourself.'],
             ['When does the app launch?', 'The Android version is in testing, and the Google Play button on this page goes live as soon as it is available.'],
             ['Is there an iPhone version?', "Not for now. An iPhone version needs a paid Apple developer account, so we'll start once we have a sponsor."],
-            ['Is Bukuresipi free?', 'Yes. The recipe book app is free, with no ads for now.'],
+            ['Is Bukuresipi free?', 'Yes. The app is free, with ads on the Home page to help cover its costs.'],
             ['Is it for Malaysian recipes only?', 'No. Any recipe you find works: Malaysian lauk, cakes, kuih, desserts or drinks, in Malay or English.'],
             ['Which languages are supported?', 'Malay and English. Recipes are kept in the language of the original post.'],
         ],
@@ -532,7 +547,7 @@ const en: typeof ms = {
         title: 'Terms of Use - Bukuresipi',
         description: 'The rules for using Bukuresipi: your account, what you share, how accurate the information is, and liability.',
         heading: 'Terms of Use',
-        updated: 'Updated 6 November 2026',
+        updated: 'Updated 17 November 2026',
         intro: 'Bukuresipi is run by Hafiz Bahtiar in Malaysia. By using the app or this website you agree to these terms. How we handle your data is in the Privacy Policy.',
         sections: [
             {
@@ -565,13 +580,22 @@ const en: typeof ms = {
                 title: 'Accuracy', items: [
                     'Recipes and restaurant details are read automatically (by AI) from posts, and can be wrong or incomplete. Check before you cook or go.',
                     'The allergen list only covers the ingredients we recognised. No list means "unknown", not "allergen free". If you have an allergy, check every ingredient yourself.',
-                    'Halal shown is a quote from the source, with its link. It is not halal certification (for example JAKIM). Confirm with the restaurant.',
                     'Restaurant locations, addresses and branches can be wrong or out of date.',
                 ]
             },
             {
+                title: 'Halal information (disclaimer)', items: [
+                    'Bukuresipi is not a halal certification body, and does not certify any restaurant or food as halal.',
+                    '"Says halal" is a quote from the post or the restaurant\'s own page, with its link. It is not certification.',
+                    '"JAKIM halal" means we found the premises in JAKIM\'s public halal directory (halal.gov.my), with its certificate\'s expiry date and the date we checked. The match is made automatically and can be wrong, and a certificate\'s status can change after we check it.',
+                    'JAKIM certifies each premises separately. A brand with certified outlets does not mean every branch is certified.',
+                    'No halal information does not mean a restaurant is not halal: we may not have found it.',
+                    'Before relying on it, check JAKIM\'s link and the certificate displayed at the premises.',
+                ]
+            },
+            {
                 title: 'The service', items: [
-                    'Bukuresipi is free for now. We may show ads or offer a paid plan in the future, and will say so first.',
+                    'Bukuresipi is free. The app shows ads on the Home page, marked "Ad", to cover its costs. We may offer a paid plan without ads in the future.',
                     'We may change, limit or stop features. There are daily limits (for example shares per day).',
                 ]
             },
@@ -604,8 +628,8 @@ const en: typeof ms = {
         title: 'Privacy Policy - Bukuresipi',
         description: 'What data Bukuresipi collects, what for, who processes it, and how to delete it.',
         heading: 'Privacy Policy',
-        updated: 'Updated 8 November 2026',
-        intro: 'Bukuresipi saves the recipes and places to eat you share from social media. This page explains what data we collect, why, and how to delete it. We do not sell your data and show no ads.',
+        updated: 'Updated 17 November 2026',
+        intro: 'Bukuresipi saves the recipes and places to eat you share from social media. This page explains what data we collect, why, and how to delete it. We do not sell your data. The app shows ads from Google AdMob (see below).',
         sections: [
             {
                 title: 'What we collect', items: [
@@ -616,7 +640,11 @@ const en: typeof ms = {
                     'Profile photo: only if you add one. Only you and your family see it.',
                     'Receipts: the photo of a restaurant receipt you add, and what we read from it (shop, address, date and time, total, and each item\'s name, quantity and price). The photo is deleted once you save the receipt, or after 30 days if you don\'t. Card numbers and the names of people are never read or stored. Your spending summary is shown only to you, never to your family.',
                     'Signed-in devices: device name and model, Android and app version, and an approximate city from your IP address (for the "Signed-in devices" page).',
+                    'Meal photos (Snap a meal): sent to name the dishes and estimate calories, then not kept. The meals, times and calories you save stay in your account.',
+                    'Split bill: the names you type for the people sharing a receipt. They need no account; the names are deleted with the receipt.',
                     'A notification token (Firebase), to send notifications to your phone.',
+                    'App usage (Google Analytics for Firebase): the screens you open, device model and version, and an app install ID. Not your email, recipes or places.',
+                    'Ads (Google AdMob): the device\'s advertising ID, device and app information, and interactions with ads, to show and measure ads. Where the law requires it, the app asks for your consent first (Google UMP). You can reset or delete the advertising ID in Android settings.',
                     'Location: only while you search the map. For a search you submit we keep the words, the number of results and the area rounded to about 1 km for 90 days, to learn which places to add.',
                     'The tester form on this website: the email you enter.',
                 ]
@@ -635,7 +663,9 @@ const en: typeof ms = {
                 ], items: [
                     'Cloudflare: servers, database, image storage, and Workers AI, which reads posts and screenshots.',
                     'Command Code (DeepSeek models): reads post text to pull out a recipe or a restaurant\'s details, and reads receipt photos.',
-                    'Google Firebase: sends notifications. Google Sign-In: signing in with Google.',
+                    'Google Firebase: sends notifications and measures app usage. Google Sign-In: signing in with Google.',
+                    'Google AdMob: chooses and shows the ads on the Home page. We send AdMob none of your account data, recipes, places or location. How Google uses data: https://policies.google.com/technologies/partner-sites',
+                    'JAKIM\'s halal directory (halal.gov.my): gets a restaurant\'s name and state only, to find its halal certificate. None of your data.',
                     'Resend: sends account emails.',
                     'OpenStreetMap (Nominatim, Overpass), Photon, HERE and Parallel: find a restaurant\'s location from its name and address. When a map search finds few results, Photon gets the search words and the map point.',
                     'Amazon Location Service (GrabMaps): find a restaurant\'s location from its name and area.',
