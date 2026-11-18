@@ -394,7 +394,7 @@ const ms = {
         },
         delete: {
             title: 'Padam akaun',
-            text: 'Ini memadam akaun Bukuresipi anda serta-merta dan tidak boleh dibatalkan: tempat dan resipi yang disimpan, perkongsian dan tangkapan skrin, penilaian dan ulasan, serta laporan anda. Restoran yang dikongsi oleh pengguna lain kekal.',
+            text: 'Ini memadam akaun Bukuresipi anda serta-merta dan tidak boleh dibatalkan: tempat dan resipi yang disimpan, perkongsian dan tangkapan skrin, penilaian dan ulasan, serta laporan anda. Restoran yang dikongsi oleh pengguna lain kekal. Mendaftar dengan Google? Tetapkan kata laluan dahulu melalui Lupa kata laluan.',
             email: 'Emel',
             password: 'Kata laluan',
             button: 'Padam akaun saya',
@@ -800,7 +800,7 @@ const en: typeof ms = {
         },
         delete: {
             title: 'Delete account',
-            text: 'This deletes your Bukuresipi account at once and cannot be undone: your saved places and recipes, shares and screenshots, ratings and reviews, and your reports. Restaurants other users shared stay.',
+            text: 'This deletes your Bukuresipi account at once and cannot be undone: your saved places and recipes, shares and screenshots, ratings and reviews, and your reports. Restaurants other users shared stay. Signed up with Google? Set a password first with Forgot password.',
             email: 'Email',
             password: 'Password',
             button: 'Delete my account',

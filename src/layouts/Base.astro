@@ -29,19 +29,10 @@ const ogImage = `${SITE}/og-${lang}.png`;
 <!doctype html>
 <html lang={s.htmlLang}>
     <head>
-        <!-- Google tag (GTM-KP75ZMBG) -->
-        <script
-            is:inline
-            async
-            src="https://www.googletagmanager.com/gtm.js?id=GTM-KP75ZMBG"
-        ></script>
-        <script is:inline>
-            window.dataLayer = window.dataLayer || [];
-            function gtag() {
-                dataLayer.push(arguments);
-            }
-            gtag("js", new Date());
-        </script>
+        <!-- Google tag (GTM-KP75ZMBG). Not on noindex pages: email-link and invite pages carry a token in the
+             address (?token=, ?t=) that Analytics would record before the page removes it. -->
+        {!noindex && <script is:inline async src="https://www.googletagmanager.com/gtm.js?id=GTM-KP75ZMBG" />}
+        {!noindex && <script is:inline set:html={'window.dataLayer = window.dataLayer || []; function gtag() { dataLayer.push(arguments); } gtag("js", new Date());'} />}
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <title>{title}</title>
