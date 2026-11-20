@@ -141,8 +141,8 @@ const ms = {
         title: 'Terma Penggunaan - Bukuresipi',
         description: 'Peraturan menggunakan Bukuresipi: akaun, kandungan yang anda kongsi, ketepatan maklumat, dan tanggungjawab.',
         heading: 'Terma Penggunaan',
-        updated: 'Dikemas kini 17 November 2026',
-        intro: 'Bukuresipi dikendalikan oleh Hafiz Bahtiar di Malaysia. Dengan menggunakan aplikasi atau laman web ini, anda bersetuju dengan terma ini. Cara kami mengendalikan data anda diterangkan dalam Dasar Privasi.',
+        updated: 'Dikemas kini 21 November 2026',
+        intro: 'Bukuresipi dikendalikan oleh Tri Digital Niaga (SSM 202603244841), Kuala Lumpur, Malaysia. Dengan menggunakan aplikasi atau laman web ini, anda bersetuju dengan terma ini. Cara kami mengendalikan data anda diterangkan dalam Dasar Privasi.',
         sections: [
             {
                 title: 'Akaun anda', items: [
@@ -222,8 +222,8 @@ const ms = {
         title: 'Dasar Privasi - Bukuresipi',
         description: 'Data yang Bukuresipi kumpul, untuk apa, siapa yang memprosesnya, dan cara memadamnya.',
         heading: 'Dasar Privasi',
-        updated: 'Dikemas kini 17 November 2026',
-        intro: 'Bukuresipi menyimpan resipi dan kedai makan yang anda kongsi dari media sosial. Halaman ini menerangkan data yang kami kumpul, kenapa, dan cara memadamnya. Kami tidak menjual data anda. Aplikasi menunjukkan iklan daripada Google AdMob (lihat di bawah).',
+        updated: 'Dikemas kini 21 November 2026',
+        intro: 'Bukuresipi menyimpan resipi dan kedai makan yang anda kongsi dari media sosial. Halaman ini menerangkan data yang kami kumpul, kenapa, dan cara memadamnya. Kami tidak menjual data anda. Aplikasi menunjukkan iklan daripada Google AdMob (lihat di bawah). Pengguna data di bawah Akta Perlindungan Data Peribadi 2010 ialah Tri Digital Niaga (SSM 202603244841), Kuala Lumpur.',
         sections: [
             {
                 title: 'Data yang kami kumpul', items: [
@@ -253,7 +253,7 @@ const ms = {
             },
             {
                 title: 'Siapa yang memproses data', paras: [
-                    'Kami menggunakan perkhidmatan ini untuk menjalankan Bukuresipi. Mereka menerima hanya apa yang perlu untuk tugas mereka:',
+                    'Kami menggunakan perkhidmatan ini untuk menjalankan Bukuresipi. Mereka menerima hanya apa yang perlu untuk tugas mereka. Kebanyakannya memproses data di luar Malaysia (contohnya Cloudflare, Google, Command Code dan Resend), di bawah perjanjian dan langkah keselamatan mereka sendiri:',
                 ], items: [
                     'Cloudflare: pelayan, pangkalan data, storan gambar, dan Workers AI yang membaca siaran dan tangkapan skrin.',
                     'Command Code (model DeepSeek): membaca teks siaran untuk mengeluarkan resipi atau butiran kedai, dan membaca gambar resit.',
@@ -263,6 +263,7 @@ const ms = {
                     'Resend: menghantar emel akaun.',
                     'OpenStreetMap (Nominatim, Overpass), Photon, HERE dan Parallel: mencari lokasi kedai daripada nama dan alamatnya. Apabila carian peta menemui sedikit hasil, Photon menerima kata carian dan titik peta.',
                     'Amazon Location Service (GrabMaps): mencari lokasi kedai daripada nama dan kawasannya.',
+                    'TinyFish: carian web dan bacaan halaman untuk alamat dan cawangan kedai. Menerima nama dan kawasan kedai sahaja, tiada data anda.',
                 ]
             },
             {
@@ -276,6 +277,7 @@ const ms = {
                 title: 'Keselamatan', items: [
                     'Semua sambungan menggunakan HTTPS. Kata laluan disimpan sebagai cincangan, dan pautan emel sekali guna.',
                     'Tangkapan skrin dan gambar resit anda disimpan secara peribadi; hanya anda (dan keluarga anda, bagi tangkapan skrin kedai yang dikongsi) boleh melihatnya.',
+                    'Jika berlaku kebocoran data yang mungkin memudaratkan anda, kami memaklumkan Pesuruhjaya Perlindungan Data Peribadi dan anda secepat mungkin, seperti yang dikehendaki undang-undang.',
                 ]
             },
             {
@@ -553,8 +555,8 @@ const en: typeof ms = {
         title: 'Terms of Use - Bukuresipi',
         description: 'The rules for using Bukuresipi: your account, what you share, how accurate the information is, and liability.',
         heading: 'Terms of Use',
-        updated: 'Updated 17 November 2026',
-        intro: 'Bukuresipi is run by Hafiz Bahtiar in Malaysia. By using the app or this website you agree to these terms. How we handle your data is in the Privacy Policy.',
+        updated: 'Updated 21 November 2026',
+        intro: 'Bukuresipi is run by Tri Digital Niaga (SSM 202603244841), Kuala Lumpur, Malaysia. By using the app or this website you agree to these terms. How we handle your data is in the Privacy Policy.',
         sections: [
             {
                 title: 'Your account', items: [
@@ -634,8 +636,8 @@ const en: typeof ms = {
         title: 'Privacy Policy - Bukuresipi',
         description: 'What data Bukuresipi collects, what for, who processes it, and how to delete it.',
         heading: 'Privacy Policy',
-        updated: 'Updated 17 November 2026',
-        intro: 'Bukuresipi saves the recipes and places to eat you share from social media. This page explains what data we collect, why, and how to delete it. We do not sell your data. The app shows ads from Google AdMob (see below).',
+        updated: 'Updated 21 November 2026',
+        intro: 'Bukuresipi saves the recipes and places to eat you share from social media. This page explains what data we collect, why, and how to delete it. We do not sell your data. The app shows ads from Google AdMob (see below). The data user under Malaysia\'s Personal Data Protection Act 2010 is Tri Digital Niaga (SSM 202603244841), Kuala Lumpur.',
         sections: [
             {
                 title: 'What we collect', items: [
@@ -665,7 +667,7 @@ const en: typeof ms = {
             },
             {
                 title: 'Who processes data', paras: [
-                    'We use these services to run Bukuresipi. Each gets only what its job needs:',
+                    'We use these services to run Bukuresipi. Each gets only what its job needs. Most of them process data outside Malaysia (for example Cloudflare, Google, Command Code and Resend), under their own agreements and safeguards:',
                 ], items: [
                     'Cloudflare: servers, database, image storage, and Workers AI, which reads posts and screenshots.',
                     'Command Code (DeepSeek models): reads post text to pull out a recipe or a restaurant\'s details, and reads receipt photos.',
@@ -675,6 +677,7 @@ const en: typeof ms = {
                     'Resend: sends account emails.',
                     'OpenStreetMap (Nominatim, Overpass), Photon, HERE and Parallel: find a restaurant\'s location from its name and address. When a map search finds few results, Photon gets the search words and the map point.',
                     'Amazon Location Service (GrabMaps): find a restaurant\'s location from its name and area.',
+                    'TinyFish: web search and page reading for a restaurant\'s address and branches. Gets the restaurant\'s name and area only, none of your data.',
                 ]
             },
             {
@@ -688,6 +691,7 @@ const en: typeof ms = {
                 title: 'Security', items: [
                     'Every connection uses HTTPS. Passwords are stored as hashes, and email links work once.',
                     'Your screenshots and receipt photos are stored privately; only you (and your family, for a shared place\'s screenshot) can see them.',
+                    'If a data breach is likely to harm you, we tell the Personal Data Protection Commissioner and you as soon as we can, as the law requires.',
                 ]
             },
             {
