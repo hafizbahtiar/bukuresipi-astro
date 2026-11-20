@@ -324,12 +324,17 @@ const ms = {
                     { name: 'Photon', detail: 'Alamat ke lokasi.', url: 'https://photon.komoot.io' },
                     { name: 'HERE', detail: 'Mencari kedai mengikut nama.', url: 'https://www.here.com' },
                     { name: 'Parallel', detail: 'Carian web untuk alamat cawangan.', url: 'https://parallel.ai' },
+                    { name: 'TinyFish', detail: 'Carian web dan bacaan halaman.', url: 'https://www.tinyfish.ai' },
+                    { name: 'GrabMaps (Amazon Location Service)', detail: 'Mencari kedai mengikut nama.', url: 'https://aws.amazon.com/location/' },
+                    { name: 'malaysia-postcodes', detail: 'Poskod, bandar dan negeri, MIT.', url: 'https://www.npmjs.com/package/malaysia-postcodes' },
+                    { name: 'Direktori Halal Malaysia (JAKIM)', detail: 'Sijil halal premis, daripada direktori awam. Bukan pengesahan oleh JAKIM.', url: 'https://www.halal.gov.my' },
                 ]
             },
             {
                 title: 'Dibina dengan', items: [
                     { name: 'Flutter', detail: 'Aplikasi, BSD.', url: 'https://flutter.dev' },
                     { name: 'Cloudflare', detail: 'Workers, D1, R2 dan Workers AI.', url: 'https://www.cloudflare.com' },
+                    { name: 'DeepSeek (melalui Command Code)', detail: 'AI yang membaca siaran dan resit.', url: 'https://commandcode.ai' },
                     { name: 'Hono', detail: 'API, MIT.', url: 'https://hono.dev' },
                     { name: 'Drizzle ORM', detail: 'Pangkalan data, Apache-2.0.', url: 'https://orm.drizzle.team' },
                     { name: 'Astro', detail: 'Laman web ini, MIT.', url: 'https://astro.build' },
@@ -338,6 +343,7 @@ const ms = {
             },
         ],
         testers: 'Dan terima kasih kepada setiap tester yang mencuba aplikasi ini sebelum orang lain.',
+        maker: 'Bukuresipi dibangunkan oleh Tri Digital Niaga (SSM 202603244841), Kuala Lumpur.',
         back: 'Kembali ke laman utama',
     },
     auth: {
@@ -730,12 +736,17 @@ const en: typeof ms = {
                     { name: 'Photon', detail: 'Address to location.', url: 'https://photon.komoot.io' },
                     { name: 'HERE', detail: 'Finding shops by name.', url: 'https://www.here.com' },
                     { name: 'Parallel', detail: 'Web search for branch addresses.', url: 'https://parallel.ai' },
+                    { name: 'TinyFish', detail: 'Web search and page reading.', url: 'https://www.tinyfish.ai' },
+                    { name: 'GrabMaps (Amazon Location Service)', detail: 'Finding shops by name.', url: 'https://aws.amazon.com/location/' },
+                    { name: 'malaysia-postcodes', detail: 'Postcodes, towns and states, MIT.', url: 'https://www.npmjs.com/package/malaysia-postcodes' },
+                    { name: 'Halal Malaysia directory (JAKIM)', detail: 'Premises halal certificates, from the public directory. Not an endorsement by JAKIM.', url: 'https://www.halal.gov.my' },
                 ]
             },
             {
                 title: 'Built with', items: [
                     { name: 'Flutter', detail: 'The app, BSD.', url: 'https://flutter.dev' },
                     { name: 'Cloudflare', detail: 'Workers, D1, R2 and Workers AI.', url: 'https://www.cloudflare.com' },
+                    { name: 'DeepSeek (via Command Code)', detail: 'The AI that reads posts and receipts.', url: 'https://commandcode.ai' },
                     { name: 'Hono', detail: 'The API, MIT.', url: 'https://hono.dev' },
                     { name: 'Drizzle ORM', detail: 'Database, Apache-2.0.', url: 'https://orm.drizzle.team' },
                     { name: 'Astro', detail: 'This website, MIT.', url: 'https://astro.build' },
@@ -744,6 +755,7 @@ const en: typeof ms = {
             },
         ],
         testers: 'And thank you to every tester who tried the app before anyone else.',
+        maker: 'Bukuresipi is made by Tri Digital Niaga (SSM 202603244841), Kuala Lumpur.',
         back: 'Back to the home page',
     },
     auth: {
